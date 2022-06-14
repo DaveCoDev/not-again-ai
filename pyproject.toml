@@ -1,0 +1,134 @@
+[tool.poetry]
+name = "not-again-ai"
+version = "0.1.0"
+description = "Designed to once and for all collect all the little things that come up over and over again in AI projects and put them in one place."
+authors = ["DaveCoDev <dave.co.dev@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/DaveCoDev/not-again-ai"
+documentation = "https://github.com/DaveCoDev/not-again-ai"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Typing :: Typed",
+]
+
+
+[tool.poetry.dependencies]
+# Some packages, such as scipy, constrain their upper bound of Python versions they support.
+# Without also constraining the upper bound here, Poetry will not select those versions and will
+# result in an old version being resolved/locked.
+python = "^3.9, <3.11"
+
+
+[tool.poetry.dev-dependencies]
+nox-poetry = "*"
+
+# Testing.
+pytest = "*"
+pytest-cov = "*"
+
+# Type Checking.
+mypy = "*"
+# As of mypy 0.900, mypy no longer bundles the stubs for third-party libraries that reside
+# in the typeshed project. Add these "types-" packages here if you depend on them in
+# requirements.in (e.g. types-requests).
+# See: http://mypy-lang.blogspot.com/2021/06/mypy-0900-released.html
+#      https://github.com/python/typeshed/tree/master/stubs
+
+# Linting.
+flake8 = "*"
+flake8-bugbear = "*"
+flake8-broken-line = "*"
+flake8-comprehensions = "*"
+pep8-naming = "*"
+# TODO: Remove this when flake8 adds native support for pyproject.toml.
+pyproject-flake8 = "*"
+
+# Formatting.
+black = "*"
+isort = "*"
+
+# Documentation.
+mkdocs-material = "*"
+mkdocs-htmlproofer-plugin = "*"
+mkdocstrings = { version = "*", extras = ["python"] }
+## Autodoc.
+mkdocs-gen-files = "*"
+mkdocs-literate-nav = "*"
+
+
+[tool.poetry.scripts]
+not-again-ai = "not_again_ai.cli:entry_point"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.mypy]
+ignore_missing_imports = true
+strict = true
+# If certain strict config options are too pedantic for a project,
+# disable them selectively here by setting to false.
+
+# Note: This configuration is supported by pyproject-flake8.
+[tool.flake8]
+max-line-length = 120
+# This ignore is required by black.
+extend-ignore = ["E203"]
+# flake8-bugbear config.
+# TODO: Remove this once flake8 > 4.0.1 is released as this has been fixed
+#   upstream: https://github.com/PyCQA/flake8/pull/1443
+extend-exclude = [".nox", 
+    ".git", 
+    ".venv", 
+    "__pycache__", 
+    "dist", 
+    "site", 
+    ".mypy_cache",
+    ".pytest_cache",
+    "htmlcov"]
+
+
+[tool.black]
+line-length = 120
+target-version = ["py39", "py310"]
+# black will automatically exclude all files listed in .gitignore
+# If you need to exclude additional folders, consider using extend-exclude to avoid disabling the
+# default .gitignore behaviour.
+
+
+[tool.isort]
+profile = "black"
+line_length = 120
+force_sort_within_sections = true
+# Inform isort of paths to import names that should be considered part of the "First Party" group.
+src_paths = ["src/not_again_ai"]
+skip_gitignore = true
+# If you need to skip/exclude folders, consider using skip_glob as that will allow the
+# isort defaults for skip to remain without the need to duplicate them.
+
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    # When running tests, treat warnings as errors (e.g. -Werror).
+    # See: https://docs.pytest.org/en/latest/reference/reference.html#confval-filterwarnings
+    "error",
+    # Add additional warning supressions as needed here. For example, if a third-party library
+    # is throwing a deprecation warning that needs to be fixed upstream:
+    # "ignore::DeprecationWarning:typer",
+]
+
+
+[tool.coverage.run]
+branch = true
