@@ -32,7 +32,7 @@ isolated [Python virtual environments](https://docs.python.org/3/library/venv.ht
 To proceed, 
 [install Poetry globally onto your system](https://python-poetry.org/docs/#installation).
 
-(Optionall) configure Poetry to use an in-project virtual environment.
+(Optional) configure Poetry to use an in-project virtual environment.
 ```bash
 $ poetry config virtualenvs.in-project true
 ```
@@ -233,6 +233,12 @@ Continuous integration is provided by [GitHub Actions](https://github.com/featur
 runs all tests, lints, and type checking for every commit and pull request to the repository.
 
 GitHub Actions is configured in [`.github/workflows/python.yml`](./.github/workflows/python.yml).
+
+## [Visual Studio Code](https://code.visualstudio.com/docs/languages/python)
+
+Install the [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python) for VSCode.
+
+Default settings are configured in [`.vscode/settings.json`](./.vscode/settings.json). This will enable flake8 and black formatting with consistent settings.
 
 # Documentation
 
