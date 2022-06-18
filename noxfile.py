@@ -18,6 +18,7 @@ def test(s: Session) -> None:
         "--cov-report=html",
         "--cov-report=term",
         "tests",
+        "-W ignore::DeprecationWarning",
         *s.posargs,
     )
 

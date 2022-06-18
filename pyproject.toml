@@ -27,7 +27,9 @@ classifiers = [
 # Without also constraining the upper bound here, Poetry will not select those versions and will
 # result in an old version being resolved/locked.
 python = "^3.9, <3.11"
-
+numpy = "^1.22.4"
+pandas = "^1.4.2"
+seaborn = "^0.11.2"
 
 [tool.poetry.dev-dependencies]
 nox-poetry = "*"
