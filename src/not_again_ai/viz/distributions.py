@@ -7,6 +7,7 @@ import numpy.typing as npt
 import seaborn as sns
 
 from not_again_ai.system.files import create_file_dir
+from not_again_ai.viz.utils import reset_plot_libs
 
 
 def univariate_distplot(
@@ -29,7 +30,7 @@ def univariate_distplot(
 
     Args:
         data (list[float]): Input listlike data to plot distribution of
-        save_pathname (str): Filepath to save plot to.
+        save_pathname (str): Filepath to save plot to. Parent directories will be automatically created.
         print_summary (bool, optional): If true will print summary statistics. Defaults to True.
         title (str, optional): Title of the plot. Defaults to None.
         xlabel (str, optional): Set the label for the x-axis. Defaults to 'Value'.
@@ -38,13 +39,10 @@ def univariate_distplot(
         ylim (tuple[float, float], optional): Set the y-axis limits (lower, upper). Defaults to None.
         xticks (list[float], optional): Set the x-axis tick locations. Defaults to None.
         yticks (list[float], optional): Set the y-axis tick locations. Defaults to None.
-        bins (int, optional): See matplotlib histplot documentation for all options.
-            https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html#matplotlib-pyplot-hist
-            Defaults to 50.
+        bins (int, optional): See matplotlib [histplot documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html#matplotlib-pyplot-hist) for all options. Defaults to 50.
         font_size (float, optional): Font size. Defaults to 48.
         height (float, optional): Height (in inches) of the plot. Defaults to 13.
-        aspect (float, optional): Aspect ratio of the plot, so that `aspect` * `height` gives
-            the width of each facet in inches. Defaults to 2.2.
+        aspect (float, optional): Aspect ratio of the plot, so that `aspect` * `height` gives the width of each facet in inches. Defaults to 2.2.
     """
 
     sns.set_theme(
@@ -68,7 +66,6 @@ def univariate_distplot(
 
     facet_grid = sns.displot(data, bins=bins, height=height, aspect=aspect)
 
-    # set x and y limit
     facet_grid.set(
         xlim=xlim,
         ylim=ylim,
@@ -98,9 +95,9 @@ def univariate_distplot(
 
     plt.legend(handles=handles, loc=0)
 
-    # create path to file if does not exist
     create_file_dir(save_pathname)
     plt.savefig(save_pathname)
+    reset_plot_libs()
 
     if print_summary:
         to_print = (

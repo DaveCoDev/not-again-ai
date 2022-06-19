@@ -87,7 +87,7 @@ strict = true
 [tool.flake8]
 max-line-length = 120
 # This ignore is required by black.
-extend-ignore = ["E203"]
+extend-ignore = "E203,E501"
 # flake8-bugbear config.
 # TODO: Remove this once flake8 > 4.0.1 is released as this has been fixed
 #   upstream: https://github.com/PyCQA/flake8/pull/1443
