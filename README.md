@@ -53,8 +53,8 @@ We currently offer two visualization tools, a time series plot and a histogram f
 ```
 
 <p float="center">
-  <img src="assets/ts_lineplot5.svg" width="424" />
-  <img src="assets/distributions_test4.svg" width="424" /> 
+  <img src="assets/ts_lineplot5.svg" width="404" />
+  <img src="assets/distributions_test4.svg" width="404" /> 
 </p>
 
 ## Parallel
