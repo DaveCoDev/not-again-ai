@@ -13,7 +13,7 @@
 Have you ever been working on a project and groaned as you go to search again on how to nicely plot a simple distribution? Or have you been frustrated at wanting to run multiple functions in parallel, but stuck between the seemingly ten different ways to do it?
 **not-again-ai** is a Python package designed to once and for all collect all these little things that come up over and over again in AI projects and put them in one place.
 
-**Documentation** available at [davecodev.github.io/not-again-ai/](https://davecodev.github.io/not-again-ai/)
+**Documentation** available at [DaveCoDev.github.io/not-again-ai/](https://DaveCoDev.github.io/not-again-ai/)
 
 # Installation
 
