@@ -13,6 +13,7 @@
 Have you ever been working on a project and groaned as you go to search again on how to nicely plot a simple distribution? Or have you been frustrated at wanting to run multiple functions in parallel, but stuck between the seemingly ten different ways to do it?
 **not-again-ai** is a Python package designed to once and for all collect all these little things that come up over and over again in AI projects and put them in one place.
 
+**Documentation** available at [davecodev.github.io/not-again-ai/](https://davecodev.github.io/not-again-ai/)
 
 # Installation
 
@@ -43,10 +44,15 @@ We currently offer two visualization tools, a time series plot and a histogram f
 # get a random distribution
 >>> distrib = np.random.beta(a=0.5, b=0.5, size=1000)
 # plot the distribution and save it to a file
->>> univariate_distplot(data=distrib, save_pathname='mydistribution.svg', print_summary=False, bins=100, title=r'Beta Distribution $\alpha=0.5, \beta=0.5$',)
+>>> univariate_distplot(
+...     data=distrib, 
+...     save_pathname='mydistribution.svg', 
+...     print_summary=False, bins=100, 
+...     title=r'Beta Distribution $\alpha=0.5, \beta=0.5$'
+... )
 ```
 
-<p align="center"><img width="504" height="280" src="assets/ts_lineplot5.svg"/> <img width="504" height="280" src="assets/distributions_test4.svg"/> </a></p>
+<p align="center"><img width="468" height="260" src="assets/ts_lineplot5.svg"/> <img width="468" height="260" src="assets/distributions_test4.svg"/> </a></p>
 
 ## Parallel
 For when you have functions you want to execute in parallel.
