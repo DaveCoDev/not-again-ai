@@ -52,7 +52,10 @@ We currently offer two visualization tools, a time series plot and a histogram f
 ... )
 ```
 
-<p align="center"><img width="414" height="230" src="assets/ts_lineplot5.svg"/> <img width="432" height="240" src="assets/distributions_test4.svg"/> </a></p>
+<p float="center">
+  <img src="assets/ts_lineplot5.svg" width="424" />
+  <img src="assets/distributions_test4.svg" width="424" /> 
+</p>
 
 ## Parallel
 For when you have functions you want to execute in parallel.
