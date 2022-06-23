@@ -96,7 +96,7 @@ def univariate_distplot(
     plt.legend(handles=handles, loc=0)
 
     create_file_dir(save_pathname)
-    plt.savefig(save_pathname)
+    plt.savefig(save_pathname, bbox_inches='tight')
     reset_plot_libs()
 
     if print_summary:

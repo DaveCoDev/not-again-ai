@@ -31,6 +31,16 @@ def test_univariate_distplot() -> None:
         yticks=np.arange(0, 65.5, 5),
         bins=100,
     )
+    univariate_distplot(
+        data=np.random.beta(a=0.5, b=0.5, size=10000),
+        save_pathname='.nox/temp/distributions_test4.svg',
+        print_summary=False,
+        bins=100,
+        title=r'Beta Distribution $\alpha=0.5, \beta=0.5$',
+        font_size=18,
+        height=3.91,
+        aspect=1.8,
+    )
 
 
 if __name__ == '__main__':

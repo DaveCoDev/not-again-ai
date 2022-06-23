@@ -10,18 +10,64 @@
 [isort-badge]: https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336
 [mypy-badge]: https://img.shields.io/badge/type%20checked-mypy-blue.svg
 
-Have you ever been working on a project and groaned as you go to search how to plot a simple distribution? 
+Have you ever been working on a project and groaned as you go to search again on how to nicely plot a simple distribution? Or have you been frustrated at wanting to run multiple functions in parallel, but stuck between the seemingly ten different ways to do it?
 **not-again-ai** is a Python package designed to once and for all collect all these little things that come up over and over again in AI projects and put them in one place.
 
 
-# Requirements and Installation
+# Installation
 
-## Requires
-Python 3.9+
+Requires: Python 3.9, 3.10
 
-## Install
 ```bash
 $ pip install not_again_ai
+```
+
+# Quick tour
+
+## Visualization
+
+We currently offer two visualization tools, a time series plot and a histogram for plotting univariate distributions.
+
+```python
+>>> import numpy as np
+>>> from not_again_ai.viz.time_series import ts_lineplot
+>>> from not_again_ai.viz.distributions import univariate_distplot
+
+# get some time series data
+>>> rs = np.random.RandomState(365)
+>>> values = rs.randn(365, 4).cumsum(axis=0)
+>>> dates = pd.date_range('1 1 2021', periods=365, freq='D')
+# plot the time series and save it to a file
+>>> ts_lineplot(ts_data=values, save_pathname='myplot.png', ts_x=dates, ts_names=['A', 'B', 'C', 'D'])
+
+# get a random distribution
+>>> distrib = np.random.beta(a=0.5, b=0.5, size=1000)
+# plot the distribution and save it to a file
+>>> univariate_distplot(data=distrib, save_pathname='mydistribution.svg', print_summary=False, bins=100, title=r'Beta Distribution $\alpha=0.5, \beta=0.5$',)
+```
+
+<p align="center"><img width="504" height="280" src="assets/ts_lineplot5.svg"/> <img width="504" height="280" src="assets/distributions_test4.svg"/> </a></p>
+
+## Parallel
+For when you have functions you want to execute in parallel.
+
+```python
+# execute the passed in functions in parallel without any additional arguments
+>>> result = embarrassingly_parallel_simple([do_something, do_something2], num_processes=2)
+
+# execute the function mult in parallel with the passed in arguments
+>>> args = ((2, 2), (3, 3), (4, 4))
+>>> result2 = embarrassingly_parallel(mult, args, num_processes=multiprocessing.cpu_count())
+```
+
+## Filesystem
+We provide helpers to deal with files and directories easily and without raising uncessary errors.
+
+```python
+>>> from not_again_ai.system.files import create_file_dir
+
+# creates the directory mydir if it does not exist
+>>> create_file_dir('mydir/myfile.txt')
 ```
 
 # Development Information
