@@ -67,7 +67,7 @@ copyright: Copyright &copy; 2022 DaveCoDev
 # GitHub Specific Configuration.
 repo_name: not-again-ai
 repo_url: https://github.com/DaveCoDev/not-again-ai
-edit_uri: edit/master/docs/user_guide/docs/
+edit_uri: edit/main/docs/user_guide/docs/
 nav:
   - index.md
   - Code Reference: reference/
