@@ -19,6 +19,8 @@ Have you ever been working on a project and groaned as you go to search again on
 
 Requires: Python 3.9, 3.10
 
+Install from [PyPI](https://pypi.org/project/not-again-ai/)
+
 ```bash
 $ pip install not_again_ai
 ```
@@ -31,6 +33,7 @@ We currently offer two visualization tools, a time series plot and a histogram f
 
 ```python
 >>> import numpy as np
+>>> import pandas as pd
 >>> from not_again_ai.viz.time_series import ts_lineplot
 >>> from not_again_ai.viz.distributions import univariate_distplot
 
