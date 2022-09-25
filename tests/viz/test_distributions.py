@@ -27,8 +27,8 @@ def test_univariate_distplot() -> None:
         print_summary=False,
         xlim=None,
         ylim=None,
-        xticks=np.arange(-7, 7.5, 0.5),
-        yticks=np.arange(0, 65.5, 5),
+        xticks=np.arange(0, 11, 1),
+        yticks=np.arange(0, 5, 1),
         bins=100,
     )
     univariate_distplot(
