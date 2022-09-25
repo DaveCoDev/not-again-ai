@@ -103,8 +103,7 @@ all machines that use the project, both during development and in production.
 
 To install all dependencies into an isolated virtual environment:
 
-> Append `--remove-untracked` to uninstall dependencies that are no longer in use from the virtual
-> environment.
+> Append `--sync` to uninstall dependencies that are no longer in use from the virtual environment.
 
 ```bash
 $ poetry install
@@ -353,6 +352,13 @@ Returns:
 """
 ```
 
+## Misc
+
+If you get a `Failed to create the collection: Prompt dismissed..` error when running `poetry update` on Ubuntu, try setting the following environment variable:
+
+    ```bash
+    export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
+    ```
 
 # Attributions
 [python-blueprint](https://github.com/johnthagen/python-blueprint) for the Python package skeleton.

@@ -2,27 +2,48 @@ name: python
 
 on: [push, pull_request]
 
+env:
+  POETRY_VERSION: 1.2.1
+
 jobs:
-  nox:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [ "3.9", "3.10" ]
     steps:
       - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry==${POETRY_VERSION}
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Upgrade pip
-        run: python -m pip install --upgrade pip
-      - name: Install Poetry
-        run: pipx install poetry
-      - name: Set Python version
-        run: poetry env use ${{ matrix.python-version }}
-      - name: Check Python version
-        run: poetry env info
-      - name: Install all dependencies, including Nox
-        run: poetry install --no-root
+          cache: poetry
+      - name: Install Nox
+        run: poetry install --only nox
       - name: Test with Nox
-        run: poetry run nox
+        run: poetry run nox -s test-${{ matrix.python-version }}
+  quality:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        job:
+          - { nox-session: fmt_check, poetry-groups: "fmt" }
+          - { nox-session: lint, poetry-groups: "lint" }
+          # type_check needs main and test dependencies for inline type annotations.
+          - { nox-session: type_check, poetry-groups: "type_check,main,test" }
+          - { nox-session: docs, poetry-groups: "docs" }
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry==${POETRY_VERSION}
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+          cache: poetry
+      - name: Install Nox and group dependencies
+        run: poetry install --only nox,${{ matrix.job.poetry-groups }}
+      - name: Test with Nox
+        run: poetry run nox -s ${{ matrix.job.nox-session }}

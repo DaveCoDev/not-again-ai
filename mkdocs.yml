@@ -21,8 +21,10 @@ theme:
     - search.highlight
     - search.share
     - search.suggest
+    - toc.follow
 markdown_extensions:
   - admonition
+  - footnotes
   - pymdownx.keys
   - pymdownx.highlight
   - pymdownx.superfences

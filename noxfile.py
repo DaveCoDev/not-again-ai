@@ -1,8 +1,7 @@
-from tempfile import NamedTemporaryFile
-
 import nox
 from nox_poetry import Session, session
 
+nox.options.error_on_external_run = True
 nox.options.reuse_existing_virtualenvs = True
 nox.options.sessions = ["fmt_check", "lint", "type_check", "test", "docs"]
 
@@ -40,7 +39,7 @@ def fmt_check(s: Session) -> None:
 @session(venv_backend="none")
 def lint(s: Session) -> None:
     # Run pyproject-flake8 entrypoint to support reading configuration from pyproject.toml.
-    s.run("pflake8")
+    s.run("pflake8", "src", "tests", "noxfile.py")
 
 
 @session(venv_backend="none")
@@ -65,21 +64,3 @@ def docs_serve(s: Session) -> None:
 @session(venv_backend="none")
 def docs_github_pages(s: Session) -> None:
     s.run("mkdocs", "gh-deploy", "--force", env=doc_env)
-
-
-# Note: This reuse_venv does not yet have affect due to:
-#   https://github.com/wntrblm/nox/issues/488
-@session(reuse_venv=False)
-def licenses(s: Session) -> None:
-    # Install dependencies without installing the package itself:
-    #   https://github.com/cjolowicz/nox-poetry/issues/680
-    with NamedTemporaryFile() as requirements_file:
-        s.run_always(
-            "poetry",
-            "export",
-            "--without-hashes",
-            f"--output={requirements_file.name}",
-            external=True,
-        )
-        s.install("pip-licenses", "-r", requirements_file.name)
-    s.run("pip-licenses", *s.posargs)
