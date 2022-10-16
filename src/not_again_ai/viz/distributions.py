@@ -29,7 +29,7 @@ def univariate_distplot(
     """Saves a univariate distribution plot to the specified pathname.
 
     Args:
-        data (list[float]): Input listlike data to plot distribution of
+        data (listlike): Input listlike data to plot distribution of
         save_pathname (str): Filepath to save plot to. Parent directories will be automatically created.
         print_summary (bool, optional): If true will print summary statistics. Defaults to True.
         title (str, optional): Title of the plot. Defaults to None.
@@ -37,8 +37,8 @@ def univariate_distplot(
         ylabel (str, optional): Set the label for the y-axis. Defaults to 'Count'.
         xlim (tuple[float, float], optional): Set the x-axis limits (lower, upper). Defaults to None.
         ylim (tuple[float, float], optional): Set the y-axis limits (lower, upper). Defaults to None.
-        xticks (list[float], optional): Set the x-axis tick locations. Defaults to None.
-        yticks (list[float], optional): Set the y-axis tick locations. Defaults to None.
+        xticks (npt.ArrayLike, optional): Set the x-axis tick locations. Defaults to None.
+        yticks (npt.ArrayLike, optional): Set the y-axis tick locations. Defaults to None.
         bins (int, optional): See matplotlib [histplot documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html#matplotlib-pyplot-hist) for all options. Defaults to 50.
         font_size (float, optional): Font size. Defaults to 48.
         height (float, optional): Height (in inches) of the plot. Defaults to 13.

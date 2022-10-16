@@ -73,13 +73,25 @@ For when you have functions you want to execute in parallel.
 ```
 
 ## Filesystem
-We provide helpers to deal with files and directories easily and without raising uncessary errors.
+We provide helpers to deal with files and directories easily and without raising unnecessary errors.
 
 ```python
 >>> from not_again_ai.system.files import create_file_dir
 
 # creates the directory mydir if it does not exist
 >>> create_file_dir('mydir/myfile.txt')
+```
+
+## Data Analysis
+We provide a few helpers for data analysis.
+
+```python
+from not_again_ai.data_analysis.dependence import pearson_correlation
+# quadratic dependence
+>>> x = (rs.rand(500) * 4) - 2
+>>> y = x**2 + (rs.randn(500) * 0.2)
+>>> pearson_correlation(x, y)
+0.05
 ```
 
 # Development Information
