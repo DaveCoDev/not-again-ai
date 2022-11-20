@@ -10,10 +10,10 @@ def _example_1(rs: np.random.RandomState) -> tuple[npt.NDArray[Any], npt.NDArray
     """Example 1 - x is mostly predictive of y.
     x is categorical (strings), y is binary, both are numpy arrays
     """
-    x0 = rs.choice(['a'], 200)
+    x0 = rs.choice(["a"], 200)
     y0 = rs.choice([0, 1], 200, p=[0.9, 0.1])
 
-    x1 = rs.choice(['b'], 300)
+    x1 = rs.choice(["b"], 300)
     y1 = rs.choice([0, 1], 300, p=[0.1, 0.9])
 
     x = np.concatenate([x0, x1])
@@ -24,7 +24,7 @@ def _example_1(rs: np.random.RandomState) -> tuple[npt.NDArray[Any], npt.NDArray
 def _example_2() -> tuple[npt.NDArray[Any], npt.NDArray[Any]]:
     """Example 2 - x completely predicts y"""
     x = np.array([1, 1, 0, 0, 0, 0, 0, 0, 0, 0])
-    y = np.array(['a', 'a', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'])
+    y = np.array(["a", "a", "b", "b", "b", "b", "b", "b", "b", "b"])
     return (x, y)
 
 
@@ -53,7 +53,7 @@ def _example_4(rs: np.random.RandomState) -> tuple[npt.NDArray[Any], npt.NDArray
 
 def _example_5(rs: np.random.RandomState) -> tuple[npt.NDArray[Any], npt.NDArray[Any]]:
     """Example 5 - x is not predictive of y (random noise)"""
-    x = rs.choice(['a', 'b'], 500)
+    x = rs.choice(["a", "b"], 500)
     y = rs.choice([0, 1], 500)
     return (x, y)
 
@@ -140,6 +140,6 @@ def test_pred_power_score_classification() -> None:
     assert res < 0.333
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     test_pearson_correlation()
     test_pred_power_score_classification()

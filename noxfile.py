@@ -27,13 +27,13 @@ def test(s: Session) -> None:
 @session(venv_backend="none")
 def fmt(s: Session) -> None:
     s.run("isort", ".")
-    s.run("black", ".", "-S")
+    s.run("black", ".")
 
 
 @session(venv_backend="none")
 def fmt_check(s: Session) -> None:
     s.run("isort", "--check", ".")
-    s.run("black", "--check", ".", "-S")
+    s.run("black", "--check", ".")
 
 
 @session(venv_backend="none")

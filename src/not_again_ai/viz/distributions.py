@@ -15,8 +15,8 @@ def univariate_distplot(
     save_pathname: str,
     print_summary: bool = True,
     title: Optional[str] = None,
-    xlabel: Optional[str] = 'Value',
-    ylabel: Optional[str] = 'Count',
+    xlabel: Optional[str] = "Value",
+    ylabel: Optional[str] = "Count",
     xlim: Optional[tuple[float, float]] = None,
     ylim: Optional[tuple[float, float]] = None,
     xticks: Optional[npt.ArrayLike] = None,
@@ -46,14 +46,14 @@ def univariate_distplot(
     """
 
     sns.set_theme(
-        style='white',
+        style="white",
         rc={
-            'font.size': font_size,
-            'axes.titlesize': font_size,
-            'axes.labelsize': font_size * 0.8,
+            "font.size": font_size,
+            "axes.titlesize": font_size,
+            "axes.labelsize": font_size * 0.8,
             "xtick.labelsize": font_size * 0.7,
             "ytick.labelsize": font_size * 0.7,
-            'legend.fontsize': font_size * 0.55,
+            "legend.fontsize": font_size * 0.55,
         },
     )
 
@@ -79,33 +79,33 @@ def univariate_distplot(
     if yticks is not None:
         facet_grid.set(yticks=yticks)
 
-    pastel_colors = sns.color_palette('pastel')
+    pastel_colors = sns.color_palette("pastel")
 
     ax = facet_grid.axes.flatten()[0]
 
     # plot summary statistic lines
-    ax.axvline(x=mean, color=pastel_colors[1], ls='--', lw=2.5, label=f'Mean: {mean:.3f}')
-    ax.axvline(x=median, color=pastel_colors[2], ls='--', lw=2.5, label=f'Median: {mean:.3f}')
-    ax.axvline(x=percentile_5, color=pastel_colors[9], ls='--', lw=2.5, label=f'5 Percentile: {percentile_5:.3f}')
-    ax.axvline(x=percentile_95, color=pastel_colors[4], ls='--', lw=2.5, label=f'95 Percentile: {percentile_95:.3f}')
+    ax.axvline(x=mean, color=pastel_colors[1], ls="--", lw=2.5, label=f"Mean: {mean:.3f}")
+    ax.axvline(x=median, color=pastel_colors[2], ls="--", lw=2.5, label=f"Median: {mean:.3f}")
+    ax.axvline(x=percentile_5, color=pastel_colors[9], ls="--", lw=2.5, label=f"5 Percentile: {percentile_5:.3f}")
+    ax.axvline(x=percentile_95, color=pastel_colors[4], ls="--", lw=2.5, label=f"95 Percentile: {percentile_95:.3f}")
     # add legend for these lines
     handles, _ = ax.get_legend_handles_labels()
     # and an empty patch for the stdev statistic
-    handles.append(mpatches.Patch(color='none', label=f'St Dev: {stdev:.3f}'))
+    handles.append(mpatches.Patch(color="none", label=f"St Dev: {stdev:.3f}"))
 
     plt.legend(handles=handles, loc=0)
 
     create_file_dir(save_pathname)
-    plt.savefig(save_pathname, bbox_inches='tight')
+    plt.savefig(save_pathname, bbox_inches="tight")
     reset_plot_libs()
 
     if print_summary:
         to_print = (
-            'Summary Statistics:',
-            f'Mean:\t\t{mean:.3f}',
-            f'Median:\t\t{median:.3f}',
-            f'5 Percentile:\t{percentile_5:.3f}',
-            f'95 Percentile:\t{percentile_95:.3f}',
-            f'St Dev:\t\t{stdev:.3f}',
+            "Summary Statistics:",
+            f"Mean:\t\t{mean:.3f}",
+            f"Median:\t\t{median:.3f}",
+            f"5 Percentile:\t{percentile_5:.3f}",
+            f"95 Percentile:\t{percentile_95:.3f}",
+            f"St Dev:\t\t{stdev:.3f}",
         )
-        print('\n'.join(to_print))
+        print("\n".join(to_print))

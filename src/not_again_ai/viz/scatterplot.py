@@ -36,24 +36,24 @@ def scatterplot_basic(
     """
 
     sns.set_theme(
-        style='white',
+        style="white",
         rc={
-            'font.size': font_size,
-            'axes.titlesize': font_size,
-            'axes.labelsize': font_size * 0.8,
-            'xtick.labelsize': font_size * 0.65,
-            'ytick.labelsize': font_size * 0.65,
-            'legend.fontsize': font_size * 0.5,
-            'legend.title_fontsize': font_size * 0.55,
+            "font.size": font_size,
+            "axes.titlesize": font_size,
+            "axes.labelsize": font_size * 0.8,
+            "xtick.labelsize": font_size * 0.65,
+            "ytick.labelsize": font_size * 0.65,
+            "legend.fontsize": font_size * 0.5,
+            "legend.title_fontsize": font_size * 0.55,
         },
     )
-    data = pd.DataFrame({'x': x, 'y': y})
-    ax = sns.scatterplot(data=data, x='x', y='y')
+    data = pd.DataFrame({"x": x, "y": y})
+    ax = sns.scatterplot(data=data, x="x", y="y")
 
     ax.figure.set_size_inches(height * aspect, height)
     ax.set_title(title)
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
 
     ax.set_xlim(xlim)
     ax.set_ylim(ylim)
@@ -61,5 +61,5 @@ def scatterplot_basic(
     sns.despine(top=True, right=True)
 
     create_file_dir(save_pathname)
-    plt.savefig(save_pathname, bbox_inches='tight')
+    plt.savefig(save_pathname, bbox_inches="tight")
     reset_plot_libs()

@@ -49,7 +49,7 @@ def pearson_correlation(
     # check if y contains all of the same values, and if so return 1
     if len(np.unique(y_array)) == 1:
         if print_diagnostics:
-            print('y contains all of the same values, returning 1')
+            print("y contains all of the same values, returning 1")
         return 1.0
 
     pearsonr = scipy.stats.pearsonr(x_array, y_array)
@@ -97,25 +97,25 @@ def pred_power_score_classification(
     # check if y contains all of the same values, and if so return 1
     if len(np.unique(y_array)) == 1:
         if print_diagnostics:
-            print('y contains all of the same values, returning 1')
+            print("y contains all of the same values, returning 1")
         return 1.0
 
     # Use KFold cross-validation to compute weighted (macro) F1 score
-    model = sktree.DecisionTreeClassifier(criterion='gini', splitter='best', max_depth=None, random_state=0)
+    model = sktree.DecisionTreeClassifier(criterion="gini", splitter="best", max_depth=None, random_state=0)
     cv_method = skmodel_selection.KFold(n_splits=cv_splits, shuffle=True, random_state=0)
     f1_scores = skmodel_selection.cross_val_score(
-        model, x_array, y_array, cv=cv_method, scoring='f1_weighted', error_score='raise'
+        model, x_array, y_array, cv=cv_method, scoring="f1_weighted", error_score="raise"
     )
     f1 = np.mean(f1_scores)
 
     # find majority class in y
     majority_class = np.argmax(np.bincount(y_array))
     preds = np.ones_like(y_array) * majority_class
-    f1_null: float = skmetrics.f1_score(y_array, preds, average='weighted')
+    f1_null: float = skmetrics.f1_score(y_array, preds, average="weighted")
 
     # generate random predictions
     preds = np.random.choice(np.unique(y_array), size=len(y_array))
-    f1_random: float = skmetrics.f1_score(y_array, preds, average='weighted')
+    f1_random: float = skmetrics.f1_score(y_array, preds, average="weighted")
 
     f1_naive = np.max([f1_null, f1_random])
     pps: float = (f1 - f1_naive) / (1 - f1_naive)

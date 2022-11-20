@@ -41,7 +41,7 @@ def test_embarrassingly_parallel_simple() -> None:
 
 def test_embarrassingly_parallel_both() -> None:
     args = ((2, 2), (3, 3), (4, 4))
-    kwargs = [{'double': True}, {'double': False}, {'double': True}]
+    kwargs = [{"double": True}, {"double": False}, {"double": True}]
 
     result = embarrassingly_parallel(multby2, args, kwargs, num_processes=multiprocessing.cpu_count())
 
@@ -52,7 +52,7 @@ def test_embarrassingly_parallel_both() -> None:
 
 
 def test_embarrassingly_parallel_kwargs() -> None:
-    kwargs = [{'x': 2, 'y': 2, 'double': True}, {'x': 3, 'y': 3, 'double': False}, {'x': 4, 'y': 4, 'double': True}]
+    kwargs = [{"x": 2, "y": 2, "double": True}, {"x": 3, "y": 3, "double": False}, {"x": 4, "y": 4, "double": True}]
 
     result = embarrassingly_parallel(multby2, None, kwargs, num_processes=multiprocessing.cpu_count())
 
@@ -68,7 +68,7 @@ def test_embarassingly_parallel_exceptions() -> None:
 
     with pytest.raises(ValueError):
         args = ((2, 2), (3, 3), (4, 4))
-        kwargs = [{'double': True}, {'double': False}]
+        kwargs = [{"double": True}, {"double": False}]
         embarrassingly_parallel(multby2, args, kwargs, num_processes=multiprocessing.cpu_count())
 
 

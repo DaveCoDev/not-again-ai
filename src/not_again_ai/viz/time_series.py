@@ -19,8 +19,8 @@ def ts_lineplot(
     ] = None,
     ts_names: Optional[list[str]] = None,
     title: Optional[str] = None,
-    xlabel: Optional[str] = 'Time',
-    ylabel: Optional[str] = 'Value',
+    xlabel: Optional[str] = "Time",
+    ylabel: Optional[str] = "Value",
     legend_title: Optional[str] = None,
     xaxis_date_format: Optional[str] = None,
     xaxis_major_locator: Optional[matplotlib.ticker.Locator] = None,
@@ -31,7 +31,7 @@ def ts_lineplot(
     aspect: float = 2.2,
     linewidth: float = 2,
     legend_loc: Optional[Union[str, tuple[float, float], int]] = None,
-    palette: Union[str, list[str], list[float], dict[str, str], matplotlib.colors.Colormap] = 'tab10',
+    palette: Union[str, list[str], list[float], dict[str, str], matplotlib.colors.Colormap] = "tab10",
 ) -> None:
     """Saves a time series plot where each row in `ts_data` is a time series.
     Optionally, a specific x axis (like dates) can be provided with `ts_x`.
@@ -61,15 +61,15 @@ def ts_lineplot(
     """
 
     sns.set_theme(
-        style='white',
+        style="white",
         rc={
-            'font.size': font_size,
-            'axes.titlesize': font_size,
-            'axes.labelsize': font_size * 0.8,
-            'xtick.labelsize': font_size * 0.65,
-            'ytick.labelsize': font_size * 0.65,
-            'legend.fontsize': font_size * 0.5,
-            'legend.title_fontsize': font_size * 0.55,
+            "font.size": font_size,
+            "axes.titlesize": font_size,
+            "axes.labelsize": font_size * 0.8,
+            "xtick.labelsize": font_size * 0.65,
+            "ytick.labelsize": font_size * 0.65,
+            "legend.fontsize": font_size * 0.5,
+            "legend.title_fontsize": font_size * 0.55,
         },
     )
 
@@ -77,9 +77,9 @@ def ts_lineplot(
     if ts_x is None:
         ts_x = np.arange(len(ts_data))
 
-    sns_data['Time'] = ts_x
-    sns_data = sns_data.melt(id_vars='Time', var_name='Time Series', value_name='Value')
-    ax = sns.lineplot(data=sns_data, x='Time', y='Value', hue='Time Series', palette=palette, linewidth=linewidth)
+    sns_data["Time"] = ts_x
+    sns_data = sns_data.melt(id_vars="Time", var_name="Time Series", value_name="Value")
+    ax = sns.lineplot(data=sns_data, x="Time", y="Value", hue="Time Series", palette=palette, linewidth=linewidth)
 
     ax.figure.set_size_inches(height * aspect, height)
     ax.set_title(title)
@@ -104,5 +104,5 @@ def ts_lineplot(
     sns.despine(top=True, right=True)
 
     create_file_dir(save_pathname)
-    plt.savefig(save_pathname, bbox_inches='tight')
+    plt.savefig(save_pathname, bbox_inches="tight")
     reset_plot_libs()
