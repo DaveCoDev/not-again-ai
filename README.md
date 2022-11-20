@@ -56,8 +56,8 @@ We currently offer two visualization tools, a time series plot and a histogram f
 ```
 
 <p float="center">
-  <img src="assets/ts_lineplot5.svg" width="404" />
-  <img src="assets/distributions_test4.svg" width="404" /> 
+  <img src="https://raw.githubusercontent.com/DaveCoDev/not-again-ai/44c53fb7fb07234aaceea40c90d8cb74e5fa6c15/assets/distributions_test4.svg" width="404" />
+  <img src="https://raw.githubusercontent.com/DaveCoDev/not-again-ai/44c53fb7fb07234aaceea40c90d8cb74e5fa6c15/assets/ts_lineplot5.svg" width="404" /> 
 </p>
 
 ## Parallel
@@ -327,6 +327,12 @@ To build the user guide, run,
 ```
 
 and open `docs/user_guide/site/index.html` using a web browser.
+
+To build the user guide, additionally validating external URLs, run:
+
+```bash
+(.venv) $ nox -s docs_check_urls
+```
 
 To build and serve the user guide with automatic rebuilding as you change the contents,
 run:

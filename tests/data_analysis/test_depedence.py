@@ -82,7 +82,6 @@ def _example_8(rs: np.random.RandomState) -> tuple[npt.NDArray[Any], npt.NDArray
 
 def test_pearson_correlation() -> None:
     rs = np.random.RandomState(365)
-    print(type(rs))
 
     x, y = _example_1(rs)
     res = pearson_correlation(x, y, is_x_categorical=True, is_y_categorical=True)

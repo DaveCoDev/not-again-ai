@@ -73,6 +73,7 @@ def pred_power_score_classification(
 ) -> float:
     """Compute Predictive Power Score, an asymmetric score that can detect
     linear or non-linear relationships between two variables.
+    For this implementation, the score is computed for a classification task and y must be categorical.
 
     Returns 1 in the case y contains all of the same values.
 
@@ -102,7 +103,9 @@ def pred_power_score_classification(
     # Use KFold cross-validation to compute weighted (macro) F1 score
     model = sktree.DecisionTreeClassifier(criterion='gini', splitter='best', max_depth=None, random_state=0)
     cv_method = skmodel_selection.KFold(n_splits=cv_splits, shuffle=True, random_state=0)
-    f1_scores = skmodel_selection.cross_val_score(model, x_array, x_array, cv=cv_method, scoring='f1_weighted')
+    f1_scores = skmodel_selection.cross_val_score(
+        model, x_array, y_array, cv=cv_method, scoring='f1_weighted', error_score='raise'
+    )
     f1 = np.mean(f1_scores)
 
     # find majority class in y

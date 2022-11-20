@@ -6,7 +6,7 @@ nox.options.reuse_existing_virtualenvs = True
 nox.options.sessions = ["fmt_check", "lint", "type_check", "test", "docs"]
 
 
-@session(python=["3.9", "3.10"])
+@session(python=["3.9", "3.10", "3.11"])
 def test(s: Session) -> None:
     s.install(".", "pytest", "pytest-cov")
     s.run(
@@ -54,6 +54,11 @@ doc_env = {"PYTHONPATH": "src"}
 @session(venv_backend="none")
 def docs(s: Session) -> None:
     s.run("mkdocs", "build", env=doc_env)
+
+
+@session(venv_backend="none")
+def docs_check_urls(s: Session) -> None:
+    s.run("mkdocs", "build", env={**doc_env, **{"HTMLPROOFER_VALIDATE_EXTERNAL_URLS": str(True)}})
 
 
 @session(venv_backend="none")

@@ -18,6 +18,7 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Typing :: Typed",
 ]
 
@@ -26,7 +27,7 @@ classifiers = [
 # Some packages, such as scipy, constrain their upper bound of Python versions they support.
 # Without also constraining the upper bound here, Poetry will not select those versions and will
 # result in an old version being resolved/locked.
-python = "^3.9, <3.11"
+python = "^3.9, <3.12"
 numpy = "^1.22.4"
 pandas = "^1.4.2"
 seaborn = "^0"
@@ -80,7 +81,6 @@ build-backend = "poetry.core.masonry.api"
 
 
 [tool.mypy]
-show_error_codes = true
 ignore_missing_imports = true
 strict = true
 # If certain strict config options are too pedantic for a project,

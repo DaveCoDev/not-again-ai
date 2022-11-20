@@ -3,14 +3,15 @@ name: python
 on: [push, pull_request]
 
 env:
-  POETRY_VERSION: 1.2.1
+  POETRY_VERSION: "1.2.2"
+  PYTHON_VERSION: "3.10"
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ "3.9", "3.10" ]
+        python-version: [ "3.9", "3.10", "3.11" ]
     steps:
       - uses: actions/checkout@v3
       - name: Install poetry
@@ -41,9 +42,22 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: poetry
       - name: Install Nox and group dependencies
         run: poetry install --only nox,${{ matrix.job.poetry-groups }}
       - name: Test with Nox
         run: poetry run nox -s ${{ matrix.job.nox-session }}
+  poetry-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry==${POETRY_VERSION}
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Validate Poetry Configuration and Lockfile Freshness
+        # This command also includes `poetry check` validation.
+        run: poetry lock --check
