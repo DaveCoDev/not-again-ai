@@ -38,8 +38,7 @@ def fmt_check(s: Session) -> None:
 
 @session(venv_backend="none")
 def lint(s: Session) -> None:
-    # Run pyproject-flake8 entrypoint to support reading configuration from pyproject.toml.
-    s.run("pflake8", "src", "tests", "noxfile.py")
+    s.run("flake8", "src", "tests", "noxfile.py")
 
 
 @session(venv_backend="none")
@@ -59,6 +58,11 @@ def docs(s: Session) -> None:
 @session(venv_backend="none")
 def docs_check_urls(s: Session) -> None:
     s.run("mkdocs", "build", env={**doc_env, **{"HTMLPROOFER_VALIDATE_EXTERNAL_URLS": str(True)}})
+
+
+@session(venv_backend="none")
+def docs_offline(s: Session) -> None:
+    s.run("mkdocs", "build", env={**doc_env, **{"MKDOCS_MATERIAL_OFFLINE": str(True)}})
 
 
 @session(venv_backend="none")

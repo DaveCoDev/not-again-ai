@@ -1,14 +1,16 @@
 # not-again-ai
 
 [![GitHub Actions][github-actions-badge]](https://github.com/DaveCoDev/not-again-ai/actions)
+[![Packaged with Poetry][poetry-badge]](https://python-poetry.org/)
 [![Code style: black][black-badge]](https://github.com/psf/black)
 [![Imports: isort][isort-badge]](https://pycqa.github.io/isort/)
-[![Type checked with mypy][mypy-badge]](https://github.com/python/mypy)
+[![Type checked with mypy][mypy-badge]](https://mypy-lang.org/)
 
 [github-actions-badge]: https://github.com/DaveCoDev/not-again-ai/workflows/python/badge.svg
 [black-badge]: https://img.shields.io/badge/code%20style-black-000000.svg
 [isort-badge]: https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336
-[mypy-badge]: https://img.shields.io/badge/type%20checked-mypy-blue.svg
+[mypy-badge]: https://www.mypy-lang.org/static/mypy_badge.svg
+[poetry-badge]: https://img.shields.io/badge/packaging-poetry-cyan.svg
 
 Have you ever been working on a project and groaned as you go to search again on how to nicely plot a simple distribution? Or have you been frustrated at wanting to run multiple functions in parallel, but stuck between the seemingly ten different ways to do it?
 **not-again-ai** is a Python package designed to once and for all collect all these little things that come up over and over again in AI projects and put them in one place.
@@ -17,7 +19,7 @@ Have you ever been working on a project and groaned as you go to search again on
 
 # Installation
 
-Requires: Python 3.9, 3.10
+Requires: Python 3.9, 3.10, or 3.11
 
 Install from [PyPI](https://pypi.org/project/not-again-ai/)
 
@@ -150,8 +152,8 @@ Packaging is configured by:
 - [`pyproject.toml`](./pyproject.toml)
 
 To package the project as both a 
-[source distribution](https://docs.python.org/3/distutils/sourcedist.html) and
-a [wheel](https://wheel.readthedocs.io/en/stable/):
+[source distribution](https://packaging.python.org/en/latest/flow/#the-source-distribution-sdist) and
+a [wheel](https://packaging.python.org/en/latest/specifications/binary-distribution-format/):
 
 ```bash
 $ poetry build
@@ -232,7 +234,7 @@ included:
 - `flake8-broken-line`: Forbid using backslashes (`\`) for line breaks.
 - `flake8-comprehensions`: Helps write better `list`/`set`/`dict` comprehensions.
 - `pep8-naming`: Ensure functions, classes, and variables are named with correct casing.
-- `pyproject-flake8`: Allow configuration of `flake8` through `pyproject.toml`.
+- `flake8-pyproject`: Allow configuration of `flake8` through `pyproject.toml`.
 
 Some code style settings are included in [`.editorconfig`](./.editorconfig) and will be
 configured automatically in editors such as PyCharm.
@@ -332,6 +334,12 @@ To build the user guide, additionally validating external URLs, run:
 
 ```bash
 (.venv) $ nox -s docs_check_urls
+```
+
+To build the user guide in a format suitable for viewing directly from the file system, run:
+
+```bash
+(.venv) $ nox -s docs_offline
 ```
 
 To build and serve the user guide with automatic rebuilding as you change the contents,

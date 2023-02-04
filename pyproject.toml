@@ -37,7 +37,7 @@ scikit-learn = "^1"
 [tool.poetry.group.nox.dependencies]
 nox-poetry = "*"
 
-[tool.poetry.group.test.dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "*"
 pytest-cov = "*"
 
@@ -56,7 +56,7 @@ flake8-broken-line = "*"
 flake8-comprehensions = "*"
 pep8-naming = "*"
 # TODO: Remove this when flake8 adds native support for pyproject.toml.
-pyproject-flake8 = "*"
+flake8-pyproject = "*"
 
 [tool.poetry.group.fmt.dependencies]
 black = "*"
@@ -86,7 +86,7 @@ strict = true
 # If certain strict config options are too pedantic for a project,
 # disable them selectively here by setting to false.
 
-# Note: This configuration is supported by pyproject-flake8.
+# Note: This configuration is supported by flake8-pyproject.
 [tool.flake8]
 max-line-length = 120
 # This ignore is required by black.
@@ -94,7 +94,7 @@ extend-ignore = "E203,E501"
 
 [tool.black]
 line-length = 120
-target-version = ["py39", "py310"]
+target-version = ["py39", "py310", "py311"]
 # black will automatically exclude all files listed in .gitignore
 # If you need to exclude additional folders, consider using extend-exclude to avoid disabling the
 # default .gitignore behaviour.
@@ -112,6 +112,11 @@ skip_gitignore = true
 
 
 [tool.pytest.ini_options]
+addopts = [
+    "--strict-config",
+    "--strict-markers",
+]
+xfail_strict = true
 filterwarnings = [
     # When running tests, treat warnings as errors (e.g. -Werror).
     # See: https://docs.pytest.org/en/latest/reference/reference.html#confval-filterwarnings
