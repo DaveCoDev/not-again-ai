@@ -1,12 +1,13 @@
 {
-    "editor.formatOnSave": true,
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": true
+        }
+    },
     "python.formatting.provider": "black",
-    "python.formatting.blackArgs": [],
     "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true,
-    "python.linting.flake8Args": [
-        "--ignore=E203",
-        "--max-line-length=120",
-        "--verbose"
-    ]
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportGeneralTypeIssues": "none",
+    }
 }

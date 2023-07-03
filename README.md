@@ -1,16 +1,18 @@
 # not-again-ai
 
-[![GitHub Actions][github-actions-badge]](https://github.com/DaveCoDev/not-again-ai/actions)
+[![GitHub Actions][github-actions-badge]](https://github.com/johnthagen/python-blueprint/actions)
 [![Packaged with Poetry][poetry-badge]](https://python-poetry.org/)
-[![Code style: black][black-badge]](https://github.com/psf/black)
-[![Imports: isort][isort-badge]](https://pycqa.github.io/isort/)
+[![Nox][nox-badge]](https://github.com/wntrblm/nox)
+[![Code style: Black][black-badge]](https://github.com/psf/black)
+[![Ruff][ruff-badge]](https://github.com/astral-sh/ruff)
 [![Type checked with mypy][mypy-badge]](https://mypy-lang.org/)
 
-[github-actions-badge]: https://github.com/DaveCoDev/not-again-ai/workflows/python/badge.svg
-[black-badge]: https://img.shields.io/badge/code%20style-black-000000.svg
-[isort-badge]: https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336
-[mypy-badge]: https://www.mypy-lang.org/static/mypy_badge.svg
+[github-actions-badge]: https://github.com/johnthagen/python-blueprint/workflows/python/badge.svg
 [poetry-badge]: https://img.shields.io/badge/packaging-poetry-cyan.svg
+[nox-badge]: https://img.shields.io/badge/%F0%9F%A6%8A-Nox-D85E00.svg
+[black-badge]: https://img.shields.io/badge/code%20style-black-000000.svg
+[ruff-badge]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
+[mypy-badge]: https://www.mypy-lang.org/static/mypy_badge.svg
 
 Have you ever been working on a project and groaned as you go to search again on how to nicely plot a simple distribution? Or have you been frustrated at wanting to run multiple functions in parallel, but stuck between the seemingly ten different ways to do it?
 **not-again-ai** is a Python package designed to once and for all collect all these little things that come up over and over again in AI projects and put them in one place.
@@ -102,7 +104,7 @@ This package uses [Poetry](https://python-poetry.org/) to manage dependencies an
 isolated [Python virtual environments](https://docs.python.org/3/library/venv.html).
 
 To proceed, 
-[install Poetry globally onto your system](https://python-poetry.org/docs/#installation).
+[install Poetry globally onto your system](https://python-poetry.org/docs/#installing-with-the-official-installer).
 
 (Optional) configure Poetry to use an in-project virtual environment.
 ```bash
@@ -136,7 +138,7 @@ To deactivate the environment:
 (.venv) $ exit
 ```
 
-To upgrade all dependencies to their latest versions:
+To upgrade all dependencies to the versions defined in [`pyproject.toml`](./pyproject.toml):
 
 ```bash
 $ poetry update
@@ -159,7 +161,7 @@ a [wheel](https://packaging.python.org/en/latest/specifications/binary-distribut
 $ poetry build
 ```
 
-This will generate `dist/not-again-ai-0.1.0.tar.gz` and `dist/not_again_ai-0.1.0-py3-none-any.whl`.
+This will generate `dist/not-again-ai-<version>.tar.gz` and `dist/not_again_ai-<version>-py3-none-any.whl`.
 
 Read more about the [advantages of wheels](https://pythonwheels.com/) to understand why generating
 wheel distributions are important.
@@ -226,18 +228,8 @@ To pass arguments to `pytest` through `nox`:
 ## Code Style Checking
 
 [PEP 8](https://peps.python.org/pep-0008/) is the universally accepted style guide for
-Python code. PEP 8 code compliance is verified using [Flake8](http://flake8.pycqa.org/). Flake8 is
-configured in the `[tool.flake8]` section of `pyproject.toml`. Extra Flake8 plugins are also
-included:
-
-- `flake8-bugbear`: Find likely bugs and design problems in your program.
-- `flake8-broken-line`: Forbid using backslashes (`\`) for line breaks.
-- `flake8-comprehensions`: Helps write better `list`/`set`/`dict` comprehensions.
-- `pep8-naming`: Ensure functions, classes, and variables are named with correct casing.
-- `flake8-pyproject`: Allow configuration of `flake8` through `pyproject.toml`.
-
-Some code style settings are included in [`.editorconfig`](./.editorconfig) and will be
-configured automatically in editors such as PyCharm.
+Python code. PEP 8 code compliance is verified using [Ruff](https://github.com/astral-sh/ruff).
+Ruff is configured in the `[tool.ruff]` section of `pyproject.toml`.
 
 To lint code, run:
 
@@ -245,10 +237,16 @@ To lint code, run:
 (.venv) $ nox -s lint
 ```
 
+To automatically fix fixable lint errors, run:
+
+```bash
+(.venv) $ nox -s lint_fix
+```
+
 ## Automated Code Formatting
 
 Code is automatically formatted using [black](https://github.com/psf/black). Imports are
-automatically sorted and grouped using [isort](https://github.com/PyCQA/isort/).
+automatically sorted and grouped using [Ruff](https://github.com/astral-sh/ruff).
 
 These tools are configured by:
 
@@ -309,7 +307,9 @@ GitHub Actions is configured in [`.github/workflows/python.yml`](./.github/workf
 
 Install the [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python) for VSCode.
 
-Default settings are configured in [`.vscode/settings.json`](./.vscode/settings.json). This will enable flake8 and black formatting with consistent settings.
+Install the [Ruff extension](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) for VSCode.
+
+Default settings are configured in [`.vscode/settings.json`](./.vscode/settings.json). This will enable Ruff and black with consistent settings.
 
 # Documentation
 

@@ -140,6 +140,6 @@ def test_pred_power_score_classification() -> None:
     assert res < 0.333
 
 
-if "__main__" == __name__:
+if __name__ == "__main__":
     test_pearson_correlation()
     test_pred_power_score_classification()
