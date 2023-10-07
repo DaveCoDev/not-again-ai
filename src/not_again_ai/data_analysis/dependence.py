@@ -1,5 +1,3 @@
-from typing import Union
-
 import numpy as np
 import numpy.typing as npt
 import scipy
@@ -10,8 +8,8 @@ import sklearn.tree as sktree
 
 
 def _process_variable(
-    x: Union[npt.NDArray[np.int_], npt.NDArray[np.float_], npt.NDArray[np.str_]]
-) -> Union[npt.NDArray[np.int_], npt.NDArray[np.float_], npt.NDArray[np.str_]]:
+    x: npt.NDArray[np.int_] | (npt.NDArray[np.float_] | npt.NDArray[np.str_]),
+) -> npt.NDArray[np.int_] | (npt.NDArray[np.float_] | npt.NDArray[np.str_]):
     """Process variable by encoding it as a numeric array."""
     le = skpreprocessing.LabelEncoder()
     x = le.fit_transform(x)
@@ -19,8 +17,10 @@ def _process_variable(
 
 
 def pearson_correlation(
-    x: Union[list[int], list[float], list[str], npt.NDArray[np.int_], npt.NDArray[np.float_], npt.NDArray[np.str_]],
-    y: Union[list[int], list[float], list[str], npt.NDArray[np.int_], npt.NDArray[np.float_], npt.NDArray[np.str_]],
+    x: list[int]
+    | (list[float] | (list[str] | (npt.NDArray[np.int_] | (npt.NDArray[np.float_] | npt.NDArray[np.str_])))),
+    y: list[int]
+    | (list[float] | (list[str] | (npt.NDArray[np.int_] | (npt.NDArray[np.float_] | npt.NDArray[np.str_])))),
     is_x_categorical: bool = False,
     is_y_categorical: bool = False,
     print_diagnostics: bool = False,
@@ -59,15 +59,9 @@ def pearson_correlation(
 
 
 def pred_power_score_classification(
-    x: Union[
-        list[int],
-        list[float],
-        list[str],
-        npt.NDArray[np.int_],
-        npt.NDArray[np.float_],
-        npt.NDArray[np.str_],
-    ],
-    y: Union[list[int], list[str], npt.NDArray[np.int_]],
+    x: list[int]
+    | (list[float] | (list[str] | (npt.NDArray[np.int_] | (npt.NDArray[np.float_] | npt.NDArray[np.str_])))),
+    y: list[int] | (list[str] | npt.NDArray[np.int_]),
     cv_splits: int = 5,
     print_diagnostics: bool = False,
 ) -> float:

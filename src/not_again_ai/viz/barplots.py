@@ -1,5 +1,3 @@
-from typing import Optional, Union
-
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
@@ -10,14 +8,14 @@ from not_again_ai.viz.utils import reset_plot_libs
 
 
 def simple_barplot(
-    x: Union[list[str], list[float], npt.NDArray[np.int_], npt.NDArray[np.float_]],
-    y: Union[list[str], list[float], npt.NDArray[np.int_], npt.NDArray[np.float_]],
+    x: list[str] | (list[float] | (npt.NDArray[np.int_] | npt.NDArray[np.float_])),
+    y: list[str] | (list[float] | (npt.NDArray[np.int_] | npt.NDArray[np.float_])),
     save_pathname: str,
-    order: Optional[str] = None,
+    order: str | None = None,
     orient_bars_vertically: bool = True,
-    title: Optional[str] = None,
-    x_label: Optional[str] = None,
-    y_label: Optional[str] = None,
+    title: str | None = None,
+    x_label: str | None = None,
+    y_label: str | None = None,
     font_size: float = 48,
     height: float = 11,
     aspect: float = 2,
@@ -60,17 +58,17 @@ def simple_barplot(
         if order == "asc":
             # sort x and y ascending by
             if orient_bars_vertically:
-                y, x = zip(*sorted(zip(y, x)))
+                y, x = zip(*sorted(zip(y, x, strict=True)), strict=True)
             else:
-                x, y = zip(*sorted(zip(x, y)))
+                x, y = zip(*sorted(zip(x, y, strict=True)), strict=True)
             x = list(x)
             y = list(y)
         elif order == "desc":
             # sort x and y descending by y
             if orient_bars_vertically:
-                y, x = zip(*sorted(zip(y, x), reverse=True))
+                y, x = zip(*sorted(zip(y, x, strict=True), reverse=True), strict=True)
             else:
-                x, y = zip(*sorted(zip(x, y), reverse=True))
+                x, y = zip(*sorted(zip(x, y, strict=True), reverse=True), strict=True)
             x = list(x)
             y = list(y)
 

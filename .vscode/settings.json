@@ -1,13 +1,17 @@
 {
     "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
             "source.fixAll": true
         }
     },
-    "python.formatting.provider": "black",
-    "python.linting.enabled": true,
     "python.analysis.diagnosticSeverityOverrides": {
         "reportGeneralTypeIssues": "none",
-    }
+    },
+    "black-formatter.args": ["--config", "pyproject.toml"],
+    "notebook.formatOnSave.enabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [],
 }

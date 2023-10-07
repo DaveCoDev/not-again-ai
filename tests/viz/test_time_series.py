@@ -7,7 +7,7 @@ from not_again_ai.viz.time_series import ts_lineplot
 
 def test_ts_lineplot() -> None:
     rs = np.random.RandomState(365)
-    values = rs.randn(365, 4).cumsum(axis=0)
+    values = rs.randn(365, 4).cumsum(axis=0).T
     dates = pd.date_range("1 1 2021", periods=365, freq="D")
     ts_lineplot(
         ts_data=values,

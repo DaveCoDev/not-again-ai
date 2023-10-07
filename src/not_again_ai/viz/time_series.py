@@ -1,6 +1,5 @@
-from typing import Optional, Union
-
 import matplotlib
+import matplotlib.dates
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
@@ -12,26 +11,26 @@ from not_again_ai.viz.utils import reset_plot_libs
 
 
 def ts_lineplot(
-    ts_data: Union[list[float], npt.NDArray[np.float64], npt.NDArray[np.int64]],
+    ts_data: list[float] | (npt.NDArray[np.float64] | npt.NDArray[np.int64]),
     save_pathname: str,
-    ts_x: Optional[
-        Union[list[float], npt.NDArray[np.float64], npt.NDArray[np.datetime64], npt.NDArray[np.int64], pd.Series]
-    ] = None,
-    ts_names: Optional[list[str]] = None,
-    title: Optional[str] = None,
-    xlabel: Optional[str] = "Time",
-    ylabel: Optional[str] = "Value",
-    legend_title: Optional[str] = None,
-    xaxis_date_format: Optional[str] = None,
-    xaxis_major_locator: Optional[matplotlib.ticker.Locator] = None,
-    ylim: Optional[tuple[float, float]] = None,
-    yticks: Optional[npt.ArrayLike] = None,
+    ts_x: list[float]
+    | (npt.NDArray[np.float64] | (npt.NDArray[np.datetime64] | (npt.NDArray[np.int64] | pd.Series)))
+    | None = None,
+    ts_names: list[str] | None = None,
+    title: str | None = None,
+    xlabel: str | None = "Time",
+    ylabel: str | None = "Value",
+    legend_title: str | None = None,
+    xaxis_date_format: str | None = None,
+    xaxis_major_locator: matplotlib.ticker.Locator | None = None,
+    ylim: tuple[float, float] | None = None,
+    yticks: npt.ArrayLike | None = None,
     font_size: float = 48,
     height: float = 13,
     aspect: float = 2.2,
     linewidth: float = 2,
-    legend_loc: Optional[Union[str, tuple[float, float], int]] = None,
-    palette: Union[str, list[str], list[float], dict[str, str], matplotlib.colors.Colormap] = "tab10",
+    legend_loc: str | (tuple[float, float] | int) | None = None,
+    palette: str | (list[str] | (list[float] | (dict[str, str] | matplotlib.colors.Colormap))) = "tab10",
 ) -> None:
     """Saves a time series plot where each row in `ts_data` is a time series.
     Optionally, a specific x axis (like dates) can be provided with `ts_x`.
@@ -72,7 +71,8 @@ def ts_lineplot(
             "legend.title_fontsize": font_size * 0.55,
         },
     )
-
+    # Transpose the list of lists or numpy array
+    ts_data = np.array(ts_data).T
     sns_data = pd.DataFrame(ts_data, columns=ts_names)
     if ts_x is None:
         ts_x = np.arange(len(ts_data))

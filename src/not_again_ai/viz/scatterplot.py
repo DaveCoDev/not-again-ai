@@ -1,5 +1,3 @@
-from typing import Optional, Union
-
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
@@ -11,12 +9,12 @@ from not_again_ai.viz.utils import reset_plot_libs
 
 
 def scatterplot_basic(
-    x: Union[list[float], npt.NDArray[np.int_], npt.NDArray[np.float_]],
-    y: Union[list[float], npt.NDArray[np.int_], npt.NDArray[np.float_]],
+    x: list[float] | (npt.NDArray[np.int_] | npt.NDArray[np.float_]),
+    y: list[float] | (npt.NDArray[np.int_] | npt.NDArray[np.float_]),
     save_pathname: str,
-    title: Optional[str] = None,
-    xlim: Optional[tuple[float, float]] = None,
-    ylim: Optional[tuple[float, float]] = None,
+    title: str | None = None,
+    xlim: tuple[float, float] | None = None,
+    ylim: tuple[float, float] | None = None,
     font_size: float = 48,
     height: float = 13,
     aspect: float = 1.2,

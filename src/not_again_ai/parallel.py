@@ -1,11 +1,12 @@
+from collections.abc import Callable
 from multiprocessing.pool import ThreadPool
-from typing import Any, Callable, Optional
+from typing import Any
 
 
 def embarrassingly_parallel(
     func: Callable[..., Any],
-    args_list: Optional[tuple[tuple[Any, ...], ...]],
-    kwargs_list: Optional[list[dict[str, Any]]] = None,
+    args_list: tuple[tuple[Any, ...], ...] | None,
+    kwargs_list: list[dict[str, Any]] | None = None,
     num_processes: int = 1,
 ) -> list[Any]:
     """Call multiple functions in parallel providing either positional arguments, keyword arguments,
@@ -40,7 +41,7 @@ def embarrassingly_parallel(
     elif (args_list is not None) and (kwargs_list is not None):
         # in this case args_list and kwargs_list must be of the same length
         if len(args_list) == len(kwargs_list):
-            for idx, (args, kwargs) in enumerate(zip(args_list, kwargs_list)):
+            for idx, (args, kwargs) in enumerate(zip(args_list, kwargs_list, strict=True)):
                 results[idx] = pool.apply_async(func, args, kwargs)
         else:
             pool.close()

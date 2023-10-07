@@ -1,5 +1,3 @@
-from typing import Optional, Union
-
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,16 +9,16 @@ from not_again_ai.viz.utils import reset_plot_libs
 
 
 def univariate_distplot(
-    data: Union[list[float], npt.NDArray[np.float64]],
+    data: list[float] | npt.NDArray[np.float64],
     save_pathname: str,
     print_summary: bool = True,
-    title: Optional[str] = None,
-    xlabel: Optional[str] = "Value",
-    ylabel: Optional[str] = "Count",
-    xlim: Optional[tuple[float, float]] = None,
-    ylim: Optional[tuple[float, float]] = None,
-    xticks: Optional[npt.ArrayLike] = None,
-    yticks: Optional[npt.ArrayLike] = None,
+    title: str | None = None,
+    xlabel: str | None = "Value",
+    ylabel: str | None = "Count",
+    xlim: tuple[float, float] | None = None,
+    ylim: tuple[float, float] | None = None,
+    xticks: npt.ArrayLike | None = None,
+    yticks: npt.ArrayLike | None = None,
     bins: int = 50,
     font_size: float = 48,
     height: float = 13,
