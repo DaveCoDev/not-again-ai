@@ -21,7 +21,7 @@ Have you ever been working on a project and groaned as you go to search again on
 
 # Installation
 
-Requires: Python 3.9, 3.10, or 3.11
+Requires: Python 3.10, 3.11, or 3.12
 
 Install from [PyPI](https://pypi.org/project/not-again-ai/)
 
