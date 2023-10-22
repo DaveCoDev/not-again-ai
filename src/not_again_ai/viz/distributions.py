@@ -4,7 +4,7 @@ import numpy as np
 import numpy.typing as npt
 import seaborn as sns
 
-from not_again_ai.system.files import create_file_dir
+from not_again_ai.base.file_system import create_file_dir
 from not_again_ai.viz.utils import reset_plot_libs
 
 
