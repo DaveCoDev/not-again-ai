@@ -4,7 +4,7 @@ import time
 
 import pytest
 
-from not_again_ai.parallel import embarrassingly_parallel, embarrassingly_parallel_simple
+from not_again_ai.base.parallel import embarrassingly_parallel, embarrassingly_parallel_simple
 
 
 def multby2(x: float, y: float, double: bool = False) -> float:

@@ -14,26 +14,52 @@
 [ruff-badge]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
 [mypy-badge]: https://www.mypy-lang.org/static/mypy_badge.svg
 
-Have you ever been working on a project and groaned as you go to search again on how to nicely plot a simple distribution? Or have you been frustrated at wanting to run multiple functions in parallel, but stuck between the seemingly ten different ways to do it?
-**not-again-ai** is a Python package designed to once and for all collect all these little things that come up over and over again in AI projects and put them in one place.
+**not-again-ai** is a collection of various functionalities that come up over and over again when developing AI projects as a Data/Applied/Research Scientist. It is designed to be simple and minimize dependencies first and foremost. This is not meant to reinvent the wheel, but instead be a home for functions that don’t belong well elsewhere. Additionally, feel free to **a)** use this as a template for your own Python package. **b)** instead of installing the package, copy and paste functions into your own projects (this is made easier with the limited amount of dependencies and the MIT license).
 
-**Documentation** available at [DaveCoDev.github.io/not-again-ai/](https://DaveCoDev.github.io/not-again-ai/).
+**Documentation** available within the [readmes](readmes) or auto-generated at [DaveCoDev.github.io/not-again-ai/](https://DaveCoDev.github.io/not-again-ai/).
 
 # Installation
 
-Requires: Python 3.9, 3.10, or 3.11
+Requires: Python 3.10, 3.11, or 3.12
 
-Install from [PyPI](https://pypi.org/project/not-again-ai/)
+Install the entire package from [PyPI](https://pypi.org/project/not-again-ai/) with: 
 
 ```bash
-$ pip install not_again_ai
+$ pip install not_again_ai[statistics,viz]
 ```
 
-# Quick tour
+The package is split into subpackages, so you can install only the parts you need.
+* **Base only**: `pip install not_again_ai`
+* **Statistics**: `pip install not_again_ai[statistics]`
+* **Visualization**: `pip install not_again_ai[viz]`
+
+
+# Quick Tour
+
+## Base
+[README](readmes/base.md)
+
+The base package includes only functions that have minimal external dependencies and are useful in a variety of situations such as parallelization and filesystem operations.
+
+
+## Statistics
+[README](readmes/statistics.md)
+
+We provide a few helpers for data analysis such as:
+
+```python
+from not_again_ai.statistics.dependence import pearson_correlation
+# quadratic dependence
+>>> x = (rs.rand(500) * 4) - 2
+>>> y = x**2 + (rs.randn(500) * 0.2)
+>>> pearson_correlation(x, y)
+0.05
+```
 
 ## Visualization
+[README](readmes/viz.md)
 
-We currently offer two visualization tools, a time series plot and a histogram for plotting univariate distributions.
+We offer opinionated wrappers around seaborn to make common visualizations easier to create and customize.
 
 ```python
 >>> import numpy as np
@@ -64,46 +90,13 @@ We currently offer two visualization tools, a time series plot and a histogram f
   <img src="https://raw.githubusercontent.com/DaveCoDev/not-again-ai/44c53fb7fb07234aaceea40c90d8cb74e5fa6c15/assets/ts_lineplot5.svg" width="404" /> 
 </p>
 
-## Parallel
-For when you have functions you want to execute in parallel.
-
-```python
-# execute the passed in functions in parallel without any additional arguments
->>> result = embarrassingly_parallel_simple([do_something, do_something2], num_processes=2)
-
-# execute the function mult in parallel with the passed in arguments
->>> args = ((2, 2), (3, 3), (4, 4))
->>> result2 = embarrassingly_parallel(mult, args, num_processes=multiprocessing.cpu_count())
-```
-
-## Filesystem
-We provide helpers to deal with files and directories easily and without raising unnecessary errors.
-
-```python
->>> from not_again_ai.system.files import create_file_dir
-
-# creates the directory mydir if it does not exist
->>> create_file_dir('mydir/myfile.txt')
-```
-
-## Data Analysis
-We provide a few helpers for data analysis.
-
-```python
-from not_again_ai.data_analysis.dependence import pearson_correlation
-# quadratic dependence
->>> x = (rs.rand(500) * 4) - 2
->>> y = x**2 + (rs.randn(500) * 0.2)
->>> pearson_correlation(x, y)
-0.05
-```
 
 # Development Information
 
-This package uses [Poetry](https://python-poetry.org/) to manage dependencies and
-isolated [Python virtual environments](https://docs.python.org/3/library/venv.html).
+The following information is relevant if you would like to contribute or use this package as a template for yourself. 
 
-To proceed, 
+This package uses [Poetry](https://python-poetry.org/) to manage dependencies and
+isolated [Python virtual environments](https://docs.python.org/3/library/venv.html). To proceed,
 [install Poetry globally onto your system](https://python-poetry.org/docs/#installing-with-the-official-installer).
 
 (Optional) configure Poetry to use an in-project virtual environment.

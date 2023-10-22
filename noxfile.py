@@ -8,7 +8,7 @@ nox.options.sessions = ["fmt_check", "lint", "type_check", "test", "docs"]
 
 @session(python=["3.10", "3.11", "3.12"])
 def test(s: Session) -> None:
-    s.install(".", "pytest", "pytest-cov", "pytest-randomly")
+    s.install(".[statistics,viz]", "pytest", "pytest-cov", "pytest-randomly")
     s.run(
         "python",
         "-m",

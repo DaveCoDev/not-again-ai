@@ -3,7 +3,7 @@ from typing import Any
 import numpy as np
 import numpy.typing as npt
 
-from not_again_ai.data_analysis.dependence import pearson_correlation, pred_power_score_classification
+from not_again_ai.statistics.dependence import pearson_correlation, pred_power_score_classification
 
 
 def _example_1(rs: np.random.RandomState) -> tuple[npt.NDArray[Any], npt.NDArray[Any]]:
