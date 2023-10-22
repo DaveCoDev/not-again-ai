@@ -8,7 +8,7 @@ Saves a simple barplot to the specified pathname given a list of values for the 
 
 Example:
 
-![Barplot](../assets/barplot_test4.png)
+<img src="https://raw.githubusercontent.com/DaveCoDev/not-again-ai/44c53fb7fb07234aaceea40c90d8cb74e5fa6c15/assets/barplot_test4.png" width="600" /> 
 
 
 ## Distributions
@@ -17,7 +17,7 @@ Saves a univariate distribution plot to the specified pathname given a list of n
 
 Example:
 
-![Distribution](../assets/distributions_test4.svg)
+<img src="https://raw.githubusercontent.com/DaveCoDev/not-again-ai/44c53fb7fb07234aaceea40c90d8cb74e5fa6c15/assets/distributions_test4.svg" width="600" /> 
 
 
 ## Scatter Plots
@@ -26,7 +26,7 @@ Saves a basic scatterplot to the specified pathname given corresponding x and y 
 
 Example:
 
-![Scatterplot](../assets/scatterplot_basic1.png)
+<img src="https://raw.githubusercontent.com/DaveCoDev/not-again-ai/44c53fb7fb07234aaceea40c90d8cb74e5fa6c15/assets/scatterplot_basic1.png" width="600" /> 
 
 
 ## Time Series Plots
@@ -35,4 +35,4 @@ Saves a time series plot where each row in `ts_data` is a time series.
 
 Example:
 
-![Time Series](../assets/ts_lineplot5.svg)
+<img src="https://raw.githubusercontent.com/DaveCoDev/not-again-ai/44c53fb7fb07234aaceea40c90d8cb74e5fa6c15/assets/ts_lineplot5.svg" width="600" /> 
