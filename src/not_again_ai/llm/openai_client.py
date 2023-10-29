@@ -7,7 +7,7 @@ class InvalidOAIAPITypeError(Exception):
     pass
 
 
-def oai_client(
+def openai_client(
     api_type: str = "openai",
     api_key: str | None = None,
     organization: str | None = None,
