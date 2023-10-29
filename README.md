@@ -41,6 +41,9 @@ The package is split into subpackages, so you can install only the parts you nee
 
 The base package includes only functions that have minimal external dependencies and are useful in a variety of situations such as parallelization and filesystem operations.
 
+## LLM (Large Language Model)
+[README](readmes/llm.md)
+
 
 ## Statistics
 [README](readmes/statistics.md)
@@ -110,12 +113,18 @@ Dependencies are defined in [`pyproject.toml`](./pyproject.toml) and specific ve
 into [`poetry.lock`](./poetry.lock). This allows for exact reproducible environments across
 all machines that use the project, both during development and in production.
 
-To install all dependencies into an isolated virtual environment:
+To upgrade all dependencies to the versions defined in [`pyproject.toml`](./pyproject.toml):
+
+```bash
+$ poetry update
+```
+
+To install all dependencies (with all extra dependencies) into an isolated virtual environment:
 
 > Append `--sync` to uninstall dependencies that are no longer in use from the virtual environment.
 
 ```bash
-$ poetry install
+$ poetry install --all-extras
 ```
 
 To [activate](https://python-poetry.org/docs/basic-usage#activating-the-virtual-environment) the
@@ -129,12 +138,6 @@ To deactivate the environment:
 
 ```bash
 (.venv) $ exit
-```
-
-To upgrade all dependencies to the versions defined in [`pyproject.toml`](./pyproject.toml):
-
-```bash
-$ poetry update
 ```
 
 ## Packaging
