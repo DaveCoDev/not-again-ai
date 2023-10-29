@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 env:
   POETRY_VERSION: "1.6.1"
-  PYTHON_VERSION: "3.10"
+  PYTHON_VERSION: "3.12"
 
 jobs:
   test:
@@ -24,6 +24,9 @@ jobs:
       - name: Install Nox
         run: poetry install --only nox
       - name: Test with Nox
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_ORG_ID: ${{ secrets.OPENAI_ORG_ID }}
         run: poetry run nox -s test-${{ matrix.python-version }}
   quality:
     runs-on: ubuntu-22.04
@@ -45,7 +48,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: poetry
       - name: Install Nox and group dependencies
-        run: poetry install --only nox,${{ matrix.job.poetry-groups }}
+        run: poetry install --all-extras
       - name: Test with Nox
         run: poetry run nox -s ${{ matrix.job.nox-session }}
   poetry-check:
