@@ -18,11 +18,11 @@ def openai_client(
 
     Args:
         api_type (str, optional): Type of the API to be used. Accepted values are 'openai' or 'azure_openai'.
-                                  Defaults to 'openai'.
+            Defaults to 'openai'.
         api_key (str, optional): The API key to authenticate the client. If not provided,
-                                 OpenAI automatically uses `OPENAI_API_KEY` from the environment.
+            OpenAI automatically uses `OPENAI_API_KEY` from the environment.
         organization (str, optional): The ID of the organization (for enterprise users). If not provided,
-                                      OpenAI automotically uses `OPENAI_ORG_ID` from the environment.
+            OpenAI automotically uses `OPENAI_ORG_ID` from the environment.
         timeout (float, optional): TBD
         max_retries (int, optional): TBD
 

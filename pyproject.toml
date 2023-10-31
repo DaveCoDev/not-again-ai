@@ -101,6 +101,7 @@ extend-select = [
 ]
 extend-ignore = ["RUF005", "E501"]
 src = ["src"]
+unfixable = ["F401"]
 
 [tool.ruff.isort]
 force-sort-within-sections = true
