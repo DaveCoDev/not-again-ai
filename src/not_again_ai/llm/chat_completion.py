@@ -66,7 +66,7 @@ def chat_completion(
         if function_call is not None:
             response_data["function_name"] = function_call.name  # type: ignore
             response_data["function_args"] = json.loads(function_call.arguments)
-    elif finish_reason == "stop":
+    elif finish_reason == "stop" or finish_reason == "length":
         message = response.choices[0].message
         response_data["message"] = message.content  # type: ignore
     usage = response.usage

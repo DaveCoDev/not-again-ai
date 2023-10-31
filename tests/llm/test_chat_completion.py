@@ -9,6 +9,13 @@ def test_chat_completion() -> None:
     print(response)
 
 
+def test_chat_completion_length() -> None:
+    client = openai_client()
+    messages = [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "Hello!"}]
+    response = chat_completion(messages=messages, model="gpt-3.5-turbo", max_tokens=2, client=client)
+    print(response)
+
+
 def test_chat_completion_expected_function() -> None:
     functions = [
         {
