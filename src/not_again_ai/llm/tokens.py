@@ -8,8 +8,8 @@ def truncate_str(text: str, max_len: int, model: str = "gpt-3.5-turbo-0613") -> 
         text: The string to truncate.
         max_len: The maximum number of tokens to keep.
         model: The model to use for tokenization. Defaults to "gpt-3.5-turbo-0613".
-           See https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb
-           for a list of OpenAI models.
+            See https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb
+            for a list of OpenAI models.
 
     Returns:
         The truncated string.
@@ -39,8 +39,8 @@ def num_tokens_from_messages(messages: list[dict[str, str]], model: str = "gpt-3
         messages: A list of messages to count the tokens
             should ideally be the result after calling llm.prompts.chat_prompt.
         model: The model to use for tokenization. Defaults to "gpt-3.5-turbo-0613".
-           See https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb
-           for a list of OpenAI models.
+            See https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb
+            for a list of OpenAI models.
 
     Returns:
         The number of tokens used by the messages.
