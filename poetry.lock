@@ -1022,13 +1022,13 @@ mkdocs = ">=1.0.3"
 
 [[package]]
 name = "mkdocs-material"
-version = "9.4.7"
+version = "9.4.8"
 description = "Documentation that simply works"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "mkdocs_material-9.4.7-py3-none-any.whl", hash = "sha256:4d698d52bb6a6a3c452ab854481c4cdb68453a0420956a6aee2de55fe15fe610"},
-    {file = "mkdocs_material-9.4.7.tar.gz", hash = "sha256:e704e001c9ef17291e1d3462c202425217601653e18f68f85d28eff4690e662b"},
+    {file = "mkdocs_material-9.4.8-py3-none-any.whl", hash = "sha256:8b20f6851bddeef37dced903893cd176cf13a21a482e97705a103c45f06ce9b9"},
+    {file = "mkdocs_material-9.4.8.tar.gz", hash = "sha256:f0c101453e8bc12b040e8b64ca39a405d950d8402609b1378cc2b98976e74b5f"},
 ]
 
 [package.dependencies]
@@ -1236,13 +1236,13 @@ files = [
 
 [[package]]
 name = "openai"
-version = "1.0.0rc2"
+version = "1.1.1"
 description = "Client library for the openai API"
 optional = true
 python-versions = ">=3.7.1"
 files = [
-    {file = "openai-1.0.0rc2-py3-none-any.whl", hash = "sha256:8f68169ebb11055fd4069f2d51ca67bbdcb9a6c5bb311f2c8641b0a95e2b17c3"},
-    {file = "openai-1.0.0rc2.tar.gz", hash = "sha256:34daf76cb49ab1f903d8419cab23d8fd3a31b6ae3a5fa3160fcf8258f152a7c0"},
+    {file = "openai-1.1.1-py3-none-any.whl", hash = "sha256:1496418b132c88352bcfffa8c24e83a69f0e01b1484cbb7bb48f722aad8fd6e1"},
+    {file = "openai-1.1.1.tar.gz", hash = "sha256:80e49cb21d8445f6d51339b8af7376fc83302c78ab78578b78133ef89634869d"},
 ]
 
 [package.dependencies]
@@ -2295,4 +2295,4 @@ viz = ["numpy", "pandas", "seaborn"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10, <3.13"
-content-hash = "74a82bd1f43a49d6b91ce5bf7bed268406b0637839fd9bbd6b3b03084c056f21"
+content-hash = "eb5673e95789986d2a8a976c049c89b51501d89325a1baa29172d0825e960216"
