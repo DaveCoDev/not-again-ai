@@ -1,16 +1,18 @@
 {
+    "ruff.lint.args": ["--config=./pyproject.toml"],
     "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
-        }
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+        },
+        "editor.defaultFormatter": "charliermarsh.ruff"
     },
-    "python.analysis.diagnosticSeverityOverrides": {
-        "reportGeneralTypeIssues": "none",
-    },
-    "black-formatter.args": ["--config", "pyproject.toml"],
     "notebook.formatOnSave.enabled": true,
+    "notebook.codeActionsOnSave": {
+        "source.fixAll": true,
+        "source.organizeImports": true
+    },
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "python.testing.pytestArgs": [],
