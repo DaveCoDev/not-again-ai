@@ -105,7 +105,7 @@ and then [install Poetry](https://python-poetry.org/docs/#installing-with-pipx).
 Install Poetry Plugin: Export
 
 ```bash
-pipx inject poetry poetry-plugin-export
+$ pipx inject poetry poetry-plugin-export
 ```
 
 (Optional) configure Poetry to use an in-project virtual environment.

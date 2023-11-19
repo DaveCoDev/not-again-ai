@@ -27,6 +27,7 @@ def chat_completion(
         temperature (float, optional): What sampling temperature to use, between 0 and 2.
             Higher values like 0.8 will make the output more random,
             while lower values like 0.2 will make it more focused and deterministic. Defaults to 0.7.
+        **kwargs: Additional keyword arguments to pass to the OpenAI client chat completion.
 
     Returns:
         dict: A dictionary containing the following keys:

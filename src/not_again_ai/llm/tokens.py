@@ -30,6 +30,24 @@ def truncate_str(text: str, max_len: int, model: str = "gpt-3.5-turbo-0613") -> 
         return text
 
 
+def num_tokens_in_string(text: str, model: str = "gpt-3.5-turbo-0613") -> int:
+    """Return the number of tokens in a string.
+
+    Args:
+        text: The string to count the tokens.
+        model: The model to use for tokenization. Defaults to "gpt-3.5-turbo-0613".
+
+    Returns:
+        The number of tokens in the string.
+    """
+    try:
+        encoding = tiktoken.encoding_for_model(model)
+    except KeyError:
+        print("Warning: model not found. Using cl100k_base encoding.")
+        encoding = tiktoken.get_encoding("cl100k_base")
+    return len(encoding.encode(text))
+
+
 def num_tokens_from_messages(messages: list[dict[str, str]], model: str = "gpt-3.5-turbo-0613") -> int:
     """Return the number of tokens used by a list of messages.
     NOTE: Does not support counting tokens used by function calling.
