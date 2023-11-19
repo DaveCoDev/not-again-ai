@@ -56,21 +56,17 @@ def simple_barplot(
 
     if order:
         if order == "asc":
-            # sort x and y ascending by
+            # sort x and y ascending by y
             if orient_bars_vertically:
-                y, x = zip(*sorted(zip(y, x, strict=True)), strict=True)
+                y, x = (list(t) for t in zip(*sorted(zip(y, x, strict=True)), strict=True))
             else:
-                x, y = zip(*sorted(zip(x, y, strict=True)), strict=True)
-            x = list(x)
-            y = list(y)
+                x, y = (list(t) for t in zip(*sorted(zip(x, y, strict=True)), strict=True))
         elif order == "desc":
             # sort x and y descending by y
             if orient_bars_vertically:
-                y, x = zip(*sorted(zip(y, x, strict=True), reverse=True), strict=True)
+                y, x = (list(t) for t in zip(*sorted(zip(y, x, strict=True), reverse=True), strict=True))
             else:
-                x, y = zip(*sorted(zip(x, y, strict=True), reverse=True), strict=True)
-            x = list(x)
-            y = list(y)
+                x, y = (list(t) for t in zip(*sorted(zip(x, y, strict=True), reverse=True), strict=True))
 
     ax = sns.barplot(x=x, y=y, color="b", orient="v" if orient_bars_vertically else "h")
     ax.figure.set_size_inches(height * aspect, height)

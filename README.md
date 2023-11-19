@@ -99,8 +99,14 @@ We offer opinionated wrappers around seaborn to make common visualizations easie
 The following information is relevant if you would like to contribute or use this package as a template for yourself. 
 
 This package uses [Poetry](https://python-poetry.org/) to manage dependencies and
-isolated [Python virtual environments](https://docs.python.org/3/library/venv.html). To proceed,
-[install Poetry globally onto your system](https://python-poetry.org/docs/#installing-with-the-official-installer).
+isolated [Python virtual environments](https://docs.python.org/3/library/venv.html). To proceed, be sure to first install [pipx](https://github.com/pypa/pipx#install-pipx)
+and then [install Poetry](https://python-poetry.org/docs/#installing-with-pipx).
+
+Install Poetry Plugin: Export
+
+```bash
+pipx inject poetry poetry-plugin-export
+```
 
 (Optional) configure Poetry to use an in-project virtual environment.
 ```bash
