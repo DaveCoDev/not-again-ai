@@ -25,7 +25,7 @@ Requires: Python 3.10, 3.11, or 3.12
 Install the entire package from [PyPI](https://pypi.org/project/not-again-ai/) with: 
 
 ```bash
-$ pip install not_again_ai[statistics,viz]
+$ pip install not_again_ai[llm,statistics,viz]
 ```
 
 The package is split into subpackages, so you can install only the parts you need.
