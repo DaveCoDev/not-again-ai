@@ -30,6 +30,7 @@ $ pip install not_again_ai[statistics,viz]
 
 The package is split into subpackages, so you can install only the parts you need.
 * **Base only**: `pip install not_again_ai`
+* **LLM only**: `pip install not_again_ai[llm]`
 * **Statistics**: `pip install not_again_ai[statistics]`
 * **Visualization**: `pip install not_again_ai[viz]`
 
@@ -37,16 +38,16 @@ The package is split into subpackages, so you can install only the parts you nee
 # Quick Tour
 
 ## Base
-[README](readmes/base.md)
+[README](https://github.com/DaveCoDev/not-again-ai/blob/main/readmes/base.md)
 
 The base package includes only functions that have minimal external dependencies and are useful in a variety of situations such as parallelization and filesystem operations.
 
 ## LLM (Large Language Model)
-[README](readmes/llm.md)
+[README](https://github.com/DaveCoDev/not-again-ai/blob/main/readmes/llm.md)
 
 
 ## Statistics
-[README](readmes/statistics.md)
+[README](https://github.com/DaveCoDev/not-again-ai/blob/main/readmes/statistics.md)
 
 We provide a few helpers for data analysis such as:
 
@@ -60,7 +61,7 @@ from not_again_ai.statistics.dependence import pearson_correlation
 ```
 
 ## Visualization
-[README](readmes/viz.md)
+[README](https://github.com/DaveCoDev/not-again-ai/blob/main/readmes/viz.md)
 
 We offer opinionated wrappers around seaborn to make common visualizations easier to create and customize.
 
