@@ -21,10 +21,12 @@ def openai_client(
             Defaults to 'openai'.
         api_key (str, optional): The API key to authenticate the client. If not provided,
             OpenAI automatically uses `OPENAI_API_KEY` from the environment.
-        organization (str, optional): The ID of the organization (for enterprise users). If not provided,
+        organization (str, optional): The ID of the organization. If not provided,
             OpenAI automotically uses `OPENAI_ORG_ID` from the environment.
-        timeout (float, optional): TBD
-        max_retries (int, optional): TBD
+        timeout (float, optional): By default requests time out after 10 minutes.
+        max_retries (int, optional): Certain errors are automatically retried 2 times by default,
+            with a short exponential backoff. Connection errors (for example, due to a network connectivity problem),
+            408 Request Timeout, 409 Conflict, 429 Rate Limit, and >=500 Internal errors are all retried by default.
 
     Returns:
         OpenAI: An instance of the OpenAI client.
@@ -34,7 +36,7 @@ def openai_client(
         NotImplementedError: If the specified API type is recognized but not yet supported (e.g., 'azure_openai').
 
     Examples:
-        >>> client = oai_client(api_type="openai", api_key="YOUR_API_KEY")
+        >>> client = openai_client(api_type="openai", api_key="YOUR_API_KEY")
     """
     if api_type not in ["openai", "azure_openai"]:
         raise InvalidOAIAPITypeError(f"Invalid OAIAPIType: {api_type}. Must be 'openai' or 'azure_openai'.")

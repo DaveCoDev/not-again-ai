@@ -1,5 +1,5 @@
 try:
-    import jinja2  # noqa
+    import liquid  # noqa
     import openai  # noqa
     import tiktoken  # noqa
 except ImportError:

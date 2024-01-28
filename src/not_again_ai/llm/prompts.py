@@ -1,4 +1,4 @@
-import jinja2
+from liquid import Template
 
 
 def _validate_message(message: dict[str, str]) -> bool:
@@ -19,15 +19,13 @@ def _validate_message(message: dict[str, str]) -> bool:
 
 
 def chat_prompt(messages_unformatted: list[dict[str, str]], variables: dict[str, str]) -> list[dict[str, str]]:
-    """Formats a list of messages for OpenAI's chat completion API using Jinja2 templating.
-
-    The content of each message is treated as a Jinja2 template that is rendered
-    with the provided variables.
+    """
+    Formats a list of messages for OpenAI's chat completion API using Liquid templating.
 
     Args:
         messages_unformatted: A list of dictionaries where each dictionary
             represents a message. Each message must have 'role' and 'content'
-            keys with string values, where content is a Jinja2 template.
+            keys with string values, where content is a Liquid template.
         variables: A dictionary where each key-value pair represents a variable
             name and its value for template rendering.
 
@@ -47,10 +45,13 @@ def chat_prompt(messages_unformatted: list[dict[str, str]], variables: dict[str,
             {"role": "user", "content": "Help me write Python code for the fibonnaci sequence"}
         ]
     """
+
     messages_formatted = messages_unformatted.copy()
     for message in messages_formatted:
-        # Validate each message and return a ValueError if any message is invalid
         if not _validate_message(message):
             raise ValueError(f"Invalid message: {message}")
-        message["content"] = jinja2.Template(message["content"]).render(**variables)
+
+        liquid_template = Template(message["content"])
+        message["content"] = liquid_template.render(**variables)
+
     return messages_formatted

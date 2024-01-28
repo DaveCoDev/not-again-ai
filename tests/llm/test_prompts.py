@@ -21,7 +21,7 @@ place_extraction_prompt = [
     {
         "role": "user",
         "content": """Here is the text I want you to extract places from:
-{# The user's input text goes here -#}
+{%- # The user's input text goes below %}
 {{text}}""",
     },
 ]
