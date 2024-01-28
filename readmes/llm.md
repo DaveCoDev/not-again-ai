@@ -7,7 +7,7 @@ Azure OpenAI is not currently supported by this function, but it is if you use t
 
 ## Model Responses
 ### chat_completion.chat_completion
-Use this to perform a standard chat completion. Takes in messages, a model name, and client object. Also exposes some community used optional parameters like max_tokens and functions for function calling.
+Use this to perform a standard chat completion. Takes in messages, a model name, and client object. Also exposes some community used optional parameters like max_tokens and tools for tool calling.
 ```python
 client = openai_client()
 messages = [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "Hello!"}]
@@ -16,7 +16,7 @@ response = chat_completion(messages=messages, model="gpt-3.5-turbo", max_tokens=
 
 ### chat_completion.chat_prompt
 Injects variables into the chat completion prompt. sa
-In the `messages_unformatted` argument, the "content" field can be a jinja2 template string to allow for more dynamic prompts.
+In the `messages_unformatted` argument, the "content" field can be a [Python Liquid](https://jg-rp.github.io/liquid/introduction/getting-started) template string to allow for more dynamic prompts.
 
 ## Token Management
 ### tokens.truncate_str
