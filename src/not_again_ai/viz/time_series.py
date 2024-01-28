@@ -13,9 +13,11 @@ from not_again_ai.viz.utils import reset_plot_libs
 def ts_lineplot(
     ts_data: list[float] | (npt.NDArray[np.float64] | npt.NDArray[np.int64]),
     save_pathname: str,
-    ts_x: list[float]
-    | (npt.NDArray[np.float64] | (npt.NDArray[np.datetime64] | (npt.NDArray[np.int64] | pd.Series)))
-    | None = None,
+    ts_x: (
+        list[float]
+        | (npt.NDArray[np.float64] | (npt.NDArray[np.datetime64] | (npt.NDArray[np.int64] | pd.Series)))
+        | None
+    ) = None,
     ts_names: list[str] | None = None,
     title: str | None = None,
     xlabel: str | None = "Time",

@@ -3,7 +3,6 @@
 [![GitHub Actions][github-actions-badge]](https://github.com/johnthagen/python-blueprint/actions)
 [![Packaged with Poetry][poetry-badge]](https://python-poetry.org/)
 [![Nox][nox-badge]](https://github.com/wntrblm/nox)
-[![Code style: Black][black-badge]](https://github.com/psf/black)
 [![Ruff][ruff-badge]](https://github.com/astral-sh/ruff)
 [![Type checked with mypy][mypy-badge]](https://mypy-lang.org/)
 
@@ -20,7 +19,7 @@
 
 # Installation
 
-Requires: Python 3.10, 3.11, or 3.12
+Requires: Python 3.11, or 3.12
 
 Install the entire package from [PyPI](https://pypi.org/project/not-again-ai/) with: 
 
@@ -230,9 +229,11 @@ To pass arguments to `pytest` through `nox`:
 
 ## Code Style Checking
 
-[PEP 8](https://peps.python.org/pep-0008/) is the universally accepted style guide for
-Python code. PEP 8 code compliance is verified using [Ruff](https://github.com/astral-sh/ruff).
-Ruff is configured in the `[tool.ruff]` section of `pyproject.toml`.
+[PEP 8](https://peps.python.org/pep-0008/) is the universally accepted style guide for Python
+code. PEP 8 code compliance is verified using [Ruff][Ruff]. Ruff is configured in the
+`[tool.ruff]` section of [`pyproject.toml`](./pyproject.toml).
+
+[Ruff]: https://github.com/astral-sh/ruff
 
 To lint code, run:
 
@@ -248,12 +249,7 @@ To automatically fix fixable lint errors, run:
 
 ## Automated Code Formatting
 
-Code is automatically formatted using [black](https://github.com/psf/black). Imports are
-automatically sorted and grouped using [Ruff](https://github.com/astral-sh/ruff).
-
-These tools are configured by:
-
-- [`pyproject.toml`](./pyproject.toml)
+[Ruff][Ruff] is used to automatically format code and group and sort imports.
 
 To automatically format code, run:
 

@@ -16,7 +16,6 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Typing :: Typed",
@@ -26,7 +25,7 @@ classifiers = [
 # Some packages, such as scipy, constrain their upper bound of Python versions they support.
 # Without also constraining the upper bound here, Poetry will not select those versions and will
 # result in an old version being resolved/locked.
-python = "^3.10, <3.13"
+python = "^3.11, <3.13"
 
 # Optional dependencies are defined here, and groupings are defined below.
 jinja2 = { version = "^3.1.3", optional = true }
@@ -45,9 +44,6 @@ viz = ["numpy", "pandas", "seaborn"]
 
 [tool.poetry.group.nox.dependencies]
 nox-poetry = "*"
-# TODO: Remove this after virtualenv supports platformdirs 4.
-#   https://github.com/pypa/virtualenv/issues/2666
-platformdirs = "<4"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
@@ -64,9 +60,6 @@ mypy = "*"
 
 [tool.poetry.group.lint.dependencies]
 ruff = "*"
-
-[tool.poetry.group.fmt.dependencies]
-black = "*"
 
 [tool.poetry.group.docs.dependencies]
 mkdocs-material = "*"
@@ -111,21 +104,12 @@ unfixable = ["F401"]
 [tool.ruff.isort]
 force-sort-within-sections = true
 split-on-trailing-comma = false
-# For non-src directory projects, explicitly set top level package names:
-# known-first-party = ["my-app"]
 
 [tool.ruff.flake8-tidy-imports]
 ban-relative-imports = "all"
 
 [tool.ruff.flake8-bugbear]
 extend-immutable-calls = ["typer.Argument"]
-
-[tool.black]
-line-length = 120
-target-version = ["py39", "py310", "py311", "py312"]
-# black will automatically exclude all files listed in .gitignore
-# If you need to exclude additional folders, consider using extend-exclude to avoid disabling the
-# default .gitignore behaviour.
 
 [tool.pytest.ini_options]
 addopts = [

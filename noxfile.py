@@ -1,12 +1,13 @@
 import nox
+from nox import parametrize
 from nox_poetry import Session, session
 
 nox.options.error_on_external_run = True
 nox.options.reuse_existing_virtualenvs = False
-nox.options.sessions = ["fmt_check", "lint", "type_check", "test", "docs"]
+nox.options.sessions = ["lint", "type_check", "test", "docs"]
 
 
-@session(python=["3.10", "3.11", "3.12"])
+@session(python=["3.11", "3.12"])
 def test(s: Session) -> None:
     s.install(".[llm,statistics,viz]", "pytest", "pytest-cov", "pytest-randomly")
     s.run(
@@ -27,7 +28,7 @@ def test(s: Session) -> None:
 @session(venv_backend="none")
 def fmt(s: Session) -> None:
     s.run("ruff", "check", ".", "--select", "I", "--fix")
-    s.run("black", ".")
+    s.run("ruff", "format", ".")
 
 
 @session(venv_backend="none")
@@ -37,8 +38,15 @@ def fmt_check(s: Session) -> None:
 
 
 @session(venv_backend="none")
-def lint(s: Session) -> None:
-    s.run("ruff", "check", ".")
+@parametrize(
+    "command",
+    [
+        ["ruff", "check", "."],
+        ["ruff", "format", "--check", "."],
+    ],
+)
+def lint(s: Session, command: list[str]) -> None:
+    s.run(*command)
 
 
 @session(venv_backend="none")
