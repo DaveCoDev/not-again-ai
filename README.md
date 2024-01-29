@@ -44,6 +44,15 @@ The base package includes only functions that have minimal external dependencies
 ## LLM (Large Language Model)
 [README](https://github.com/DaveCoDev/not-again-ai/blob/main/readmes/llm.md)
 
+Supports OpenAI chat completions and text embeddings. Includes functions for creating chat completion prompts, token management, and context management.
+
+One example: 
+```python
+client = openai_client()
+messages = [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "Hello!"}]
+response = chat_completion(messages=messages, model="gpt-3.5-turbo", max_tokens=100, client=client)["message"]
+>>> "Hello! How can I help you today?"
+```
 
 ## Statistics
 [README](https://github.com/DaveCoDev/not-again-ai/blob/main/readmes/statistics.md)
