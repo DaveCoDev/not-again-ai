@@ -18,7 +18,7 @@ def priority_truncation(
     variables: dict[str, str],
     priority: list[str],
     token_limit: int,
-    model: str = "gpt-3.5-turbo-1106",
+    model: str = "gpt-3.5-turbo-0125",
 ) -> list[dict[str, str]]:
     """Formats messages_unformatted and injects variables into the messages in the order of priority, truncating the messages to fit the token limit.
 
@@ -37,7 +37,7 @@ def priority_truncation(
         variables: A dictionary where each key-value pair represents a variable name and its value to inject.
         priority: A list of variable names in their order of priority.
         token_limit: The maximum number of tokens allowed in the messages.
-        model: The model to use for tokenization. Defaults to "gpt-3.5-turbo-1106".
+        model: The model to use for tokenization. Defaults to "gpt-3.5-turbo-0125".
     """
 
     # Check if all variables in the priority list are in the variables dict.

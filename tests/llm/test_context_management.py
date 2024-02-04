@@ -8,8 +8,8 @@ def test_priority_truncation_simple() -> None:
         {"role": "user", "content": "Help me {{task}}"},
     ]
     vars = {"task": "write Python code for the fibonnaci sequence"}
-    truncated_messages = priority_truncation(messages, vars, ["task"], 26, model="gpt-3.5-turbo-1106")
-    assert num_tokens_from_messages(truncated_messages, model="gpt-3.5-turbo-1106") <= 26
+    truncated_messages = priority_truncation(messages, vars, ["task"], 26, model="gpt-3.5-turbo-0125")
+    assert num_tokens_from_messages(truncated_messages, model="gpt-3.5-turbo-0125") <= 26
     truncated_messages_expected = [
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "Help me write Python code for"},
@@ -24,8 +24,8 @@ def test_priority_truncation_two_vars() -> None:
         {"role": "user", "content": "Help me {{task}} and I will give you {{gift}}!"},
     ]
     vars = {"task": "write Python code for the fibonnaci sequence", "gift": "a few million dollars"}
-    truncated_messages = priority_truncation(messages, vars, ["task", "gift"], 39, model="gpt-3.5-turbo-1106")
-    assert num_tokens_from_messages(truncated_messages, model="gpt-3.5-turbo-1106") <= 39
+    truncated_messages = priority_truncation(messages, vars, ["task", "gift"], 39, model="gpt-3.5-turbo-0125")
+    assert num_tokens_from_messages(truncated_messages, model="gpt-3.5-turbo-0125") <= 39
     truncated_messages_expected = [
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "Help me write Python code for the fibonnaci and I will give you a few million!"},
@@ -40,8 +40,8 @@ def test_priority_truncation_two_vars_same_message() -> None:
         {"role": "user", "content": "Help me {{task}} and I will give you {{task}}!"},
     ]
     vars = {"task": "write Python code for the fibonnaci sequence"}
-    truncated_messages = priority_truncation(messages, vars, ["task"], 36, model="gpt-3.5-turbo-1106")
-    assert num_tokens_from_messages(truncated_messages, model="gpt-3.5-turbo-1106") <= 36
+    truncated_messages = priority_truncation(messages, vars, ["task"], 36, model="gpt-3.5-turbo-0125")
+    assert num_tokens_from_messages(truncated_messages, model="gpt-3.5-turbo-0125") <= 36
     truncated_messages_expected = [
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "Help me write Python and I will give you write Python!"},
@@ -57,8 +57,8 @@ def test_priority_truncation_two_vars_two_messages() -> None:
         {"role": "assistant", "content": "I will give you {{task}}!"},
     ]
     vars = {"task": "write Python code for the fibonnaci sequence"}
-    truncated_messages = priority_truncation(messages, vars, ["task"], 39, model="gpt-3.5-turbo-1106")
-    assert num_tokens_from_messages(truncated_messages, model="gpt-3.5-turbo-1106") <= 39
+    truncated_messages = priority_truncation(messages, vars, ["task"], 39, model="gpt-3.5-turbo-0125")
+    assert num_tokens_from_messages(truncated_messages, model="gpt-3.5-turbo-0125") <= 39
     truncated_messages_expected = [
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "Help me write Python!"},
@@ -78,8 +78,8 @@ def test_priority_truncation_missing_priority() -> None:
         "gift": "a few million dollars",
         "code": "print('Hello World')",
     }
-    truncated_messages = priority_truncation(messages, vars, ["task", "gift"], 200, model="gpt-3.5-turbo-1106")
-    assert num_tokens_from_messages(truncated_messages, model="gpt-3.5-turbo-1106") <= 200
+    truncated_messages = priority_truncation(messages, vars, ["task", "gift"], 200, model="gpt-3.5-turbo-0125")
+    assert num_tokens_from_messages(truncated_messages, model="gpt-3.5-turbo-0125") <= 200
     truncated_messages_expected = [
         {
             "role": "user",
