@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "not-again-ai"
-version = "0.4.2"
+version = "0.4.3"
 description = "Designed to once and for all collect all the little things that come up over and over again in AI projects and put them in one place."
 authors = ["DaveCoDev <dave.co.dev@gmail.com>"]
 license = "MIT"
@@ -28,14 +28,14 @@ classifiers = [
 python = "^3.11, <3.13"
 
 # Optional dependencies are defined here, and groupings are defined below.
-numpy = { version = "^1.26.3", optional = true }
-openai = { version = "^1.11.0", optional = true }
+numpy = { version = "^1.26.4", optional = true }
+openai = { version = "^1.12.0", optional = true }
 pandas = { version = "^2.2.0", optional = true }
-python-liquid = { version = "^1.11.0", optional = true }
+python-liquid = { version = "^1.12.0", optional = true }
 scipy = { version = "^1.12.0", optional = true }
 scikit-learn = { version = "^1.4.0", optional = true }
 seaborn = { version = "^0.13.2", optional = true }
-tiktoken = { version = "^0.5.2", optional = true }
+tiktoken = { version = "^0.6.0", optional = true }
 
 [tool.poetry.extras]
 llm = ["openai", "python-liquid", "tiktoken"]
@@ -86,6 +86,9 @@ disallow_untyped_calls = false
 [tool.ruff]
 line-length = 120
 target-version = "py311"
+src = ["src"]
+
+[tool.ruff.lint]
 extend-select = [
     "I", # isort
     "N", # pep8-naming
@@ -98,17 +101,16 @@ extend-select = [
     "TID", # flake8-tidy-imports
 ]
 extend-ignore = ["RUF005", "E501"]
-src = ["src"]
 unfixable = ["F401"]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 force-sort-within-sections = true
 split-on-trailing-comma = false
 
-[tool.ruff.flake8-tidy-imports]
+[tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
 
-[tool.ruff.flake8-bugbear]
+[tool.ruff.lint.flake8-bugbear]
 extend-immutable-calls = ["typer.Argument"]
 
 [tool.pytest.ini_options]

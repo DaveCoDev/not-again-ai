@@ -114,6 +114,7 @@ def chat_completion(
             for tool_call in tool_calls:
                 tool_names.append(tool_call.function.name)
                 tool_args_list.append(json.loads(tool_call.function.arguments))
+            response_data_curr["message"] = response_choice.message.content
             response_data_curr["tool_names"] = tool_names
             response_data_curr["tool_args_list"] = tool_args_list
         elif finish_reason == "stop" or finish_reason == "length":

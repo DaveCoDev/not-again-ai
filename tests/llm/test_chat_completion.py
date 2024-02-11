@@ -351,4 +351,51 @@ Output: {"name": "Jane Doe"}""",
     print(response)
 
 
-test_chat_completion_misc_1()
+def test_message_with_tools() -> None:
+    client = openai_client()
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "get_current_weather",
+                "description": "Get the current weather",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA",
+                        },
+                        "format": {
+                            "type": "string",
+                            "enum": ["celsius", "fahrenheit"],
+                            "description": "The temperature unit to use. Infer this from the users location.",
+                        },
+                    },
+                    "required": ["location", "format"],
+                },
+            },
+        },
+    ]
+    messages = [
+        {
+            "role": "system",
+            "content": """You will be given a function called get_current_weather.
+Before calling the function, first reason about which city the user is asking about. YOU MUST think step by step before calling the function.
+For example, if the user asks 'What's the current weather like in Boston, MA today?', You should first say 'The user is asking about Boston, MA so I will call the function with 'Boston, MA' <now call the function>""",
+        },
+        {
+            "role": "user",
+            "content": "What's the current weather like in Boston, MA today? First think step by step as to which city and state to call, only then call the get_current_weather function. ",
+        },
+    ]
+
+    response = chat_completion(
+        messages=messages,
+        model="gpt-4-0125-preview",
+        client=client,
+        tools=tools,
+        max_tokens=600,
+        temperature=0.7,
+    )
+    print(response)

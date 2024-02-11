@@ -2,16 +2,16 @@ from liquid import Template
 
 
 def _validate_message(message: dict[str, str]) -> bool:
-    valid_fields = ["role", "content", "name", "function_call"]
+    """Valides that a message has valid fields and if the role is valid.
+    See https://platform.openai.com/docs/api-reference/chat/create#chat-create-messages
+    """
+    valid_fields = ["role", "content", "name", "tool_call_id", "tool_calls"]
     # Check if the only keys in the message are in valid_fields
     if not all(key in valid_fields for key in message):
         return False
 
-    # Check if the each of the values are strings except function_call
-    if not all(isinstance(value, str) for key, value in message.items() if key != "function_call"):
-        return False
-
-    valid_roles = ["system", "user", "assistant", "function"]
+    # Check if the only roles in the message are in valid_fields
+    valid_roles = ["system", "user", "assistant", "tool"]
     if message["role"] not in valid_roles:
         return False
 
