@@ -1,7 +1,7 @@
 try:
-    import numpy  # noqa
-    import scipy  # noqa
-    import sklearn  # noqa
+    import numpy
+    import scipy
+    import sklearn
 except ImportError:
     raise ImportError(  # noqa
         "not_again_ai.statistics requires the 'statistics' extra to be installed. "

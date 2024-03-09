@@ -29,11 +29,11 @@ python = "^3.11, <3.13"
 
 # Optional dependencies are defined here, and groupings are defined below.
 numpy = { version = "^1.26.4", optional = true }
-openai = { version = "^1.12.0", optional = true }
-pandas = { version = "^2.2.0", optional = true }
-python-liquid = { version = "^1.12.0", optional = true }
+openai = { version = "^1.13.3", optional = true }
+pandas = { version = "^2.2.1", optional = true }
+python-liquid = { version = "^1.12.1", optional = true }
 scipy = { version = "^1.12.0", optional = true }
-scikit-learn = { version = "^1.4.0", optional = true }
+scikit-learn = { version = "^1.4.1.post1", optional = true }
 seaborn = { version = "^0.13.2", optional = true }
 tiktoken = { version = "^0.6.0", optional = true }
 
@@ -86,10 +86,10 @@ disallow_untyped_calls = false
 [tool.ruff]
 line-length = 120
 target-version = "py311"
-src = ["src"]
+src = ["src", "tests"]
 
 [tool.ruff.lint]
-extend-select = [
+select = [
     "I", # isort
     "N", # pep8-naming
     "UP", # pyupgrade
@@ -100,7 +100,7 @@ extend-select = [
     "SIM", # flake8-simplify
     "TID", # flake8-tidy-imports
 ]
-extend-ignore = ["RUF005", "E501"]
+ignore = ["E501"]
 unfixable = ["F401"]
 
 [tool.ruff.lint.isort]
@@ -109,9 +109,6 @@ split-on-trailing-comma = false
 
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
-
-[tool.ruff.lint.flake8-bugbear]
-extend-immutable-calls = ["typer.Argument"]
 
 [tool.pytest.ini_options]
 addopts = [

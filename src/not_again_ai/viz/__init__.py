@@ -1,7 +1,7 @@
 try:
-    import numpy  # noqa
-    import pandas  # noqa
-    import seaborn  # noqa
+    import numpy
+    import pandas
+    import seaborn
 except ImportError:
     raise ImportError(  # noqa
         "not_again_ai.viz requires the 'viz' extra to be installed. "
