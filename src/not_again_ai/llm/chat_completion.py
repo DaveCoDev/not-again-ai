@@ -105,8 +105,7 @@ def chat_completion(
         finish_reason = response_choice.finish_reason
         response_data_curr["finish_reason"] = finish_reason
 
-        # Not checking finish_reason=="tool_calls" here because when a user provides function name as tool_choice,
-        # the finish reason is "stop", not "tool_calls"
+        # We first check for tool calls because even if the finish_reason is stop, the model may have called a tool
         tool_calls = response_choice.message.tool_calls
         if tool_calls:
             tool_names = []
@@ -159,7 +158,6 @@ def chat_completion(
         response_data["system_fingerprint"] = response.system_fingerprint
 
     if len(response_data["choices"]) == 1:
-        # Add all the fields in the first choice dict to the response_data dict
         response_data.update(response_data["choices"][0])
         del response_data["choices"]
 
