@@ -16,9 +16,36 @@ response = chat_completion(messages=messages, model="gpt-3.5-turbo", max_tokens=
 >>> "Hello! How can I help you today?"
 ```
 
-### chat_completion.chat_prompt
+### prompts.chat_prompt
 Injects variables into the chat completion prompt. sa
 In the `messages_unformatted` argument, the "content" field can be a [Python Liquid](https://jg-rp.github.io/liquid/introduction/getting-started) template string to allow for more dynamic prompts.
+
+### chat_completion_vision.chat_completion_vision
+[Example Notebook](https://github.com/DaveCoDev/not-again-ai/blob/main/notebooks/llm/gpt-4-v.ipynb)
+
+Use this to perform a chat completion with vision. Takes in messages, a model name, and client object. Also exposes some community used optional parameters.
+
+### prompts.chat_prompt_vision
+Formats a list of messages for OpenAI's chat completion API, for vision models only, using Liquid templating. 
+Allows for easy injection of text variables and images provided as either paths or URLs.
+
+```python
+vision_prompt = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {
+        "role": "user",
+        "content": ["Describe the animal in the image in one word.", {"image": cat_image_path, "detail": "low"}],
+    },
+    {"role": "assistant", "content": "{{ answer }}"},
+    {
+        "role": "user",
+        "content": ["What about this animal?", {"image": dog_image_path, "detail": "low"}],
+    },
+]
+```
+
+### prompts.create_image_url
+Takes in any Path object and returns the correctly formatted image URL for OpenAI's chat completion API as long as a valid MIME type is used.
 
 
 ## Text Embeddings

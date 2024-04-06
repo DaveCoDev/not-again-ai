@@ -64,9 +64,8 @@ def chat_completion(
                 this will be a list of dictionaries containing the token, logprob, and bytes for each token in the message.
             'choices' (list[dict], optional): A list of chat completion choices if n > 1 where each dict contains the above fields.
             'completion_tokens' (int): The number of tokens used by the model to generate the completion.
-                NOTE: If n > 1 this is the sum of all completions and thus will be same value in each dict.
-            'prompt_tokens' (int): The number of tokens in the generated response.
-                NOTE: If n > 1 this is the sum of all completions and thus will be same value in each dict.
+                NOTE: If n > 1 this is the sum of all completions.
+            'prompt_tokens' (int): The number of tokens in the messages sent to the model.
             'system_fingerprint' (str, optional): If seed is set, a unique identifier for the model used to generate the response.
     """
     response_format = {"type": "json_object"} if json_mode else None

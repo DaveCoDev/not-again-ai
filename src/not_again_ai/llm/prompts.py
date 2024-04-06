@@ -127,7 +127,7 @@ def create_image_url(image_path: Path) -> str:
 
 
 def chat_prompt_vision(messages_unformatted: list[dict[str, Any]], variables: dict[str, str]) -> list[dict[str, Any]]:
-    """Formats a list of messages for OpenAI's chat completion API for vision models only using Liquid templating.
+    """Formats a list of messages for OpenAI's chat completion API, for vision models only, using Liquid templating.
 
     Args:
         messages_unformatted (list[dict[str, list[dict[str, Path | str]] | str]]):

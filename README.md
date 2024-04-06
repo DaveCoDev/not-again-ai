@@ -42,7 +42,7 @@ The package is split into subpackages, so you can install only the parts you nee
 The base package includes only functions that have minimal external dependencies and are useful in a variety of situations such as parallelization and filesystem operations.
 
 ## LLM (Large Language Model)
-[README](https://github.com/DaveCoDev/not-again-ai/blob/main/readmes/llm.md)
+[README](https://github.com/DaveCoDev/not-again-ai/blob/main/readmes/llm.md), [Example Notebooks](https://github.com/DaveCoDev/not-again-ai/blob/main/notebooks/llm/)
 
 Supports OpenAI chat completions and text embeddings. Includes functions for creating chat completion prompts, token management, and context management.
 
