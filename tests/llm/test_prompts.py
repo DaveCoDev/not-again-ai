@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any
 
-from not_again_ai.llm.prompts import chat_prompt, chat_prompt_vision, encode_image
+from not_again_ai.llm.prompts import chat_prompt, encode_image
 
 sk_infographic = Path(__file__).parent / "sample_images" / "SKInfographic.png"
 sk_diagram = Path(__file__).parent / "sample_images" / "SKDiagram.png"
@@ -80,7 +80,7 @@ def test_vision_prompt_1() -> None:
             ],
         },
     ]
-    messages_formatted = chat_prompt_vision(vision_prompt_1, {"persona": "assistant", "library": "Semantic Kernel"})
+    messages_formatted = chat_prompt(vision_prompt_1, {"persona": "assistant", "library": "Semantic Kernel"})
     messages_expected = [
         {"role": "system", "content": "You are a helpful assistant."},
         {
@@ -118,7 +118,7 @@ def test_vision_prompt_2() -> None:
             "content": ["What about this animal?", {"image": dog_image, "detail": "low"}],
         },
     ]
-    messages_formatted = chat_prompt_vision(vision_prompt_2, {"answer": "Cat"})
+    messages_formatted = chat_prompt(vision_prompt_2, {"answer": "Cat"})
     messages_expected = [
         {"role": "system", "content": "You are a helpful assistant."},
         {
@@ -145,6 +145,3 @@ def test_vision_prompt_2() -> None:
     ]
 
     assert messages_formatted == messages_expected
-
-
-test_vision_prompt_2()

@@ -21,6 +21,10 @@ def chat_completion(
 ) -> dict[str, Any]:
     """Get an OpenAI chat completion response: https://platform.openai.com/docs/api-reference/chat/create
 
+    NOTE: Depending on the model, certain parameters may not be supported,
+    particularly for older vision-enabled models like gpt-4-1106-vision-preview.
+    Be sure to check the documentation: https://platform.openai.com/docs/models/gpt-4-turbo-and-gpt-4
+
     Args:
         messages (list): A list of messages comprising the conversation so far.
         model (str): ID of the model to use. See the model endpoint compatibility table:

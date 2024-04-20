@@ -80,6 +80,8 @@ def num_tokens_from_messages(messages: list[dict[str, str]], model: str = "gpt-3
         "gpt-4-1106-preview",
         "gpt-4-turbo-preview",
         "gpt-4-0125-preview",
+        "gpt-4-turbo",
+        "gpt-4-turbo-2024-04-09",
     }:
         tokens_per_message = 3  # every message follows <|start|>{role/name}\n{content}<|end|>\n
         tokens_per_name = 1  # if there's a name, the role is omitted

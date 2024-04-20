@@ -7,69 +7,13 @@ from typing import Any
 from liquid import Template
 
 
-def _validate_message(message: dict[str, str]) -> bool:
-    """Valides that a message has valid fields and if the role is valid.
-    See https://platform.openai.com/docs/api-reference/chat/create#chat-create-messages
-    """
-    valid_fields = ["role", "content", "name", "tool_call_id", "tool_calls"]
-    # Check if the only keys in the message are in valid_fields
-    if not all(key in valid_fields for key in message):
-        raise ValueError(f"Message contains invalid fields: {message.keys()}")
-
-    # Check if the only roles in the message are in valid_fields
-    valid_roles = ["system", "user", "assistant", "tool"]
-    if message["role"] not in valid_roles:
-        raise ValueError(f"Message contains invalid role: {message['role']}")
-
-    return True
-
-
-def chat_prompt(messages_unformatted: list[dict[str, str]], variables: dict[str, str]) -> list[dict[str, str]]:
-    """
-    Formats a list of messages for OpenAI's chat completion API using Liquid templating.
-
-    Args:
-        messages_unformatted: A list of dictionaries where each dictionary
-            represents a message. Each message must have 'role' and 'content'
-            keys with string values, where content is a Liquid template.
-        variables: A dictionary where each key-value pair represents a variable
-            name and its value for template rendering.
-
-    Returns:
-        A list of dictionaries with the same structure as `messages_unformatted`,
-        but with the 'content' of each message with the provided `variables`.
-
-    Examples:
-        >>> messages = [
-        ...     {"role": "system", "content": "You are a helpful assistant."},
-        ...     {"role": "user", "content": "Help me {{task}}"}
-        ... ]
-        >>> vars = {"task": "write Python code for the fibonnaci sequence"}
-        >>> chat_prompt(messages, vars)
-        [
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": "Help me write Python code for the fibonnaci sequence"}
-        ]
-    """
-
-    messages_formatted = deepcopy(messages_unformatted)
-    for message in messages_formatted:
-        if not _validate_message(message):
-            raise ValueError()
-
-        liquid_template = Template(message["content"])
-        message["content"] = liquid_template.render(**variables)
-
-    return messages_formatted
-
-
 def _validate_message_vision(message: dict[str, list[dict[str, Path | str]] | str]) -> bool:
     """Validates that a message for a vision model is valid"""
-    valid_fields = ["role", "content"]
+    valid_fields = ["role", "content", "name", "tool_call_id", "tool_calls"]
     if not all(key in valid_fields for key in message):
         raise ValueError(f"Message contains invalid fields: {message.keys()}")
 
-    valid_roles = ["system", "user", "assistant"]
+    valid_roles = ["system", "user", "assistant", "tool"]
     if message["role"] not in valid_roles:
         raise ValueError(f"Message contains invalid role: {message['role']}")
 
@@ -126,13 +70,13 @@ def create_image_url(image_path: Path) -> str:
     return f"data:{mime_type};base64,{image_data}"
 
 
-def chat_prompt_vision(messages_unformatted: list[dict[str, Any]], variables: dict[str, str]) -> list[dict[str, Any]]:
-    """Formats a list of messages for OpenAI's chat completion API, for vision models only, using Liquid templating.
+def chat_prompt(messages_unformatted: list[dict[str, Any]], variables: dict[str, str]) -> list[dict[str, Any]]:
+    """Formats a list of messages for OpenAI's chat completion API,
+    including special syntax for vision models, using Liquid templating.
 
     Args:
         messages_unformatted (list[dict[str, list[dict[str, Path | str]] | str]]):
             A list of dictionaries where each dictionary represents a message.
-            Each message must have 'role' and 'content' keys. `role` must be 'system', 'user', or 'assistant'.
             `content` can be a Liquid template string or a list of dictionaries where each dictionary
             represents a content part. Each content part can be a string or a dictionary with 'image' and 'detail' keys.
             The 'image' key must be a Path or a string representing a URL. The 'detail' key is optional and must be 'low' or 'high'.
