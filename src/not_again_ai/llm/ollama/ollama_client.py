@@ -3,7 +3,7 @@ import os
 from ollama import Client
 
 
-def client(host: str | None = None, timeout: float | None = None) -> Client:
+def ollama_client(host: str | None = None, timeout: float | None = None) -> Client:
     """Create an Ollama client instance based on the specified host or will read from the OLLAMA_HOST environment variable.
 
     Args:

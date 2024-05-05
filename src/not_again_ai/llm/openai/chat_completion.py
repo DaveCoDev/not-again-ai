@@ -33,8 +33,8 @@ def chat_completion(
         client (OpenAI): An instance of the OpenAI client.
         tools (list[dict[str, Any]], optional): A list of tools the model may generate JSON inputs for.
             Defaults to None.
-        tool_choice (str, optional): The tool choice to use. Can be "auto", "none", or a specific function name.
-            Defaults to "auto".
+        tool_choice (str, optional): The tool choice to use. Can be "auto", "required", "none", or a specific function name.
+            Note the function name cannot be any of "auto", "required", or "none". Defaults to "auto".
         max_tokens (int, optional): The maximum number of tokens to generate in the chat completion.
             Defaults to None, which automatically limits to the model's maximum context length.
         temperature (float, optional): What sampling temperature to use, between 0 and 2.
@@ -87,7 +87,7 @@ def chat_completion(
 
     if tools is not None:
         kwargs["tools"] = tools
-        if tool_choice not in ["none", "auto"]:
+        if tool_choice not in ["none", "auto", "required"]:
             kwargs["tool_choice"] = {"type": "function", "function": {"name": tool_choice}}
         else:
             kwargs["tool_choice"] = tool_choice

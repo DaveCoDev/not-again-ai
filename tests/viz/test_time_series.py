@@ -67,7 +67,3 @@ def test_ts_lineplot() -> None:
         height=4.4,
         aspect=1.8,
     )
-
-
-if __name__ == "__main__":
-    test_ts_lineplot()

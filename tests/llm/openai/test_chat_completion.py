@@ -684,3 +684,53 @@ def test_chat_completion_vision_many_features() -> None:
         seed=21,
     )
     print(response)
+
+
+@pytest.mark.skip("API Cost")
+def test_chat_complete_required_tool_call() -> None:
+    client = openai_client()
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "get_current_weather",
+                "description": "Get the current weather",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA",
+                        },
+                        "format": {
+                            "type": "string",
+                            "enum": ["celsius", "fahrenheit"],
+                            "description": "The temperature unit to use. Infer this from the users location.",
+                        },
+                    },
+                    "required": ["location", "format"],
+                },
+            },
+        },
+    ]
+    messages = [
+        {
+            "role": "system",
+            "content": """You are a helpful assistant who listens to the user.""",
+        },
+        {
+            "role": "user",
+            "content": "Do not call any tools!",
+        },
+    ]
+
+    response = chat_completion(
+        messages=messages,
+        model="gpt-4-turbo-2024-04-09",
+        client=client,
+        tools=tools,
+        tool_choice="required",
+        max_tokens=400,
+        temperature=0.5,
+    )
+    print(response)

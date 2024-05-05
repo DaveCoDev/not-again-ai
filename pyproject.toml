@@ -129,6 +129,7 @@ filterwarnings = [
     # Add additional warning supressions as needed here. For example, if a third-party library
     # is throwing a deprecation warning that needs to be fixed upstream:
     # "ignore::DeprecationWarning:typer",
+    "ignore::pytest.PytestUnraisableExceptionWarning"
 ]
 
 [tool.coverage.run]
