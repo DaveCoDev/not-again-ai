@@ -15,7 +15,7 @@
 
 **not-again-ai** is a collection of various building blocks that come up over and over again when developing AI products. The key goals of this package are to have simple, but flexible interfaces and to minimize dependencies. Feel free to **a)** use this as a template for your own Python package. **b)** instead of installing the package, copy and paste functions into your own projects (this is made possible with the limited amount of dependencies and the MIT license).
 
-**Documentation** available within individual [readmes](readmes) or auto-generated at [DaveCoDev.github.io/not-again-ai/](https://DaveCoDev.github.io/not-again-ai/).
+**Documentation** available within individual [notebooks](notebooks), docstrings, or auto-generated at [DaveCoDev.github.io/not-again-ai/](https://DaveCoDev.github.io/not-again-ai/).
 
 # Installation
 
