@@ -14,7 +14,7 @@ def test(s: Session) -> None:
     s.install(".[llm,statistics,viz]", "pytest", "pytest-cov", "pytest-randomly")
 
     # Skip tests in directories specified by the SKIP_TESTS_NAII environment variable.
-    skip_tests = os.getenv("SKIP_TESTS_NAII", "")
+    skip_tests = os.getenv("SKIP_TESTS_NAAI", "")
     skip_args = [f"--ignore={dir}" for dir in skip_tests.split()] if skip_tests else []
 
     s.run(
