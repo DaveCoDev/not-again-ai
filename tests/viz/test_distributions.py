@@ -41,7 +41,3 @@ def test_univariate_distplot() -> None:
         height=3.91,
         aspect=1.8,
     )
-
-
-if __name__ == "__main__":
-    test_univariate_distplot()

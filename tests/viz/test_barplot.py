@@ -50,7 +50,3 @@ def test_simple_barplot() -> None:
         x_label="logit",
         y_label="token",
     )
-
-
-if __name__ == "__main__":
-    test_simple_barplot()

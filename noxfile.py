@@ -1,3 +1,5 @@
+import os
+
 import nox
 from nox import parametrize
 from nox_poetry import Session, session
@@ -10,6 +12,11 @@ nox.options.sessions = ["lint", "type_check", "test", "docs"]
 @session(python=["3.11", "3.12"])
 def test(s: Session) -> None:
     s.install(".[llm,statistics,viz]", "pytest", "pytest-cov", "pytest-randomly")
+
+    # Skip tests in directories specified by the SKIP_TESTS_NAII environment variable.
+    skip_tests = os.getenv("SKIP_TESTS_NAAI", "")
+    skip_args = [f"--ignore={dir}" for dir in skip_tests.split()] if skip_tests else []
+
     s.run(
         "python",
         "-m",
@@ -18,6 +25,7 @@ def test(s: Session) -> None:
         "--cov-report=html",
         "--cov-report=term",
         "tests",
+        *skip_args,
         "-W ignore::DeprecationWarning",
         *s.posargs,
     )
@@ -34,7 +42,6 @@ def fmt(s: Session) -> None:
 @session(venv_backend="none")
 def fmt_check(s: Session) -> None:
     s.run("ruff", "check", ".", "--select", "I")
-    s.run("black", "--check", ".")
 
 
 @session(venv_backend="none")

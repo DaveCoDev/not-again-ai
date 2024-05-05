@@ -3,15 +3,16 @@ from typing import Any
 
 import pytest
 
-from not_again_ai.llm.chat_completion import chat_completion
-from not_again_ai.llm.openai_client import openai_client
-from not_again_ai.llm.prompts import encode_image
+from not_again_ai.llm.openai.chat_completion import chat_completion
+from not_again_ai.llm.openai.openai_client import openai_client
+from not_again_ai.llm.openai.prompts import encode_image
 
-cat_image = Path(__file__).parent / "sample_images" / "cat.jpg"
-dog_image = Path(__file__).parent / "sample_images" / "dog.jpg"
-numbers_image = Path(__file__).parent / "sample_images" / "numbers.png"
-sk_infographic = Path(__file__).parent / "sample_images" / "SKInfographic.png"
-sk_diagram = Path(__file__).parent / "sample_images" / "SKDiagram.png"
+image_dir = Path(__file__).parent.parent / "sample_images"
+cat_image = image_dir / "cat.jpg"
+dog_image = image_dir / "dog.jpg"
+numbers_image = image_dir / "numbers.png"
+sk_infographic = image_dir / "SKInfographic.png"
+sk_diagram = image_dir / "SKDiagram.png"
 
 
 def test_chat_completion() -> None:
@@ -336,6 +337,7 @@ def test_chat_completion_misc_1() -> None:
     print(response)
 
 
+@pytest.mark.skip("API Cost")
 def test_chat_completion_misc_2() -> None:
     messages = [
         {
@@ -365,6 +367,7 @@ Output: {"name": "Jane Doe"}""",
     print(response)
 
 
+@pytest.mark.skip("API Cost")
 def test_message_with_tools() -> None:
     client = openai_client()
     tools = [
@@ -415,6 +418,7 @@ For example, if the user asks 'What's the current weather like in Boston, MA tod
     print(response)
 
 
+@pytest.mark.skip("API Cost")
 def test_chat_completion_vision() -> None:
     client = openai_client()
     messages: list[dict[str, Any]] = [
@@ -437,6 +441,7 @@ def test_chat_completion_vision() -> None:
     print(response)
 
 
+@pytest.mark.skip("API Cost")
 def test_chat_completion_vision_length() -> None:
     client = openai_client()
     messages: list[dict[str, Any]] = [
@@ -456,6 +461,7 @@ def test_chat_completion_vision_length() -> None:
     print(response)
 
 
+@pytest.mark.skip("API Cost")
 def test_chat_completion_vision_n() -> None:
     client = openai_client()
     messages: list[dict[str, Any]] = [
@@ -676,5 +682,55 @@ def test_chat_completion_vision_many_features() -> None:
         n=2,
         logprobs=(True, 2),
         seed=21,
+    )
+    print(response)
+
+
+@pytest.mark.skip("API Cost")
+def test_chat_complete_required_tool_call() -> None:
+    client = openai_client()
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "get_current_weather",
+                "description": "Get the current weather",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA",
+                        },
+                        "format": {
+                            "type": "string",
+                            "enum": ["celsius", "fahrenheit"],
+                            "description": "The temperature unit to use. Infer this from the users location.",
+                        },
+                    },
+                    "required": ["location", "format"],
+                },
+            },
+        },
+    ]
+    messages = [
+        {
+            "role": "system",
+            "content": """You are a helpful assistant who listens to the user.""",
+        },
+        {
+            "role": "user",
+            "content": "Do not call any tools!",
+        },
+    ]
+
+    response = chat_completion(
+        messages=messages,
+        model="gpt-4-turbo-2024-04-09",
+        client=client,
+        tools=tools,
+        tool_choice="required",
+        max_tokens=400,
+        temperature=0.5,
     )
     print(response)

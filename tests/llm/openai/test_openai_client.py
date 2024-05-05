@@ -3,7 +3,7 @@ import os
 from openai import OpenAI
 import pytest
 
-from not_again_ai.llm.openai_client import InvalidOAIAPITypeError, openai_client
+from not_again_ai.llm.openai.openai_client import InvalidOAIAPITypeError, openai_client
 
 
 def test_openai_client_client_default_type() -> None:

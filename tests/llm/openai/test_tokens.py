@@ -1,6 +1,6 @@
 import pytest
 
-from not_again_ai.llm.tokens import num_tokens_from_messages, num_tokens_in_string, truncate_str
+from not_again_ai.llm.openai.tokens import num_tokens_from_messages, num_tokens_in_string, truncate_str
 
 
 # Tests for truncate_str function

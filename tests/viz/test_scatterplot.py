@@ -20,7 +20,3 @@ def test_scatterplot_basic() -> None:
         height=15,
         aspect=2.2,
     )
-
-
-if __name__ == "__main__":
-    test_scatterplot_basic()
