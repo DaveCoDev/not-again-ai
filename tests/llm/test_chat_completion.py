@@ -336,6 +336,7 @@ def test_chat_completion_misc_1() -> None:
     print(response)
 
 
+@pytest.mark.skip("API Cost")
 def test_chat_completion_misc_2() -> None:
     messages = [
         {
@@ -365,6 +366,7 @@ Output: {"name": "Jane Doe"}""",
     print(response)
 
 
+@pytest.mark.skip("API Cost")
 def test_message_with_tools() -> None:
     client = openai_client()
     tools = [
@@ -415,6 +417,7 @@ For example, if the user asks 'What's the current weather like in Boston, MA tod
     print(response)
 
 
+@pytest.mark.skip("API Cost")
 def test_chat_completion_vision() -> None:
     client = openai_client()
     messages: list[dict[str, Any]] = [
@@ -437,6 +440,7 @@ def test_chat_completion_vision() -> None:
     print(response)
 
 
+@pytest.mark.skip("API Cost")
 def test_chat_completion_vision_length() -> None:
     client = openai_client()
     messages: list[dict[str, Any]] = [
@@ -456,6 +460,7 @@ def test_chat_completion_vision_length() -> None:
     print(response)
 
 
+@pytest.mark.skip("API Cost")
 def test_chat_completion_vision_n() -> None:
     client = openai_client()
     messages: list[dict[str, Any]] = [

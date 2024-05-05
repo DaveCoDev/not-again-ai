@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "not-again-ai"
-version = "0.6.0"
+version = "0.7.0"
 description = "Designed to once and for all collect all the little things that come up over and over again in AI projects and put them in one place."
 authors = ["DaveCoDev <dave.co.dev@gmail.com>"]
 license = "MIT"
@@ -28,7 +28,8 @@ python = "^3.11, <3.13"
 
 # Optional dependencies are defined here, and groupings are defined below.
 numpy = { version = "^1.26.4", optional = true }
-openai = { version = "^1.23.2", optional = true }
+ollama = { version = "^0.1.9", optional = true }
+openai = { version = "^1.25.1", optional = true }
 pandas = { version = "^2.2.2", optional = true }
 python-liquid = { version = "^1.12.1", optional = true }
 scipy = { version = "^1.13.0", optional = true }
@@ -37,7 +38,7 @@ seaborn = { version = "^0.13.2", optional = true }
 tiktoken = { version = "^0.6.0", optional = true }
 
 [tool.poetry.extras]
-llm = ["openai", "python-liquid", "tiktoken"]
+llm = ["ollama", "openai", "python-liquid", "tiktoken"]
 statistics = ["numpy", "scikit-learn", "scipy"]
 viz = ["numpy", "pandas", "seaborn"]
 

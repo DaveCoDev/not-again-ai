@@ -6,7 +6,7 @@ from openai import OpenAI
 
 
 def chat_completion(
-    messages: list[dict[str, str]],
+    messages: list[dict[str, Any]],
     model: str,
     client: OpenAI,
     tools: list[dict[str, Any]] | None = None,

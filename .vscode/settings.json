@@ -1,5 +1,7 @@
 {
-    "ruff.lint.args": ["--config=./pyproject.toml"],
+    "ruff.lint.args": [
+        "--config=./pyproject.toml"
+    ],
     "[python]": {
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {

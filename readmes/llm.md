@@ -5,9 +5,23 @@
 This is required for making any call to the OpenAI API. This creates an OpenAI client object as described in this v1.0.0 beta [documentation](https://github.com/openai/openai-python/discussions/631).
 Azure OpenAI is not currently supported by this function, but it is if you use the OpenAI package directly (via the AzureOpenAI client object).
 
+## Ollama
+### Installation
+1. Follow the instructions to install ollama for your system: https://github.com/ollama/ollama
+1. [Add Ollama as a startup service (recommended)](https://github.com/ollama/ollama/blob/main/docs/linux.md#adding-ollama-as-a-startup-service-recommended)
+1. If you'd like to make the ollama service accessible on your local network and it is hosted on Linux, add the following to the `/etc/systemd/system/ollama.service` file:
+    ```bash
+    [Service]
+    ...
+    Environment="OLLAMA_HOST=0.0.0.0"
+    ```
+    Now ollama will be available at `http://<local_address>:11434`
+
+### ollama_client.ollama_client
+
 
 ## Chat Completion
-### chat_completion.chat_completion
+### `chat_completion.chat_completion`
 Use this to perform a standard chat completion. Takes in messages, a model name, and client object. Also exposes some community used optional parameters like max_tokens and tools for tool calling.
 ```python
 client = openai_client()
