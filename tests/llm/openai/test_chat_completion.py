@@ -3,15 +3,16 @@ from typing import Any
 
 import pytest
 
-from not_again_ai.llm.chat_completion import chat_completion
-from not_again_ai.llm.openai_client import openai_client
-from not_again_ai.llm.prompts import encode_image
+from not_again_ai.llm.openai.chat_completion import chat_completion
+from not_again_ai.llm.openai.openai_client import openai_client
+from not_again_ai.llm.openai.prompts import encode_image
 
-cat_image = Path(__file__).parent / "sample_images" / "cat.jpg"
-dog_image = Path(__file__).parent / "sample_images" / "dog.jpg"
-numbers_image = Path(__file__).parent / "sample_images" / "numbers.png"
-sk_infographic = Path(__file__).parent / "sample_images" / "SKInfographic.png"
-sk_diagram = Path(__file__).parent / "sample_images" / "SKDiagram.png"
+image_dir = Path(__file__).parent.parent / "sample_images"
+cat_image = image_dir / "cat.jpg"
+dog_image = image_dir / "dog.jpg"
+numbers_image = image_dir / "numbers.png"
+sk_infographic = image_dir / "SKInfographic.png"
+sk_diagram = image_dir / "SKDiagram.png"
 
 
 def test_chat_completion() -> None:

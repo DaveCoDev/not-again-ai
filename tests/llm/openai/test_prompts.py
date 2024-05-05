@@ -1,12 +1,13 @@
 from pathlib import Path
 from typing import Any
 
-from not_again_ai.llm.prompts import chat_prompt, encode_image
+from not_again_ai.llm.openai.prompts import chat_prompt, encode_image
 
-sk_infographic = Path(__file__).parent / "sample_images" / "SKInfographic.png"
-sk_diagram = Path(__file__).parent / "sample_images" / "SKDiagram.png"
-cat_image = Path(__file__).parent / "sample_images" / "cat.jpg"
-dog_image = Path(__file__).parent / "sample_images" / "dog.jpg"
+image_dir = Path(__file__).parent.parent / "sample_images"
+sk_infographic = image_dir / "SKInfographic.png"
+sk_diagram = image_dir / "SKDiagram.png"
+cat_image = image_dir / "cat.jpg"
+dog_image = image_dir / "dog.jpg"
 
 
 def test_chat_prompt_no_vars() -> None:

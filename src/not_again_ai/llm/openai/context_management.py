@@ -1,6 +1,6 @@
 import copy
 
-from not_again_ai.llm.tokens import num_tokens_from_messages, truncate_str
+from not_again_ai.llm.openai.tokens import num_tokens_from_messages, truncate_str
 
 
 def _inject_variable(
