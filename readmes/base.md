@@ -11,3 +11,6 @@ Allows you to execute a list of functions (that take no arguments) in parallel a
 ## File System
 ### `create_file_dir`
 Create a directory and its parent directories for a specified Path.
+
+### `readable_size`
+Converts a file size in bytes to a human-readable format.

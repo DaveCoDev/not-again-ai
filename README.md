@@ -13,9 +13,9 @@
 [ruff-badge]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
 [mypy-badge]: https://www.mypy-lang.org/static/mypy_badge.svg
 
-**not-again-ai** is a collection of various functionalities that come up over and over again when developing AI projects as a Data/Applied/Research Scientist. It is designed to be simple and minimize dependencies first and foremost. This is not meant to reinvent the wheel, but instead be a home for functions that don’t belong well elsewhere. Additionally, feel free to **a)** use this as a template for your own Python package. **b)** instead of installing the package, copy and paste functions into your own projects (this is made easier with the limited amount of dependencies and the MIT license).
+**not-again-ai** is a collection of various building blocks that come up over and over again when developing AI products. The key goals of this package are to have simple, but flexible interfaces and to minimize dependencies. Feel free to **a)** use this as a template for your own Python package. **b)** instead of installing the package, copy and paste functions into your own projects (this is made possible with the limited amount of dependencies and the MIT license).
 
-**Documentation** available within the [readmes](readmes) or auto-generated at [DaveCoDev.github.io/not-again-ai/](https://DaveCoDev.github.io/not-again-ai/).
+**Documentation** available within individual [readmes](readmes) or auto-generated at [DaveCoDev.github.io/not-again-ai/](https://DaveCoDev.github.io/not-again-ai/).
 
 # Installation
 
@@ -29,12 +29,26 @@ $ pip install not_again_ai[llm,statistics,viz]
 
 The package is split into subpackages, so you can install only the parts you need.
 * **Base only**: `pip install not_again_ai`
-* **LLM only**: `pip install not_again_ai[llm]`
+* **LLM**: `pip install not_again_ai[llm]`
+    1. If you wish to use OpenAI
+        1. Go to https://platform.openai.com/settings/profile?tab=api-keys to get your API key.
+        1. (Optionally) Set the `OPENAI_API_KEY` and the `OPENAI_ORG_ID` environment variables.
+    1. If you wish to use Ollama:
+        1. follow the instructions to install ollama for your system: https://github.com/ollama/ollama
+        1. [Add Ollama as a startup service (recommended)](https://github.com/ollama/ollama/blob/main/docs/linux.md#adding-ollama-as-a-startup-service-recommended)
+        1. If you'd like to make the ollama service accessible on your local network and it is hosted on Linux, add the following to the `/etc/systemd/system/ollama.service` file:
+            ```bash
+            [Service]
+            ...
+            Environment="OLLAMA_HOST=0.0.0.0"
+            ```
+        Now ollama will be available at `http://<local_address>:11434`
 * **Statistics**: `pip install not_again_ai[statistics]`
 * **Visualization**: `pip install not_again_ai[viz]`
 
 
 # Quick Tour
+The package is broken into multiple extra groups. This is to help keep the package light and modular.
 
 ## Base
 [README](https://github.com/DaveCoDev/not-again-ai/blob/main/readmes/base.md)
@@ -44,7 +58,9 @@ The base package includes only functions that have minimal external dependencies
 ## LLM (Large Language Model)
 [README](https://github.com/DaveCoDev/not-again-ai/blob/main/readmes/llm.md), [Example Notebooks](https://github.com/DaveCoDev/not-again-ai/blob/main/notebooks/llm/)
 
-Supports OpenAI chat completions and text embeddings. Includes functions for creating chat completion prompts, token management, and context management.
+Supports **OpenAI** chat completions and text embeddings. Includes functions for creating chat completion prompts, token management, and context management.
+
+Also supports **Ollama** for local inference.
 
 One example: 
 ```python

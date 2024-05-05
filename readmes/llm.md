@@ -17,8 +17,6 @@ Azure OpenAI is not currently supported by this function, but it is if you use t
     ```
     Now ollama will be available at `http://<local_address>:11434`
 
-### ollama_client.ollama_client
-
 
 ## Chat Completion
 ### `chat_completion.chat_completion`
