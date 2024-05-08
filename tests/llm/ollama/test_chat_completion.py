@@ -8,7 +8,7 @@ MODELS = ["phi3", "llama3:8b"]
 
 
 @pytest.fixture(params=MODELS)
-def model(request: str):
+def model(request):  # type: ignore
     return request.param
 
 
