@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any
 
-from not_again_ai.llm.openai.prompts import chat_prompt, encode_image
+from not_again_ai.llm.openai_api.prompts import chat_prompt, encode_image
 
 image_dir = Path(__file__).parent.parent / "sample_images"
 sk_infographic = image_dir / "SKInfographic.png"

@@ -1,5 +1,5 @@
-from not_again_ai.llm.openai.context_management import priority_truncation
-from not_again_ai.llm.openai.tokens import num_tokens_from_messages
+from not_again_ai.llm.openai_api.context_management import priority_truncation
+from not_again_ai.llm.openai_api.tokens import num_tokens_from_messages
 
 
 def test_priority_truncation_simple() -> None:

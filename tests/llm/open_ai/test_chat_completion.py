@@ -3,9 +3,9 @@ from typing import Any
 
 import pytest
 
-from not_again_ai.llm.openai.chat_completion import chat_completion
-from not_again_ai.llm.openai.openai_client import openai_client
-from not_again_ai.llm.openai.prompts import encode_image
+from not_again_ai.llm.openai_api.chat_completion import chat_completion
+from not_again_ai.llm.openai_api.openai_client import openai_client
+from not_again_ai.llm.openai_api.prompts import encode_image
 
 image_dir = Path(__file__).parent.parent / "sample_images"
 cat_image = image_dir / "cat.jpg"
