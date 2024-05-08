@@ -1,5 +1,5 @@
-from not_again_ai.llm.openai.embeddings import embed_text
-from not_again_ai.llm.openai.openai_client import openai_client
+from not_again_ai.llm.openai_api.embeddings import embed_text
+from not_again_ai.llm.openai_api.openai_client import openai_client
 
 
 def test_embeddings_basic() -> None:
