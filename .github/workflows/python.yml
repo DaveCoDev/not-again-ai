@@ -29,9 +29,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_ORG_ID: ${{ secrets.OPENAI_ORG_ID }}
-          SKIP_TESTS_NAAI: 
-            - "tests/llm/ollama"
-            - "tests/llm/chat_completion.py"
+          SKIP_TESTS_NAAI: "tests/llm/ollama tests/llm/chat_completion.py"
         run: poetry run nox -s test-${{ matrix.python-version }}
   quality:
     runs-on: ubuntu-22.04
