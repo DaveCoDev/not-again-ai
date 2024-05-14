@@ -18,7 +18,7 @@ sk_diagram = image_dir / "SKDiagram.png"
 def test_chat_completion() -> None:
     client = openai_client()
     messages = [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "Hello!"}]
-    response = chat_completion(messages=messages, model="gpt-3.5-turbo-0125", max_tokens=100, client=client)
+    response = chat_completion(messages=messages, model="gpt-4o-2024-05-13", max_tokens=100, client=client)
     print(response)
 
 
@@ -436,7 +436,7 @@ def test_chat_completion_vision() -> None:
     ]
 
     response = chat_completion(
-        messages=messages, model="gpt-4-turbo-2024-04-09", max_tokens=200, temperature=0.5, client=client
+        messages=messages, model="gpt-4o-2024-05-13", max_tokens=200, temperature=0.5, client=client
     )
     print(response)
 
@@ -498,19 +498,17 @@ def test_chat_completion_vision_seed() -> None:
         },
     ]
     response_1 = chat_completion(
-        messages=messages, model="gpt-4-turbo-2024-04-09", max_tokens=200, client=client, temperature=2, seed=42
+        messages=messages, model="gpt-4o-2024-05-13", max_tokens=200, client=client, temperature=2, seed=42
     )
 
     response_2 = chat_completion(
-        messages=messages, model="gpt-4-turbo-2024-04-09", max_tokens=200, client=client, temperature=2, seed=42
+        messages=messages, model="gpt-4o-2024-05-13", max_tokens=200, client=client, temperature=2, seed=42
     )
 
     print(response_1)
     print(response_1["message"])
     print(response_2["message"])
-
-    # There currently seems to a bug where the system fingerprint is None even when seed is set
-    # assert "system_fingerprint" in response_1
+    assert response_1["message"] == response_2["message"]
 
 
 @pytest.mark.skip("API Cost")
@@ -534,7 +532,7 @@ def test_chat_completion_vision_multiple_images() -> None:
         },
     ]
 
-    response = chat_completion(messages=messages, model="gpt-4-turbo-2024-04-09", max_tokens=200, client=client)
+    response = chat_completion(messages=messages, model="gpt-4o-2024-05-13", max_tokens=200, client=client)
     print(response)
 
 
@@ -566,7 +564,7 @@ def test_chat_completion_vision_multiple_messages() -> None:
             ],
         },
     ]
-    response = chat_completion(messages=messages, model="gpt-4-turbo-2024-04-09", max_tokens=200, client=client)
+    response = chat_completion(messages=messages, model="gpt-4o-2024-05-13", max_tokens=200, client=client)
     print(response)
 
 
@@ -627,9 +625,7 @@ If you see any text, call the ocr tool. It takes no parameters.""",
             },
         },
     ]
-    response = chat_completion(
-        messages=messages, model="gpt-4-turbo-2024-04-09", client=client, tools=tools, max_tokens=200
-    )
+    response = chat_completion(messages=messages, model="gpt-4o-2024-05-13", client=client, tools=tools, max_tokens=200)
     print(response)
 
 
@@ -653,7 +649,7 @@ Return the recognized text in JSON format where the detected text is the value o
         },
     ]
     response = chat_completion(
-        messages=messages, model="gpt-4-turbo-2024-04-09", client=client, max_tokens=300, json_mode=True
+        messages=messages, model="gpt-4o-2024-05-13", client=client, max_tokens=300, json_mode=True
     )
     print(response)
 
@@ -726,7 +722,7 @@ def test_chat_complete_required_tool_call() -> None:
 
     response = chat_completion(
         messages=messages,
-        model="gpt-4-turbo-2024-04-09",
+        model="gpt-4o-2024-05-13",
         client=client,
         tools=tools,
         tool_choice="required",

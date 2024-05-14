@@ -82,6 +82,8 @@ def num_tokens_from_messages(messages: list[dict[str, str]], model: str = "gpt-3
         "gpt-4-0125-preview",
         "gpt-4-turbo",
         "gpt-4-turbo-2024-04-09",
+        "gpt-4o",
+        "gpt-4o-2024-05-13",
     }:
         tokens_per_message = 3  # every message follows <|start|>{role/name}\n{content}<|end|>\n
         tokens_per_name = 1  # if there's a name, the role is omitted
@@ -91,6 +93,8 @@ def num_tokens_from_messages(messages: list[dict[str, str]], model: str = "gpt-3
     # Approximate catch-all. Assumes future versions of 3.5 and 4 will have the same token counts as the 0613 versions.
     elif "gpt-3.5-turbo" in model:
         return num_tokens_from_messages(messages, model="gpt-3.5-turbo-0613")
+    elif "gpt-4o" in model:
+        return num_tokens_from_messages(messages, model="gpt-4o-2024-05-13")
     elif "gpt-4" in model:
         return num_tokens_from_messages(messages, model="gpt-4-0613")
     else:
