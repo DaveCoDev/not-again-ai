@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "not-again-ai"
-version = "0.8.1"
+version = "0.8.2"
 description = "Designed to once and for all collect all the little things that come up over and over again in AI projects and put them in one place."
 authors = ["DaveCoDev <dave.co.dev@gmail.com>"]
 license = "MIT"
@@ -24,18 +24,18 @@ classifiers = [
 # Some packages, such as scipy, constrain their upper bound of Python versions they support.
 # Without also constraining the upper bound here, Poetry will not select those versions and will
 # result in an old version being resolved/locked.
-python = "^3.11, <3.13"
+python = "^3.11 || ^3.12"
 
 # Optional dependencies are defined here, and groupings are defined below.
-numpy = { version = "^1.26.4", optional = true }
-ollama = { version = "^0.2.0", optional = true }
-openai = { version = "^1.29.0", optional = true }
-pandas = { version = "^2.2.2", optional = true }
-python-liquid = { version = "^1.12.1", optional = true }
-scipy = { version = "^1.13.0", optional = true }
-scikit-learn = { version = "^1.4.2", optional = true }
-seaborn = { version = "^0.13.2", optional = true }
-tiktoken = { version = "^0.7.0", optional = true }
+numpy = { version = "==1.26.4", optional = true }
+ollama = { version = "==0.2.0", optional = true }
+openai = { version = "==1.30.1", optional = true }
+pandas = { version = "==2.2.2", optional = true }
+python-liquid = { version = "==1.12.1", optional = true }
+scipy = { version = "==1.13.0", optional = true }
+scikit-learn = { version = "==1.4.2", optional = true }
+seaborn = { version = "==0.13.2", optional = true }
+tiktoken = { version = "==0.7.0", optional = true }
 
 [tool.poetry.extras]
 llm = ["ollama", "openai", "python-liquid", "tiktoken"]
