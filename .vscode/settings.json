@@ -2,6 +2,11 @@
     "ruff.lint.args": [
         "--config=./pyproject.toml"
     ],
+    "notebook.formatOnSave.enabled": true,
+    "notebook.codeActionsOnSave": {
+        "notebook.source.fixAll": "explicit",
+        "notebook.source.organizeImports": "explicit"
+    },
     "[python]": {
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
@@ -9,11 +14,6 @@
             "source.organizeImports": "explicit"
         },
         "editor.defaultFormatter": "charliermarsh.ruff"
-    },
-    "notebook.formatOnSave.enabled": true,
-    "notebook.codeActionsOnSave": {
-        "source.fixAll": true,
-        "source.organizeImports": true
     },
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,

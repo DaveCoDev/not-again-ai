@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "not-again-ai"
-version = "0.8.2"
+version = "0.9.0"
 description = "Designed to once and for all collect all the little things that come up over and over again in AI projects and put them in one place."
 authors = ["DaveCoDev <dave.co.dev@gmail.com>"]
 license = "MIT"
@@ -36,14 +36,17 @@ scipy = { version = "==1.13.0", optional = true }
 scikit-learn = { version = "==1.4.2", optional = true }
 seaborn = { version = "==0.13.2", optional = true }
 tiktoken = { version = "==0.7.0", optional = true }
+transformers = { version = "==4.41.1", optional = true }
 
 [tool.poetry.extras]
 llm = ["ollama", "openai", "python-liquid", "tiktoken"]
+local_llm = ["transformers"]
 statistics = ["numpy", "scikit-learn", "scipy"]
 viz = ["numpy", "pandas", "seaborn"]
 
 [tool.poetry.dev-dependencies]
 ipykernel = "*"
+ipywidgets = "*"
 
 [tool.poetry.group.nox.dependencies]
 nox-poetry = "*"

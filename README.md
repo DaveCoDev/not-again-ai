@@ -24,8 +24,10 @@ Requires: Python 3.11, or 3.12
 Install the entire package from [PyPI](https://pypi.org/project/not-again-ai/) with: 
 
 ```bash
-$ pip install not_again_ai[llm,statistics,viz]
+$ pip install not_again_ai[llm,local_llm,statistics,viz]
 ```
+
+Note that local LLM requires separate installations and will not work out of the box due to how hardware dependent it is. Be sure to check the [notebooks](notebooks/local_llm/) for more details.
 
 The package is split into subpackages, so you can install only the parts you need. See the **[notebooks](notebooks)** for examples.
 * **Base only**: `pip install not_again_ai`
@@ -42,7 +44,9 @@ The package is split into subpackages, so you can install only the parts you nee
             ...
             Environment="OLLAMA_HOST=0.0.0.0"
             ```
-        Now ollama will be available at `http://<local_address>:11434`
+        1. Ollama will be available at `http://<local_address>:11434`
+* **Local LLM**: `pip install not_again_ai[llm_local]`
+    - Most of this package is hardware dependent so this only installs some generic dependencies. Be sure to check the [notebooks](notebooks/local_llm/) for more details on what is available and how to install it.
 * **Statistics**: `pip install not_again_ai[statistics]`
 * **Visualization**: `pip install not_again_ai[viz]`
 
