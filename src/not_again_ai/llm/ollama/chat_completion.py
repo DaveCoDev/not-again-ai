@@ -62,7 +62,7 @@ def chat_completion(
         all_args["format"] = "json"
 
     try:
-        response = client.chat(**all_args)
+        response = client.chat(**all_args)  # type: ignore
     except ResponseError as e:
         # If the error says "model 'model' not found" use regex then raise a more specific error
         expected_pattern = f"model '{model}' not found"
@@ -71,12 +71,12 @@ def chat_completion(
                 f"Model '{model}' not found. Please use not_again_ai.llm.ollama.service.pull() first."
             ) from e
         else:
-            raise ResponseError(e.message) from e
+            raise ResponseError(e.error) from e
 
     response_data: dict[str, Any] = {}
 
     # Handle getting the message returned by the model
-    message = response["message"].get("content", None)
+    message = response["message"].get("content", None)  # type: ignore
     if message and json_mode:
         with contextlib.suppress(json.JSONDecodeError):
             message = json.loads(message)
@@ -84,11 +84,11 @@ def chat_completion(
         response_data["message"] = message
 
     # Get the number of tokens generated
-    response_data["completion_tokens"] = response.get("eval_count", None)
+    response_data["completion_tokens"] = response.get("eval_count", None)  # type: ignore
 
     # Get the latency of the response
-    if response.get("total_duration", None):
-        response_data["response_duration"] = _convert_duration(response["total_duration"])
+    if response.get("total_duration", None):  # type: ignore
+        response_data["response_duration"] = _convert_duration(response["total_duration"])  # type: ignore
     else:
         response_data["response_duration"] = None
 

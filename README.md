@@ -265,7 +265,7 @@ Install the [Python extension](https://marketplace.visualstudio.com/items?itemNa
 
 Install the [Ruff extension](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) for VSCode.
 
-Default settings are configured in [`.vscode/settings.json`](./.vscode/settings.json). This will enable Ruff and black with consistent settings.
+Default settings are configured in [`.vscode/settings.json`](./.vscode/settings.json) which will enable Ruff with consistent settings.
 
 # Documentation
 
