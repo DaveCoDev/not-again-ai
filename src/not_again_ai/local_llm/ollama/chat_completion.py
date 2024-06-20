@@ -1,14 +1,12 @@
 import contextlib
 import json
 import re
+import time
 from typing import Any
 
 from ollama import Client, ResponseError
 
-
-def _convert_duration(nanoseconds: int) -> float:
-    seconds = nanoseconds / 1_000_000_000
-    return round(seconds, 5)
+from not_again_ai.local_llm.ollama.tokens import load_tokenizer, num_tokens_from_messages, num_tokens_in_string
 
 
 def chat_completion(
@@ -40,8 +38,9 @@ def chat_completion(
         dict[str, Any]: A dictionary with the following keys
             message (str | dict): The content of the generated assistant message.
                 If json_mode is True, this will be a dictionary.
+            prompt_tokens (int): The number of tokens in the messages sent to the model.
             completion_tokens (int): The number of tokens used by the model to generate the completion.
-            response_duration (float): The time taken to generate the response in seconds.
+            response_duration (float): The time, in seconds, taken to generate the response by using the model.
     """
 
     options = {
@@ -62,7 +61,10 @@ def chat_completion(
         all_args["format"] = "json"
 
     try:
+        start_time = time.time()
         response = client.chat(**all_args)  # type: ignore
+        end_time = time.time()
+        response_duration = end_time - start_time
     except ResponseError as e:
         # If the error says "model 'model' not found" use regex then raise a more specific error
         expected_pattern = f"model '{model}' not found"
@@ -83,13 +85,16 @@ def chat_completion(
     if message:
         response_data["message"] = message
 
+    tokenizer = load_tokenizer(model)
+    prompt_tokens = num_tokens_from_messages(messages, tokenizer)
+    response_data["prompt_tokens"] = prompt_tokens
+
     # Get the number of tokens generated
     response_data["completion_tokens"] = response.get("eval_count", None)  # type: ignore
+    if response_data["completion_tokens"] is None:
+        response_data["completion_tokens"] = num_tokens_in_string(str(response_data["message"]), tokenizer)
 
     # Get the latency of the response
-    if response.get("total_duration", None):  # type: ignore
-        response_data["response_duration"] = _convert_duration(response["total_duration"])  # type: ignore
-    else:
-        response_data["response_duration"] = None
+    response_data["response_duration"] = response_duration
 
     return response_data

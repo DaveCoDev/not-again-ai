@@ -1,5 +1,6 @@
 import contextlib
 import json
+import time
 from typing import Any
 
 from openai import OpenAI
@@ -71,6 +72,7 @@ def chat_completion(
                 NOTE: If n > 1 this is the sum of all completions.
             'prompt_tokens' (int): The number of tokens in the messages sent to the model.
             'system_fingerprint' (str, optional): If seed is set, a unique identifier for the model used to generate the response.
+            'response_duration' (float): The time, in seconds, taken to generate the response from the API.
     """
     response_format = {"type": "json_object"} if json_mode else None
 
@@ -100,7 +102,10 @@ def chat_completion(
         if logprobs[0] and logprobs[1] is not None:
             kwargs["top_logprobs"] = logprobs[1]
 
+    start_time = time.time()
     response = client.chat.completions.create(**kwargs)
+    end_time = time.time()
+    response_duration = end_time - start_time
 
     response_data: dict[str, Any] = {"choices": []}
     for response_choice in response.choices:
@@ -159,6 +164,8 @@ def chat_completion(
 
     if seed is not None and response.system_fingerprint is not None:
         response_data["system_fingerprint"] = response.system_fingerprint
+
+    response_data["response_duration"] = response_duration
 
     if len(response_data["choices"]) == 1:
         response_data.update(response_data["choices"][0])

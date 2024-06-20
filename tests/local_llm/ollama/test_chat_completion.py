@@ -1,8 +1,8 @@
 from ollama import ResponseError
 import pytest
 
-from not_again_ai.llm.ollama.chat_completion import chat_completion
-from not_again_ai.llm.ollama.ollama_client import ollama_client
+from not_again_ai.local_llm.ollama.chat_completion import chat_completion
+from not_again_ai.local_llm.ollama.ollama_client import ollama_client
 
 MODELS = ["phi3", "llama3:8b"]
 

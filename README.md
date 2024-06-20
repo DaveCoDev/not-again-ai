@@ -35,18 +35,20 @@ The package is split into subpackages, so you can install only the parts you nee
     1. If you wish to use OpenAI
         1. Go to https://platform.openai.com/settings/profile?tab=api-keys to get your API key.
         1. (Optionally) Set the `OPENAI_API_KEY` and the `OPENAI_ORG_ID` environment variables.
-    1. If you wish to use Ollama:
+* **Local LLM**: `pip install not_again_ai[llm, llm_local]`
+    1. Some HuggingFace transformers tokenizers are gated behind access requests. If you wish to use these, you will need to request access from HuggingFace on the model card.
+       1. Then set the `HF_TOKEN` environment variable to your HuggingFace API token which can be found here: https://huggingface.co/settings/tokens
+    2. If you wish to use Ollama:
         1. follow the instructions to install ollama for your system: https://github.com/ollama/ollama
-        1. [Add Ollama as a startup service (recommended)](https://github.com/ollama/ollama/blob/main/docs/linux.md#adding-ollama-as-a-startup-service-recommended)
-        1. If you'd like to make the ollama service accessible on your local network and it is hosted on Linux, add the following to the `/etc/systemd/system/ollama.service` file:
+        2. [Add Ollama as a startup service (recommended)](https://github.com/ollama/ollama/blob/main/docs/linux.md#adding-ollama-as-a-startup-service-recommended)
+        3. If you'd like to make the ollama service accessible on your local network and it is hosted on Linux, add the following to the `/etc/systemd/system/ollama.service` file:
             ```bash
             [Service]
             ...
             Environment="OLLAMA_HOST=0.0.0.0"
             ```
-        1. Ollama will be available at `http://<local_address>:11434`
-* **Local LLM**: `pip install not_again_ai[llm_local]`
-    - Most of this package is hardware dependent so this only installs some generic dependencies. Be sure to check the [notebooks](notebooks/local_llm/) for more details on what is available and how to install it.
+        4. Ollama will be available at `http://<local_address>:11434`
+    3. HuggingFace transformers and other requirements are hardware dependent so for providers other than ollama, this only installs some generic dependencies. Be sure to check the [notebooks](notebooks/local_llm/) for more details on what is available and how to install it.
 * **Statistics**: `pip install not_again_ai[statistics]`
 * **Visualization**: `pip install not_again_ai[viz]`
 

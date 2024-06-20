@@ -1,6 +1,6 @@
 import copy
 
-from not_again_ai.llm.openai_api.tokens import num_tokens_from_messages, truncate_str
+from not_again_ai.llm.openai_api.tokens import load_tokenizer, num_tokens_from_messages, truncate_str
 
 
 def _inject_variable(
@@ -39,6 +39,7 @@ def priority_truncation(
         token_limit: The maximum number of tokens allowed in the messages.
         model: The model to use for tokenization. Defaults to "gpt-3.5-turbo-0125".
     """
+    tokenizer = load_tokenizer(model)
 
     # Check if all variables in the priority list are in the variables dict.
     # If not, add the missing variables into priority in any order.
@@ -49,7 +50,8 @@ def priority_truncation(
     messages_formatted = copy.deepcopy(messages_unformatted)
     for var in priority:
         # Count the current number of tokens in messages_formatted and compute a remaining token budget.
-        num_tokens = num_tokens_from_messages(messages_formatted, model=model)
+        tokenizer = load_tokenizer(model)
+        num_tokens = num_tokens_from_messages(messages_formatted, tokenizer=tokenizer, model=model)
         remaining_tokens = token_limit - num_tokens
         if remaining_tokens <= 0:
             break
@@ -60,7 +62,7 @@ def priority_truncation(
             num_var_occurrences += message["content"].count("{{" + var + "}}")
 
         # Truncate the variable to fit the remaining token budget taking into account the number of times it occurs in the messages.
-        truncated_var = truncate_str(variables[var], remaining_tokens // num_var_occurrences, model=model)
+        truncated_var = truncate_str(variables[var], remaining_tokens // num_var_occurrences, tokenizer=tokenizer)
 
         # Inject the variable text into messages_formatted.
         messages_formatted = _inject_variable(messages_formatted, var, truncated_var)

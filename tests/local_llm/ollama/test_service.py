@@ -1,7 +1,7 @@
 import pytest
 
-from not_again_ai.llm.ollama.ollama_client import ollama_client
-from not_again_ai.llm.ollama.service import delete, is_model_available, list_models, pull, show
+from not_again_ai.local_llm.ollama.ollama_client import ollama_client
+from not_again_ai.local_llm.ollama.service import delete, is_model_available, list_models, pull, show
 
 MODEL = "phi3"
 
