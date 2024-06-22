@@ -3,8 +3,8 @@ from typing import Any
 from ollama import Client
 from openai import OpenAI
 
-from not_again_ai.llm.ollama import chat_completion as chat_completion_ollama
 from not_again_ai.llm.openai_api import chat_completion as chat_completion_openai
+from not_again_ai.local_llm.ollama import chat_completion as chat_completion_ollama
 
 
 def chat_completion(
@@ -34,7 +34,9 @@ def chat_completion(
         dict[str, Any]: A dictionary with the following keys
             message (str | dict): The content of the generated assistant message.
                 If json_mode is True, this will be a dictionary.
+            prompt_tokens (int): The number of tokens in the messages sent to the model.
             completion_tokens (int): The number of tokens used by the model to generate the completion.
+            response_duration (float): The time, in seconds, taken to generate the response by using the model.
             extras (dict): This will contain any additional fields returned by corresponding provider.
     """
     # Determine which chat_completion function to call based on the client type
@@ -65,8 +67,10 @@ def chat_completion(
 
     # Parse the responses to be consistent
     response_data = {}
-    response_data["message"] = response.get("message", None)
-    response_data["completion_tokens"] = response.get("completion_tokens", None)
+    response_data["message"] = response.get("message")
+    response_data["completion_tokens"] = response.get("completion_tokens")
+    response_data["prompt_tokens"] = response.get("prompt_tokens")
+    response_data["response_duration"] = response.get("response_duration")
 
     # Return any additional fields from the response in an "extras" dictionary
     extras = {k: v for k, v in response.items() if k not in response_data}

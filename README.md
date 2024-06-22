@@ -13,7 +13,7 @@
 [ruff-badge]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
 [mypy-badge]: https://www.mypy-lang.org/static/mypy_badge.svg
 
-**not-again-ai** is a collection of various building blocks that come up over and over again when developing AI products. The key goals of this package are to have simple, but flexible interfaces and to minimize dependencies. Feel free to **a)** use this as a template for your own Python package. **b)** instead of installing the package, copy and paste functions into your own projects (this is made possible with the limited amount of dependencies and the MIT license).
+**not-again-ai** is a collection of various building blocks that come up over and over again when developing AI products. The key goals of this package are to have simple, yet flexible interfaces and to minimize dependencies. It is encouraged to also **a)** use this as a template for your own Python package. **b)** instead of installing the package, copy and paste functions into your own projects. We make this easier by limiting the number of dependencies and use an MIT license.
 
 **Documentation** available within individual **[notebooks](notebooks)**, docstrings within the source, or auto-generated at [DaveCoDev.github.io/not-again-ai/](https://DaveCoDev.github.io/not-again-ai/).
 
@@ -29,24 +29,25 @@ $ pip install not_again_ai[llm,local_llm,statistics,viz]
 
 Note that local LLM requires separate installations and will not work out of the box due to how hardware dependent it is. Be sure to check the [notebooks](notebooks/local_llm/) for more details.
 
-The package is split into subpackages, so you can install only the parts you need. See the **[notebooks](notebooks)** for examples.
+The package is split into subpackages, so you can install only the parts you need.
 * **Base only**: `pip install not_again_ai`
 * **LLM**: `pip install not_again_ai[llm]`
     1. If you wish to use OpenAI
         1. Go to https://platform.openai.com/settings/profile?tab=api-keys to get your API key.
-        1. (Optionally) Set the `OPENAI_API_KEY` and the `OPENAI_ORG_ID` environment variables.
+        1. (Optional) Set the `OPENAI_API_KEY` and the `OPENAI_ORG_ID` environment variables.
+* **Local LLM**: `pip install not_again_ai[llm,llm_local]`
+    1. Some HuggingFace transformers tokenizers are gated behind access requests. If you wish to use these, you will need to request access from HuggingFace on the model card.
+       1. Then set the `HF_TOKEN` environment variable to your HuggingFace API token which can be found here: https://huggingface.co/settings/tokens
     1. If you wish to use Ollama:
-        1. follow the instructions to install ollama for your system: https://github.com/ollama/ollama
-        1. [Add Ollama as a startup service (recommended)](https://github.com/ollama/ollama/blob/main/docs/linux.md#adding-ollama-as-a-startup-service-recommended)
-        1. If you'd like to make the ollama service accessible on your local network and it is hosted on Linux, add the following to the `/etc/systemd/system/ollama.service` file:
+        1. Follow the instructions at https://github.com/ollama/ollama to install Ollama for your system. 
+        1. (Optional) [Add Ollama as a startup service (recommended)](https://github.com/ollama/ollama/blob/main/docs/linux.md#adding-ollama-as-a-startup-service-recommended)
+        1. (Optional) To make the Ollama service accessible on your local network from a Linux server, add the following to the `/etc/systemd/system/ollama.service` file which will make Ollama available at `http://<local_address>:11434`:
             ```bash
             [Service]
             ...
             Environment="OLLAMA_HOST=0.0.0.0"
             ```
-        1. Ollama will be available at `http://<local_address>:11434`
-* **Local LLM**: `pip install not_again_ai[llm_local]`
-    - Most of this package is hardware dependent so this only installs some generic dependencies. Be sure to check the [notebooks](notebooks/local_llm/) for more details on what is available and how to install it.
+    1. HuggingFace transformers and other requirements are hardware dependent so for providers other than Ollama, this only installs some generic dependencies. Check the [notebooks](notebooks/local_llm/) for more details on what is available and how to install it.
 * **Statistics**: `pip install not_again_ai[statistics]`
 * **Visualization**: `pip install not_again_ai[viz]`
 
@@ -265,9 +266,9 @@ Install the [Python extension](https://marketplace.visualstudio.com/items?itemNa
 
 Install the [Ruff extension](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) for VSCode.
 
-Default settings are configured in [`.vscode/settings.json`](./.vscode/settings.json). This will enable Ruff and black with consistent settings.
+Default settings are configured in [`.vscode/settings.json`](./.vscode/settings.json) which will enable Ruff with consistent settings.
 
-# Documentation
+# Generating Documentation
 
 ## Generating a User Guide
 

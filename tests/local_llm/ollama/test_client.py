@@ -1,6 +1,6 @@
 from ollama import Client
 
-from not_again_ai.llm.ollama.ollama_client import ollama_client
+from not_again_ai.local_llm.ollama.ollama_client import ollama_client
 
 
 def test_client() -> None:

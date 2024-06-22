@@ -1,6 +1,6 @@
-from not_again_ai.llm.chat_completion import chat_completion
-from not_again_ai.llm.ollama.ollama_client import ollama_client
 from not_again_ai.llm.openai_api.openai_client import openai_client
+from not_again_ai.local_llm.chat_completion import chat_completion
+from not_again_ai.local_llm.ollama.ollama_client import ollama_client
 
 
 def test_chat_completion_ollama() -> None:

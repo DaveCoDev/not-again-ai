@@ -8,8 +8,8 @@ from not_again_ai.viz.utils import reset_plot_libs
 
 
 def simple_barplot(
-    x: list[str] | (list[float] | (npt.NDArray[np.int_] | npt.NDArray[np.float_])),
-    y: list[str] | (list[float] | (npt.NDArray[np.int_] | npt.NDArray[np.float_])),
+    x: list[str] | (list[float] | (npt.NDArray[np.int_] | npt.NDArray[np.float64])),
+    y: list[str] | (list[float] | (npt.NDArray[np.int_] | npt.NDArray[np.float64])),
     save_pathname: str,
     order: str | None = None,
     orient_bars_vertically: bool = True,

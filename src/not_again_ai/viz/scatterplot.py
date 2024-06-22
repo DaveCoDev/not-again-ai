@@ -9,8 +9,8 @@ from not_again_ai.viz.utils import reset_plot_libs
 
 
 def scatterplot_basic(
-    x: list[float] | (npt.NDArray[np.int_] | npt.NDArray[np.float_]),
-    y: list[float] | (npt.NDArray[np.int_] | npt.NDArray[np.float_]),
+    x: list[float] | (npt.NDArray[np.int_] | npt.NDArray[np.float64]),
+    y: list[float] | (npt.NDArray[np.int_] | npt.NDArray[np.float64]),
     save_pathname: str,
     title: str | None = None,
     xlim: tuple[float, float] | None = None,
