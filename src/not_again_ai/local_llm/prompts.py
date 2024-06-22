@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from liquid import Template
 
 
@@ -28,7 +30,7 @@ def chat_prompt(messages_unformatted: list[dict[str, str]], variables: dict[str,
         ]
     """
 
-    messages_formatted = messages_unformatted.copy()
+    messages_formatted = deepcopy(messages_unformatted)
     for message in messages_formatted:
         liquid_template = Template(message["content"])
         message["content"] = liquid_template.render(**variables)
