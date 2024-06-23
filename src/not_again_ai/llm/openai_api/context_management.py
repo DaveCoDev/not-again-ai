@@ -33,7 +33,7 @@ def priority_truncation(
     Args:
         messages_unformatted: A list of dictionaries where each dictionary
             represents a message. Each message must have 'role' and 'content'
-            keys with string values, where content is a string with any number of occurances of {{variable_name}}.
+            keys with string values, where content is a string with any number of occurrences of {{variable_name}}.
         variables: A dictionary where each key-value pair represents a variable name and its value to inject.
         priority: A list of variable names in their order of priority.
         token_limit: The maximum number of tokens allowed in the messages.

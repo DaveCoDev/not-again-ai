@@ -95,6 +95,6 @@ def chat_completion(
         response_data["completion_tokens"] = num_tokens_in_string(str(response_data["message"]), tokenizer)
 
     # Get the latency of the response
-    response_data["response_duration"] = response_duration
+    response_data["response_duration"] = round(response_duration, 4)
 
     return response_data

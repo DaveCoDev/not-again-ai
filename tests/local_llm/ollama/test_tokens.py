@@ -15,6 +15,7 @@ MODELS = [
     "granite-code:20b",
     "llama3-gradient:8b",
     "command-r:35b",
+    "deepseek-coder-v2:16b",
     "other-model",
 ]
 

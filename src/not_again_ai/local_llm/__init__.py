@@ -21,3 +21,7 @@ else:
     import openai  # noqa: F401
     import tiktoken  # noqa: F401
     import transformers  # noqa: F401
+    from transformers.utils import logging
+
+    logging.disable_progress_bar()
+    logging.set_verbosity_error()

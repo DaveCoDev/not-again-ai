@@ -165,7 +165,7 @@ def chat_completion(
     if seed is not None and response.system_fingerprint is not None:
         response_data["system_fingerprint"] = response.system_fingerprint
 
-    response_data["response_duration"] = response_duration
+    response_data["response_duration"] = round(response_duration, 4)
 
     if len(response_data["choices"]) == 1:
         response_data.update(response_data["choices"][0])

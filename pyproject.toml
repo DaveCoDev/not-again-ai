@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "not-again-ai"
-version = "0.10.0"
+version = "0.10.1"
 description = "Designed to once and for all collect all the little things that come up over and over again in AI projects and put them in one place."
 authors = ["DaveCoDev <dave.co.dev@gmail.com>"]
 license = "MIT"
@@ -77,6 +77,9 @@ mkdocstrings = { version = "*", extras = ["python"] }
 # Autodoc.
 mkdocs-gen-files = "*"
 mkdocs-literate-nav = "*"
+
+[tool.poetry.group.typos.dependencies]
+typos = "*"
 
 [tool.poetry.scripts]
 not-again-ai = "not_again_ai.cli:entry_point"
