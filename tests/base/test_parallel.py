@@ -28,7 +28,7 @@ def echo(x: int) -> int:
     return x
 
 
-def test_embarrassingly_parallel_simple() -> None:
+def test_embarrassingly_parallel() -> None:
     args = ((2, 2), (3, 3), (4, 4))
 
     result = embarrassingly_parallel(multby2, args, num_processes=multiprocessing.cpu_count())
@@ -62,7 +62,7 @@ def test_embarrassingly_parallel_kwargs() -> None:
     assert total == 8 + 9 + 32
 
 
-def test_embarassingly_parallel_exceptions() -> None:
+def test_embarrassingly_parallel_exceptions() -> None:
     with pytest.raises(ValueError):
         embarrassingly_parallel(multby2, None, None, num_processes=multiprocessing.cpu_count())
 
@@ -72,12 +72,12 @@ def test_embarassingly_parallel_exceptions() -> None:
         embarrassingly_parallel(multby2, args, kwargs, num_processes=multiprocessing.cpu_count())
 
 
-def test_embarassingly_parallel_ordering() -> None:
+def test_embarrassingly_parallel_ordering() -> None:
     args = ((1,), (2,), (3,), (4,), (5,), (6,), (7,), (8,), (9,), (10,))
     result = embarrassingly_parallel(echo, args, num_processes=3)
     assert result == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 
-def test_embarrasingly_parallel_simple() -> None:
+def test_embarrassingly_parallel_simple() -> None:
     result = embarrassingly_parallel_simple([do_something, do_something2], num_processes=2)
     assert result == [8, 2]

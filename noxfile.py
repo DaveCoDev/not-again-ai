@@ -6,7 +6,13 @@ from nox_poetry import Session, session
 
 nox.options.error_on_external_run = True
 nox.options.reuse_existing_virtualenvs = False
-nox.options.sessions = ["lint", "type_check", "test", "docs"]
+nox.options.sessions = [
+    "lint",
+    "type_check",
+    "typos",
+    "test",
+    "docs",
+]
 
 
 @session(python=["3.11", "3.12"])
@@ -93,3 +99,8 @@ def docs_serve(s: Session) -> None:
 @session(venv_backend="none")
 def docs_github_pages(s: Session) -> None:
     s.run("mkdocs", "gh-deploy", "--force", env=doc_env)
+
+
+@session(venv_backend="none")
+def typos(s: Session) -> None:
+    s.run("typos", "-c", ".github/_typos.toml")

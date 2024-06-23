@@ -35,7 +35,7 @@ The package is split into subpackages, so you can install only the parts you nee
     1. If you wish to use OpenAI
         1. Go to https://platform.openai.com/settings/profile?tab=api-keys to get your API key.
         1. (Optional) Set the `OPENAI_API_KEY` and the `OPENAI_ORG_ID` environment variables.
-* **Local LLM**: `pip install not_again_ai[llm,llm_local]`
+* **Local LLM**: `pip install not_again_ai[llm,local_llm]`
     1. Some HuggingFace transformers tokenizers are gated behind access requests. If you wish to use these, you will need to request access from HuggingFace on the model card.
        1. Then set the `HF_TOKEN` environment variable to your HuggingFace API token which can be found here: https://huggingface.co/settings/tokens
     1. If you wish to use Ollama:
@@ -252,6 +252,14 @@ provides further examples on how to do this.
 
 Mypy looks for the existence of a file named [`py.typed`](./src/not-again-ai/py.typed) in the root of the
 installed package to indicate that inline type annotations should be checked.
+
+## Typos
+
+Checks for typos using [typos](https://github.com/crate-ci/typos)
+
+```bash
+(.venv) $ nox -s typos
+```
 
 ## Continuous Integration
 

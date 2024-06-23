@@ -112,3 +112,7 @@ def test_chat_completion_model_not_found() -> None:
 
     with pytest.raises(ResponseError):
         chat_completion(messages, model="notamodel", client=client)
+
+
+if __name__ == "__main__":
+    test_chat_completion(model=MODELS[0])

@@ -730,3 +730,7 @@ def test_chat_complete_required_tool_call() -> None:
         temperature=0.5,
     )
     print(response)
+
+
+if __name__ == "__main__":
+    test_chat_completion()

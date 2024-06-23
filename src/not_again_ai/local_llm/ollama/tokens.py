@@ -1,18 +1,12 @@
 """By default use the associated huggingface transformer tokenizer.
 If it does not exist in the mapping, default to tiktoken with some buffer (const + percentage)"""
 
-import os
-
 from loguru import logger
 import tiktoken
+from transformers import AutoTokenizer
 
 from not_again_ai.llm.openai_api.tokens import num_tokens_from_messages as openai_num_tokens_from_messages
 from not_again_ai.local_llm.ollama.model_mapping import OLLAMA_MODEL_MAPPING
-
-# Prevents the transformers library from printing advisories that are not relevant to this code like not having torch installed.
-os.environ["TRANSFORMERS_NO_ADVISORY_WARNINGS"] = "1"
-
-from transformers import AutoTokenizer  # noqa: E402
 
 TIKTOKEN_NUM_TOKENS_BUFFER = 10
 TIKTOKEN_PERCENT_TOKENS_BUFFER = 1.1

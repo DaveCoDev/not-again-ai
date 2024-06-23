@@ -12,4 +12,5 @@ OLLAMA_MODEL_MAPPING = {
     "granite-code": "ibm-granite/granite-34b-code-instruct",
     "llama3-gradient": "nvidia/Llama3-ChatQA-1.5-8B",
     "command-r": "CohereForAI/c4ai-command-r-v01",
+    "deepseek-coder-v2": "deepseek-ai/DeepSeek-Coder-V2-Lite-Base",
 }
