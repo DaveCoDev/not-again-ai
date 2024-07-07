@@ -89,7 +89,7 @@ def test_pearson_correlation() -> None:
 
     x, y = _example_2()
     res = pearson_correlation(x, y, is_x_categorical=True, is_y_categorical=True)
-    assert res == 1
+    assert np.isclose(res, 1, atol=1e-6)
 
     x, y = _example_3()
     res = pearson_correlation(x, y, is_x_categorical=True, is_y_categorical=True, print_diagnostics=True)
