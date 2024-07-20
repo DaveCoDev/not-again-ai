@@ -683,7 +683,7 @@ def test_chat_completion_vision_many_features() -> None:
 
 
 @pytest.mark.skip("API Cost")
-def test_chat_complete_required_tool_call() -> None:
+def test_chat_completion_required_tool_call() -> None:
     client = openai_client()
     tools = [
         {
@@ -732,5 +732,28 @@ def test_chat_complete_required_tool_call() -> None:
     print(response)
 
 
+def test_chat_completion_gpt4o_mini() -> None:
+    client = openai_client()
+    messages = [
+        {
+            "role": "system",
+            "content": "You are professor teaching electrical engineering. You answer questions accurately. You can just answer the question directly.",
+        },
+        {
+            "role": "user",
+            "content": "A D-flip-flop is said to be transparent when the output is LOW, the output is HIGH, the output follows clock, or the output follow input?",
+        },
+    ]
+    response = chat_completion(
+        messages=messages,
+        model="gpt-4o-mini-2024-07-18",
+        client=client,
+        max_tokens=100,
+        temperature=0,
+    )
+    print(response)
+
+
 if __name__ == "__main__":
     test_chat_completion()
+    test_chat_completion_gpt4o_mini()

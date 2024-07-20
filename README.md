@@ -47,7 +47,8 @@ The package is split into subpackages, so you can install only the parts you nee
             ...
             Environment="OLLAMA_HOST=0.0.0.0"
             ```
-    1. HuggingFace transformers and other requirements are hardware dependent so for providers other than Ollama, this only installs some generic dependencies. Check the [notebooks](notebooks/local_llm/) for more details on what is available and how to install it.
+        1. It is recommended to always have the latest version of Ollama. To update Ollama check the [docs](https://github.com/ollama/ollama/blob/main/docs/). The command for Linux is: `curl -fsSL https://ollama.com/install.sh | sh`
+    2. HuggingFace transformers and other requirements are hardware dependent so for providers other than Ollama, this only installs some generic dependencies. Check the [notebooks](notebooks/local_llm/) for more details on what is available and how to install it.
 * **Statistics**: `pip install not_again_ai[statistics]`
 * **Visualization**: `pip install not_again_ai[viz]`
 
