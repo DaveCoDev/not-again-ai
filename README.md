@@ -256,7 +256,7 @@ installed package to indicate that inline type annotations should be checked.
 
 ## Typos
 
-Checks for typos using [typos](https://github.com/crate-ci/typos)
+Check for typos using [typos](https://github.com/crate-ci/typos)
 
 ```bash
 (.venv) $ nox -s typos

@@ -10,6 +10,7 @@ from not_again_ai.local_llm.ollama.tokens import (
 MODELS = [
     "phi3",
     "llama3:8b",
+    "llama3.1:8b-instruct-q4_0",
     "gemma:7b-instruct",
     "qwen2",
     "granite-code:20b",
@@ -94,3 +95,7 @@ def test_num_tokens_unknown_model() -> None:
 
     result = num_tokens_from_messages(messages, tokenizer=tokenizer)
     print(result)
+
+
+if __name__ == "__main__":
+    test_num_tokens_single_message(MODELS[2])

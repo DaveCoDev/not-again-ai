@@ -32,8 +32,8 @@ def chat_completion(
             https://platform.openai.com/docs/models/model-endpoint-compatibility
             for details on which models work with the Chat API.
         client (OpenAI): An instance of the OpenAI client.
-        tools (list[dict[str, Any]], optional): A list of tools the model may generate JSON inputs for.
-            Defaults to None.
+        tools (list[dict[str, Any]], optional):A list of tools the model may call.
+            Use this to provide a list of functions the model may generate JSON inputs for. Defaults to None.
         tool_choice (str, optional): The tool choice to use. Can be "auto", "required", "none", or a specific function name.
             Note the function name cannot be any of "auto", "required", or "none". Defaults to "auto".
         max_tokens (int, optional): The maximum number of tokens to generate in the chat completion.
@@ -58,21 +58,21 @@ def chat_completion(
 
     Returns:
         dict[str, Any]: A dictionary with the following keys:
-            'finish_reason' (str): The reason the model stopped generating further tokens.
+            finish_reason (str): The reason the model stopped generating further tokens.
                 Can be 'stop', 'length', or 'tool_calls'.
-            'tool_names' (list[str], optional): The names of the tools called by the model.
-            'tool_args_list' (list[dict], optional): The arguments of the tools called by the model.
-            'message' (str | dict): The content of the generated assistant message.
+            tool_names (list[str], optional): The names of the tools called by the model.
+            tool_args_list (list[dict], optional): The arguments of the tools called by the model.
+            message (str | dict): The content of the generated assistant message.
                 If json_mode is True, this will be a dictionary.
-            'logprobs' (list[dict[str, Any] | list[dict[str, Any]]]): If logprobs[1] is between 1 and 5, each element in the list
+            logprobs (list[dict[str, Any] | list[dict[str, Any]]]): If logprobs[1] is between 1 and 5, each element in the list
                 will be a list of dictionaries containing the token, logprob, and bytes for the top `logprobs[1]` logprobs. Otherwise,
                 this will be a list of dictionaries containing the token, logprob, and bytes for each token in the message.
-            'choices' (list[dict], optional): A list of chat completion choices if n > 1 where each dict contains the above fields.
-            'completion_tokens' (int): The number of tokens used by the model to generate the completion.
+            choices (list[dict], optional): A list of chat completion choices if n > 1 where each dict contains the above fields.
+            completion_tokens (int): The number of tokens used by the model to generate the completion.
                 NOTE: If n > 1 this is the sum of all completions.
-            'prompt_tokens' (int): The number of tokens in the messages sent to the model.
-            'system_fingerprint' (str, optional): If seed is set, a unique identifier for the model used to generate the response.
-            'response_duration' (float): The time, in seconds, taken to generate the response from the API.
+            prompt_tokens (int): The number of tokens in the messages sent to the model.
+            system_fingerprint (str, optional): If seed is set, a unique identifier for the model used to generate the response.
+            response_duration (float): The time, in seconds, taken to generate the response from the API.
     """
     response_format = {"type": "json_object"} if json_mode else None
 
