@@ -25,7 +25,7 @@ def test_chat_completion() -> None:
 def test_chat_completion_length() -> None:
     client = openai_client()
     messages = [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "Hello!"}]
-    response = chat_completion(messages=messages, model="gpt-3.5-turbo-0125", max_tokens=2, client=client)
+    response = chat_completion(messages=messages, model="gpt-4o-mini-2024-07-18", max_tokens=2, client=client)
     print(response)
 
 
@@ -63,7 +63,7 @@ def test_chat_completion_expected_function() -> None:
     client = openai_client()
     response = chat_completion(
         messages=messages,
-        model="gpt-3.5-turbo-0125",
+        model="gpt-4o-mini-2024-07-18",
         client=client,
         tools=tools,
         max_tokens=300,
@@ -106,7 +106,7 @@ def test_chat_completion_tool_choice() -> None:
     client = openai_client()
     response = chat_completion(
         messages=messages,
-        model="gpt-3.5-turbo-0125",
+        model="gpt-4o-mini-2024-07-18",
         client=client,
         tools=tools,
         tool_choice="get_current_weather",
@@ -154,7 +154,7 @@ def test_chat_completion_multiple_functions() -> None:
     client = openai_client()
     response = chat_completion(
         messages=messages,
-        model="gpt-3.5-turbo-0125",
+        model="gpt-4o-mini-2024-07-18",
         client=client,
         tools=tools,
         max_tokens=400,
@@ -164,7 +164,7 @@ def test_chat_completion_multiple_functions() -> None:
 
 
 @pytest.mark.skip("API Cost")
-def test_dont_call_function() -> None:
+def test_chat_completion_dont_call_function() -> None:
     tools = [
         {
             "type": "function",
@@ -202,7 +202,7 @@ def test_dont_call_function() -> None:
     client = openai_client()
     response = chat_completion(
         messages=messages,
-        model="gpt-3.5-turbo-0125",
+        model="gpt-4o-mini-2024-07-18",
         client=client,
         tools=tools,
         tool_choice="none",
@@ -229,7 +229,7 @@ Output: {"name": "Jane Doe"}""",
     client = openai_client()
     response = chat_completion(
         messages=messages,
-        model="gpt-3.5-turbo-0125",
+        model="gpt-4o-mini-2024-07-18",
         client=client,
         max_tokens=300,
         temperature=0,
@@ -241,7 +241,7 @@ Output: {"name": "Jane Doe"}""",
 def test_chat_completion_n() -> None:
     client = openai_client()
     messages = [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "Hello!"}]
-    response = chat_completion(messages=messages, model="gpt-3.5-turbo-0125", max_tokens=100, client=client, n=2)
+    response = chat_completion(messages=messages, model="gpt-4o-mini-2024-07-18", max_tokens=100, client=client, n=2)
     print(response)
 
 
@@ -253,11 +253,11 @@ def test_chat_completion_seed() -> None:
         {"role": "user", "content": "Generate a random number between 0 and 100."},
     ]
     response_1 = chat_completion(
-        messages=messages, model="gpt-3.5-turbo-0125", max_tokens=100, client=client, temperature=2, seed=42
+        messages=messages, model="gpt-4o-mini-2024-07-18", max_tokens=100, client=client, temperature=2, seed=42
     )
 
     response_2 = chat_completion(
-        messages=messages, model="gpt-3.5-turbo-0125", max_tokens=100, client=client, temperature=2, seed=42
+        messages=messages, model="gpt-4o-mini-2024-07-18", max_tokens=100, client=client, temperature=2, seed=42
     )
 
     print(response_1)
@@ -275,7 +275,7 @@ def test_chat_completion_logprobs() -> None:
     client = openai_client()
     messages = [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "Hello!"}]
     response = chat_completion(
-        messages=messages, model="gpt-3.5-turbo-0125", max_tokens=100, client=client, logprobs=(True, None)
+        messages=messages, model="gpt-4o-mini-2024-07-18", max_tokens=100, client=client, logprobs=(True, None)
     )
     print(response)
 
@@ -284,7 +284,7 @@ def test_chat_completion_toplogprobs() -> None:
     client = openai_client()
     messages = [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "Hello!"}]
     response = chat_completion(
-        messages=messages, model="gpt-3.5-turbo-0125", max_tokens=100, client=client, logprobs=(True, 3)
+        messages=messages, model="gpt-4o-mini-2024-07-18", max_tokens=100, client=client, logprobs=(True, 3)
     )
     print(response)
 
@@ -324,7 +324,7 @@ def test_chat_completion_misc_1() -> None:
     client = openai_client()
     response = chat_completion(
         messages=messages,
-        model="gpt-3.5-turbo-0125",
+        model="gpt-4o-mini-2024-07-18",
         client=client,
         tools=tools,
         max_tokens=300,

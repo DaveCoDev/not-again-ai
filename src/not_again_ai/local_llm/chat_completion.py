@@ -11,6 +11,7 @@ def chat_completion(
     messages: list[dict[str, Any]],
     model: str,
     client: OpenAI | Client,
+    tools: list[dict[str, Any]] | None = None,
     max_tokens: int | None = None,
     temperature: float = 0.7,
     json_mode: bool = False,
@@ -25,6 +26,8 @@ def chat_completion(
         messages (list[dict[str, Any]]): A list of messages to send to the model.
         model (str): The model name to use.
         client (OpenAI | Client): The client object to use for chat completion.
+        tools (list[dict[str, Any]], optional):A list of tools the model may call.
+            Use this to provide a list of functions the model may generate JSON inputs for. Defaults to None.
         max_tokens (int, optional): The maximum number of tokens to generate.
         temperature (float, optional): The temperature of the model. Increasing the temperature will make the model answer more creatively.
         json_mode (bool, optional): This will structure the response as a valid JSON object.
@@ -34,6 +37,9 @@ def chat_completion(
         dict[str, Any]: A dictionary with the following keys
             message (str | dict): The content of the generated assistant message.
                 If json_mode is True, this will be a dictionary.
+            tool_names (list[str], optional): The names of the tools called by the model.
+                If the model does not support tools, a ResponseError is raised.
+            tool_args_list (list[dict], optional): The arguments of the tools called by the model.
             prompt_tokens (int): The number of tokens in the messages sent to the model.
             completion_tokens (int): The number of tokens used by the model to generate the completion.
             response_duration (float): The time, in seconds, taken to generate the response by using the model.
@@ -45,6 +51,7 @@ def chat_completion(
             messages=messages,
             model=model,
             client=client,
+            tools=tools,
             max_tokens=max_tokens,
             temperature=temperature,
             json_mode=json_mode,
@@ -56,6 +63,7 @@ def chat_completion(
             messages=messages,
             model=model,
             client=client,
+            tools=tools,
             max_tokens=max_tokens,
             temperature=temperature,
             json_mode=json_mode,
@@ -68,6 +76,9 @@ def chat_completion(
     # Parse the responses to be consistent
     response_data = {}
     response_data["message"] = response.get("message")
+    if response.get("tool_names") and response.get("tool_args_list"):
+        response_data["tool_names"] = response.get("tool_names")
+        response_data["tool_args_list"] = response.get("tool_args_list")
     response_data["completion_tokens"] = response.get("completion_tokens")
     response_data["prompt_tokens"] = response.get("prompt_tokens")
     response_data["response_duration"] = response.get("response_duration")
