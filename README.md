@@ -32,23 +32,26 @@ Note that local LLM requires separate installations and will not work out of the
 The package is split into subpackages, so you can install only the parts you need.
 * **Base only**: `pip install not_again_ai`
 * **LLM**: `pip install not_again_ai[llm]`
-    1. If you wish to use OpenAI
+    1. OpenAI API
         1. Go to https://platform.openai.com/settings/profile?tab=api-keys to get your API key.
         1. (Optional) Set the `OPENAI_API_KEY` and the `OPENAI_ORG_ID` environment variables.
+    1. GitHub Models
+       1. Get a Personal Access Token from https://github.com/settings/tokens and set the `GITHUB_TOKEN` environment variable. The token does not need any permissions.
+       1. Check the [Github Marketplace](https://github.com/marketplace/models) to see which models are available.
 * **Local LLM**: `pip install not_again_ai[llm,local_llm]`
     1. Some HuggingFace transformers tokenizers are gated behind access requests. If you wish to use these, you will need to request access from HuggingFace on the model card.
        1. Then set the `HF_TOKEN` environment variable to your HuggingFace API token which can be found here: https://huggingface.co/settings/tokens
-    1. If you wish to use Ollama:
+    2. If you wish to use Ollama:
         1. Follow the instructions at https://github.com/ollama/ollama to install Ollama for your system. 
-        1. (Optional) [Add Ollama as a startup service (recommended)](https://github.com/ollama/ollama/blob/main/docs/linux.md#adding-ollama-as-a-startup-service-recommended)
-        1. (Optional) To make the Ollama service accessible on your local network from a Linux server, add the following to the `/etc/systemd/system/ollama.service` file which will make Ollama available at `http://<local_address>:11434`:
+        2. (Optional) [Add Ollama as a startup service (recommended)](https://github.com/ollama/ollama/blob/main/docs/linux.md#adding-ollama-as-a-startup-service-recommended)
+        3. (Optional) To make the Ollama service accessible on your local network from a Linux server, add the following to the `/etc/systemd/system/ollama.service` file which will make Ollama available at `http://<local_address>:11434`:
             ```bash
             [Service]
             ...
             Environment="OLLAMA_HOST=0.0.0.0"
             ```
-        1. It is recommended to always have the latest version of Ollama. To update Ollama check the [docs](https://github.com/ollama/ollama/blob/main/docs/). The command for Linux is: `curl -fsSL https://ollama.com/install.sh | sh`
-    2. HuggingFace transformers and other requirements are hardware dependent so for providers other than Ollama, this only installs some generic dependencies. Check the [notebooks](notebooks/local_llm/) for more details on what is available and how to install it.
+        4. It is recommended to always have the latest version of Ollama. To update Ollama check the [docs](https://github.com/ollama/ollama/blob/main/docs/). The command for Linux is: `curl -fsSL https://ollama.com/install.sh | sh`
+    3. HuggingFace transformers and other requirements are hardware dependent so for providers other than Ollama, this only installs some generic dependencies. Check the [notebooks](notebooks/local_llm/) for more details on what is available and how to install it.
 * **Statistics**: `pip install not_again_ai[statistics]`
 * **Visualization**: `pip install not_again_ai[viz]`
 
