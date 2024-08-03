@@ -85,14 +85,12 @@ def chat_completion(
 
     response_data: dict[str, Any] = {}
 
-    # Handle getting the message returned by the model
     message = response["message"].get("content", "")
     if message and json_mode:
         with contextlib.suppress(json.JSONDecodeError):
             message = json.loads(message)
     response_data["message"] = message
 
-    # Try getting tool calls
     if response["message"].get("tool_calls"):
         tool_calls = response["message"]["tool_calls"]
         tool_names = [tool_call["function"]["name"] for tool_call in tool_calls]
@@ -104,12 +102,10 @@ def chat_completion(
     prompt_tokens = num_tokens_from_messages(messages, tokenizer)
     response_data["prompt_tokens"] = prompt_tokens
 
-    # Get the number of tokens generated
     response_data["completion_tokens"] = response.get("eval_count", None)
     if response_data["completion_tokens"] is None:
         response_data["completion_tokens"] = num_tokens_in_string(str(response_data["message"]), tokenizer)
 
-    # Get the latency of the response
     response_data["response_duration"] = round(response_duration, 4)
 
     return response_data
