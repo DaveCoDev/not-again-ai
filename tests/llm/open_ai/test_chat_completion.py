@@ -649,7 +649,7 @@ Return the recognized text in JSON format where the detected text is the value o
         },
     ]
     response = chat_completion(
-        messages=messages, model="gpt-4o-2024-05-13", client=client, max_tokens=300, json_mode=True
+        messages=messages, model="gpt-4o-2024-08-06", client=client, max_tokens=300, json_mode=True
     )
     print(response)
 
@@ -754,6 +754,90 @@ def test_chat_completion_gpt4o_mini() -> None:
     print(response)
 
 
+@pytest.mark.skip("API Cost")
+def test_chat_completion_structured_output() -> None:
+    client = openai_client()
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant"},
+        {"role": "user", "content": "9.11 and 9.9 -- which is bigger?"},
+    ]
+    json_schema = {
+        "name": "reasoning_schema",
+        "strict": True,
+        "schema": {
+            "type": "object",
+            "properties": {
+                "reasoning_steps": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "The reasoning steps leading to the final conclusion.",
+                },
+                "answer": {
+                    "type": "string",
+                    "description": "The final answer, taking into account the reasoning steps.",
+                },
+            },
+            "required": ["reasoning_steps", "answer"],
+            "additionalProperties": False,
+        },
+    }
+    response = chat_completion(
+        messages=messages,
+        model="gpt-4o-2024-08-06",
+        client=client,
+        max_tokens=400,
+        temperature=0.2,
+        json_mode=False,
+        json_schema=json_schema,
+    )
+    print(response)
+
+
+@pytest.mark.skip("API Cost")
+def test_chat_completion_structured_output_pydantic() -> None:
+    # NOTE: This currently does not work because we need to use beta.chat.completions.create
+    """
+    from pydantic import BaseModel
+
+    client = openai_client()
+
+    class Step(BaseModel):
+        explanation: str
+        output: str
+
+    class MathReasoning(BaseModel):
+        steps: list[Step]
+        final_answer: str
+
+    messages = [
+        {
+            "role": "system",
+            "content": "You are a helpful math tutor. Guide the user through the solution step by step.",
+        },
+        {
+            "role": "user",
+            "content": "how can I solve 8x + 7 = -23",
+        },
+    ]
+
+
+    response = chat_completion(
+        messages=messages,
+        model="gpt-4o-mini-2024-07-18",
+        client=client,
+        max_tokens=400,
+        temperature=0.3,
+        json_schema=MathReasoning,
+    )
+    print(response)
+    """
+    return None
+
+
 if __name__ == "__main__":
+    test_chat_completion_structured_output_pydantic()
+    test_chat_completion_structured_output()
+    test_chat_completion_vision_json_mode()
+    test_chat_completion_required_tool_call()
     test_chat_completion()
     test_chat_completion_gpt4o_mini()

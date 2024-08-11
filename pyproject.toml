@@ -30,11 +30,13 @@ loguru = { version = "==0.7.2" }
 
 # Optional dependencies are defined here, and groupings are defined below.
 azure-ai-inference = { version = "==1.0.0b3", optional = true }
+azure-identity = { version = "^1.17", optional = true }
 jinja2 = { version = "^3.1", optional = true }
 numpy = { version = "^1.26", optional = true }
 ollama = { version = "^0.3", optional = true }
-openai = { version = "^1.38", optional = true }
+openai = { version = "^1.40", optional = true }
 pandas = { version = "^2.2", optional = true }
+pydantic = { version = "^2.8", optional = true }
 python-liquid = { version = "^1.12", optional = true }
 scipy = { version = "^1.14", optional = true }
 scikit-learn = { version = "^1.5", optional = true }
@@ -43,7 +45,7 @@ tiktoken = { version = "^0.7", optional = true }
 transformers = { version = "^4.43", optional = true }
 
 [tool.poetry.extras]
-llm = ["azure-ai-inference", "openai", "python-liquid", "tiktoken"]
+llm = ["azure-ai-inference", "azure-identity", "openai", "pydantic", "python-liquid", "tiktoken"]
 local_llm = ["jinja2", "ollama", "transformers"]
 statistics = ["numpy", "scikit-learn", "scipy"]
 viz = ["numpy", "pandas", "seaborn"]

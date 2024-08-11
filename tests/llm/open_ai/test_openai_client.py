@@ -22,12 +22,7 @@ def test_openai_client_os_vars() -> None:
 
 def test_openai_client_invalid_type() -> None:
     with pytest.raises(InvalidOAIAPITypeError):
-        openai_client("invalid_type")
-
-
-def test_openai_client_azure_openai() -> None:
-    with pytest.raises(NotImplementedError):
-        openai_client("azure_openai")
+        openai_client("invalid_type")  # type: ignore
 
 
 def test_openai_client_openai_type_with_parameters() -> None:
