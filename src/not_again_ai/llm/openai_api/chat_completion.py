@@ -4,6 +4,7 @@ import time
 from typing import Any
 
 from openai import OpenAI
+from pydantic import BaseModel
 
 
 def chat_completion(
@@ -15,6 +16,7 @@ def chat_completion(
     max_tokens: int | None = None,
     temperature: float = 0.7,
     json_mode: bool = False,
+    json_schema: dict[str, Any] | None = None,
     seed: int | None = None,
     logprobs: tuple[bool, int | None] | None = None,
     n: int = 1,
@@ -44,6 +46,9 @@ def chat_completion(
         json_mode (bool, optional): When JSON mode is enabled, the model is constrained to only
             generate strings that parse into valid JSON object and will return a dictionary.
             See https://platform.openai.com/docs/guides/text-generation/json-mode
+        json_schema (dict, optional): Enables Structured Outputs which ensures the model will
+            always generate responses that adhere to your supplied JSON Schema.
+            See https://platform.openai.com/docs/guides/structured-outputs/structured-outputs
         seed (int, optional): If specified, OpenAI will make a best effort to sample deterministically,
             such that repeated requests with the same `seed` and parameters should return the same result.
             Determinism is not guaranteed, and you should refer to the `system_fingerprint` response
@@ -74,7 +79,19 @@ def chat_completion(
             system_fingerprint (str, optional): If seed is set, a unique identifier for the model used to generate the response.
             response_duration (float): The time, in seconds, taken to generate the response from the API.
     """
-    response_format = {"type": "json_object"} if json_mode else None
+
+    if json_mode and json_schema is not None:
+        raise ValueError("json_schema and json_mode cannot be used together.")
+
+    if json_mode:
+        response_format: dict[str, Any] = {"type": "json_object"}
+    elif json_schema is not None:
+        if isinstance(json_schema, dict):
+            response_format = {"type": "json_schema", "json_schema": json_schema}
+        elif issubclass(json_schema, BaseModel):
+            response_format = json_schema
+    else:
+        response_format = {"type": "text"}
 
     kwargs.update(
         {
@@ -126,7 +143,7 @@ def chat_completion(
             response_data_curr["tool_args_list"] = tool_args_list
         elif finish_reason == "stop" or finish_reason == "length":
             message = response_choice.message.content
-            if json_mode:
+            if json_mode or json_schema is not None:
                 with contextlib.suppress(json.JSONDecodeError):
                     message = json.loads(message)
             response_data_curr["message"] = message

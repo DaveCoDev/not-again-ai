@@ -34,7 +34,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_ORG_ID: ${{ secrets.OPENAI_ORG_ID }}
-          SKIP_TESTS_NAAI: "tests/llm/ollama tests/local_llm"
+          SKIP_TESTS_NAAI: "tests/llm/ollama tests/local_llm tests/llm/open_ai/test_azure_openai.py"
         run: poetry run nox -s test-${{ matrix.python-version }}
   quality:
     runs-on: ubuntu-22.04

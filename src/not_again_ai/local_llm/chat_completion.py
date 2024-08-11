@@ -1,8 +1,10 @@
 from typing import Any
 
+from azure.ai.inference import ChatCompletionsClient
 from ollama import Client
 from openai import OpenAI
 
+from not_again_ai.llm.gh_models import chat_completion as chat_completion_gh_models
 from not_again_ai.llm.openai_api import chat_completion as chat_completion_openai
 from not_again_ai.local_llm.ollama import chat_completion as chat_completion_ollama
 
@@ -10,7 +12,7 @@ from not_again_ai.local_llm.ollama import chat_completion as chat_completion_oll
 def chat_completion(
     messages: list[dict[str, Any]],
     model: str,
-    client: OpenAI | Client,
+    client: OpenAI | Client | ChatCompletionsClient,
     tools: list[dict[str, Any]] | None = None,
     max_tokens: int | None = None,
     temperature: float = 0.7,
@@ -64,6 +66,18 @@ def chat_completion(
             model=model,
             client=client,
             tools=tools,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            json_mode=json_mode,
+            seed=seed,
+            **kwargs,
+        )
+    elif isinstance(client, ChatCompletionsClient):
+        response = chat_completion_gh_models.chat_completion(
+            messages=messages,  # type: ignore
+            model=model,
+            client=client,
+            tools=tools,  # type: ignore
             max_tokens=max_tokens,
             temperature=temperature,
             json_mode=json_mode,

@@ -87,7 +87,7 @@ def chat_prompt(messages_unformatted: list[dict[str, Any]], variables: dict[str,
         A list which represents messages in the format that OpenAI expects for its chat completions API.
         See here for details: https://platform.openai.com/docs/api-reference/chat/create
 
-    Examples:
+    Example:
         >>> # Assume cat_image and dog_image are Path objects to image files
         >>> messages = [
         ...     {"role": "system", "content": "You are a helpful assistant."},
