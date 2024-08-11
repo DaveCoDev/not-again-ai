@@ -54,7 +54,7 @@ def test_chat_completion_length(model: str) -> None:
 @pytest.mark.skip("API Cost")
 def test_chat_completion_expected_function(model: str) -> None:
     tools = [
-        ChatCompletionsFunctionToolDefinition(  # type: ignore
+        ChatCompletionsFunctionToolDefinition(
             function=FunctionDefinition(
                 name="get_current_weather",
                 description="Get the current weather",
