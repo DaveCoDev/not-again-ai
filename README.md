@@ -35,6 +35,10 @@ The package is split into subpackages, so you can install only the parts you nee
     1. OpenAI API
         1. Go to https://platform.openai.com/settings/profile?tab=api-keys to get your API key.
         1. (Optional) Set the `OPENAI_API_KEY` and the `OPENAI_ORG_ID` environment variables.
+    1. Azure OpenAI (AOAI)
+       1. Using AOAI requires using Entra ID authentication. See https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/managed-identity for how to set this up for your AOAI deployment.
+          1. Requires the correct role assigned to your user account and being signed into the Azure CLI.
+       1. (Optional) Set the `AZURE_OPENAI_ENDPOINT` environment variable.
     1. GitHub Models
        1. Get a Personal Access Token from https://github.com/settings/tokens and set the `GITHUB_TOKEN` environment variable. The token does not need any permissions.
        1. Check the [Github Marketplace](https://github.com/marketplace/models) to see which models are available.

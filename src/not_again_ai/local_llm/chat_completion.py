@@ -2,7 +2,7 @@ from typing import Any
 
 from azure.ai.inference import ChatCompletionsClient
 from ollama import Client
-from openai import OpenAI
+from openai import AzureOpenAI, OpenAI
 
 from not_again_ai.llm.gh_models import chat_completion as chat_completion_gh_models
 from not_again_ai.llm.openai_api import chat_completion as chat_completion_openai
@@ -12,7 +12,7 @@ from not_again_ai.local_llm.ollama import chat_completion as chat_completion_oll
 def chat_completion(
     messages: list[dict[str, Any]],
     model: str,
-    client: OpenAI | Client | ChatCompletionsClient,
+    client: OpenAI | AzureOpenAI | Client | ChatCompletionsClient,
     tools: list[dict[str, Any]] | None = None,
     max_tokens: int | None = None,
     temperature: float = 0.7,
@@ -27,7 +27,7 @@ def chat_completion(
     Args:
         messages (list[dict[str, Any]]): A list of messages to send to the model.
         model (str): The model name to use.
-        client (OpenAI | Client): The client object to use for chat completion.
+        client (OpenAI | AzureOpenAI | Client | ChatCompletionsClient): The client object to use for chat completion.
         tools (list[dict[str, Any]], optional):A list of tools the model may call.
             Use this to provide a list of functions the model may generate JSON inputs for. Defaults to None.
         max_tokens (int, optional): The maximum number of tokens to generate.
@@ -48,7 +48,7 @@ def chat_completion(
             extras (dict): This will contain any additional fields returned by corresponding provider.
     """
     # Determine which chat_completion function to call based on the client type
-    if isinstance(client, OpenAI):
+    if isinstance(client, OpenAI | AzureOpenAI):
         response = chat_completion_openai.chat_completion(
             messages=messages,
             model=model,

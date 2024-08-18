@@ -65,6 +65,16 @@ def test_chat_completion_openai() -> None:
     print(response)
 
 
+def test_chat_completion_aoai() -> None:
+    client = openai_client(api_type="azure_openai")
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Hello!"},
+    ]
+    response = chat_completion(messages, model="gpt-4o-mini-2024-07-18", client=client)
+    print(response)
+
+
 @pytest.mark.skip("API Cost")
 def test_chat_completion_multiple_functions() -> None:
     tools = [
@@ -162,6 +172,7 @@ def test_chat_completion_gh() -> None:
 
 
 if __name__ == "__main__":
+    test_chat_completion_aoai()
     test_chat_completion_gh()
     test_chat_completion_multiple_functions()
     test_chat_completion_ollama_tools()
