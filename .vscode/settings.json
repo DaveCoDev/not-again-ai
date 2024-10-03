@@ -18,5 +18,5 @@
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "python.testing.pytestArgs": [],
-    "markdown.extension.orderedList.marker" : "one",
+    "markdown.extension.orderedList.marker": "one",
 }

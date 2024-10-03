@@ -2,7 +2,7 @@ from pathlib import Path
 
 from azure.ai.inference.models import (
     AssistantMessage,
-    ChatCompletionsFunctionToolDefinition,
+    ChatCompletionsToolDefinition,
     FunctionDefinition,
     ImageContentItem,
     ImageDetailLevel,
@@ -54,7 +54,7 @@ def test_chat_completion_length(model: str) -> None:
 @pytest.mark.skip("API Cost")
 def test_chat_completion_expected_function(model: str) -> None:
     tools = [
-        ChatCompletionsFunctionToolDefinition(
+        ChatCompletionsToolDefinition(
             function=FunctionDefinition(
                 name="get_current_weather",
                 description="Get the current weather",
@@ -86,7 +86,7 @@ def test_chat_completion_expected_function(model: str) -> None:
         messages=messages,  # type: ignore
         model=model,
         client=client,
-        tools=tools,  # type: ignore
+        tools=tools,
         max_tokens=300,
         temperature=0,
     )
@@ -96,7 +96,7 @@ def test_chat_completion_expected_function(model: str) -> None:
 @pytest.mark.skip("API Cost")
 def test_chat_completion_multiple_functions(model: str) -> None:
     tools = [
-        ChatCompletionsFunctionToolDefinition(
+        ChatCompletionsToolDefinition(
             function=FunctionDefinition(
                 name="get_current_weather",
                 description="Get the current weather",
@@ -127,7 +127,7 @@ def test_chat_completion_multiple_functions(model: str) -> None:
         messages=messages,
         model=model,
         client=client,
-        tools=tools,  # type: ignore
+        tools=tools,
         max_tokens=400,
         temperature=0,
     )
@@ -175,7 +175,7 @@ def test_chat_completion_seed(model: str) -> None:
 def test_chat_completion_misc_1(model: str) -> None:
     client = azure_ai_client()
     tools = [
-        ChatCompletionsFunctionToolDefinition(
+        ChatCompletionsToolDefinition(
             function=FunctionDefinition(
                 name="get_current_weather",
                 description="Get the current weather",
@@ -207,7 +207,7 @@ def test_chat_completion_misc_1(model: str) -> None:
         messages=messages,  # type: ignore
         model=model,
         client=client,
-        tools=tools,  # type: ignore
+        tools=tools,
         max_tokens=300,
         temperature=0,
         seed=42,
@@ -356,7 +356,7 @@ If you see any text, call the ocr tool. It takes no parameters."""
         ),
     ]
     tools = [
-        ChatCompletionsFunctionToolDefinition(
+        ChatCompletionsToolDefinition(
             function=FunctionDefinition(
                 name="ocr",
                 description="Perform Optical Character Recognition (OCR) on an image",
@@ -368,7 +368,7 @@ If you see any text, call the ocr tool. It takes no parameters."""
         messages=messages,
         model=model,
         client=client,
-        tools=tools,  # type: ignore
+        tools=tools,
         max_tokens=200,
     )
     print(response)

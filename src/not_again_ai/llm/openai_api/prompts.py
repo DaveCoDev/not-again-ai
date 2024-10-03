@@ -5,6 +5,8 @@ from pathlib import Path
 from typing import Any
 
 from liquid import Template
+from openai.lib._pydantic import to_strict_json_schema
+from pydantic import BaseModel
 
 
 def _validate_message_vision(message: dict[str, list[dict[str, Path | str]] | str]) -> bool:
@@ -162,3 +164,28 @@ def chat_prompt(messages_unformatted: list[dict[str, Any]], variables: dict[str,
             message["content"] = Template(message["content"]).render(**variables)
 
     return messages_formatted
+
+
+def pydantic_to_json_schema(
+    pydantic_model: type[BaseModel], schema_name: str, description: str | None = None
+) -> dict[str, Any]:
+    """Converts a Pydantic model to a JSON schema expected by Structured Outputs.
+    Must adhere to the supported schemas: https://platform.openai.com/docs/guides/structured-outputs/supported-schemas
+
+    Args:
+        pydantic_model: The Pydantic model to convert.
+        schema_name: The name of the schema.
+        description: An optional description of the schema.
+
+    Returns:
+        A JSON schema dictionary representing the Pydantic model.
+    """
+    converted_pydantic = to_strict_json_schema(pydantic_model)
+    schema = {
+        "name": schema_name,
+        "strict": True,
+        "schema": converted_pydantic,
+    }
+    if description:
+        schema["description"] = description
+    return schema

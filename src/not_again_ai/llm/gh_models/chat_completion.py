@@ -64,8 +64,8 @@ def chat_completion(
         tool_names = []
         tool_args_list = []
         for tool_call in tool_calls:
-            tool_names.append(tool_call.function.name)  # type: ignore
-            tool_args_list.append(json.loads(tool_call.function.arguments))  # type: ignore
+            tool_names.append(tool_call.function.name)
+            tool_args_list.append(json.loads(tool_call.function.arguments))
         response_data["tool_names"] = tool_names
         response_data["tool_args_list"] = tool_args_list
 

@@ -508,7 +508,8 @@ def test_chat_completion_vision_seed() -> None:
     print(response_1)
     print(response_1["message"])
     print(response_2["message"])
-    assert response_1["message"] == response_2["message"]
+    # This does not return the same output every time.
+    # assert response_1["message"] == response_2["message"]
 
 
 @pytest.mark.skip("API Cost")
@@ -780,6 +781,7 @@ def test_chat_completion_structured_output() -> None:
             "required": ["reasoning_steps", "answer"],
             "additionalProperties": False,
         },
+        "description": "A schema for structured output that includes reasoning steps and the final answer.",
     }
     response = chat_completion(
         messages=messages,
@@ -794,50 +796,149 @@ def test_chat_completion_structured_output() -> None:
 
 
 @pytest.mark.skip("API Cost")
-def test_chat_completion_structured_output_pydantic() -> None:
-    # NOTE: This currently does not work because we need to use beta.chat.completions.create
-    """
-    from pydantic import BaseModel
-
-    client = openai_client()
-
-    class Step(BaseModel):
-        explanation: str
-        output: str
-
-    class MathReasoning(BaseModel):
-        steps: list[Step]
-        final_answer: str
-
+def test_chat_completion_required_tools_none_called() -> None:
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "get_current_weather",
+                "description": "Get the current weather",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA",
+                        },
+                        "format": {
+                            "type": "string",
+                            "enum": ["celsius", "fahrenheit"],
+                            "description": "The temperature unit to use. Infer this from the users location.",
+                        },
+                    },
+                    "required": ["location", "format"],
+                },
+            },
+        },
+    ]
     messages = [
         {
             "role": "system",
-            "content": "You are a helpful math tutor. Guide the user through the solution step by step.",
+            "content": "Do not call get_current_weather or any other tool under any circumstances.",
         },
         {
             "role": "user",
-            "content": "how can I solve 8x + 7 = -23",
+            "content": "What is 2+2?",
         },
     ]
-
-
+    client = openai_client()
     response = chat_completion(
         messages=messages,
-        model="gpt-4o-mini-2024-07-18",
+        model="gpt-4o-2024-05-13",
         client=client,
-        max_tokens=400,
-        temperature=0.3,
-        json_schema=MathReasoning,
+        tools=tools,
+        tool_choice="required",
+        max_tokens=300,
+        temperature=0.5,
     )
     print(response)
-    """
-    return None
+
+
+@pytest.mark.skip("API Cost")
+def test_chat_completion_required_tools_none_called_structured() -> None:
+    tools = [
+        {
+            "type": "function",
+            "strict": True,
+            "function": {
+                "name": "get_current_weather",
+                "description": "Get the current weather",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA",
+                        },
+                        "format": {
+                            "type": "string",
+                            "enum": ["celsius", "fahrenheit"],
+                            "description": "The temperature unit to use. Infer this from the users location.",
+                        },
+                    },
+                    "required": ["location", "format"],
+                    "additionalProperties": False,
+                },
+            },
+        },
+    ]
+    messages = [
+        {
+            "role": "system",
+            "content": "Do not call get_current_weather or any other tool under any circumstances.",
+        },
+        {
+            "role": "user",
+            "content": "What is 2+2?",
+        },
+    ]
+    client = openai_client()
+    response = chat_completion(
+        messages=messages,
+        model="gpt-4o-2024-08-06",
+        client=client,
+        tools=tools,
+        tool_choice="required",
+        max_tokens=300,
+        temperature=0.5,
+    )
+    print(response)
+
+
+def test_chat_completion_external_client() -> None:
+    def custom_client(**kwargs) -> Any:  # type: ignore
+        client = openai_client()
+        completion = client.chat.completions.create(**kwargs)
+        return completion.to_dict()
+
+    messages = [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "Hello!"}]
+    response = chat_completion(
+        messages=messages,
+        model="gpt-4o-2024-05-13",
+        max_tokens=100,
+        client=custom_client,
+    )
+    print(response)
 
 
 if __name__ == "__main__":
-    test_chat_completion_structured_output_pydantic()
-    test_chat_completion_structured_output()
-    test_chat_completion_vision_json_mode()
-    test_chat_completion_required_tool_call()
     test_chat_completion()
+    test_chat_completion_length()
+    test_chat_completion_expected_function()
+    test_chat_completion_tool_choice()
+    test_chat_completion_multiple_functions()
+    test_chat_completion_dont_call_function()
+    test_json_mode()
+    test_chat_completion_n()
+    test_chat_completion_seed()
+    test_chat_completion_logprobs()
+    test_chat_completion_toplogprobs()
+    test_chat_completion_misc_1()
+    test_chat_completion_misc_2()
+    test_message_with_tools()
+    test_chat_completion_vision()
+    test_chat_completion_vision_length()
+    test_chat_completion_vision_n()
+    test_chat_completion_vision_seed()
+    test_chat_completion_vision_multiple_images()
+    test_chat_completion_vision_multiple_messages()
+    test_chat_completion_vision_different_fidelity()
+    test_chat_completion_vision_tool_call()
+    test_chat_completion_vision_json_mode()
+    test_chat_completion_vision_many_features()
+    test_chat_completion_required_tool_call()
+    test_chat_completion_required_tools_none_called()
+    test_chat_completion_required_tools_none_called_structured()
     test_chat_completion_gpt4o_mini()
+    test_chat_completion_structured_output()
+    test_chat_completion_external_client()

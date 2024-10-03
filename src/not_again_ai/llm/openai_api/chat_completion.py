@@ -3,14 +3,13 @@ import json
 import time
 from typing import Any
 
-from openai import OpenAI
-from pydantic import BaseModel
+from openai import AzureOpenAI, OpenAI
 
 
 def chat_completion(
     messages: list[dict[str, Any]],
     model: str,
-    client: OpenAI,
+    client: OpenAI | AzureOpenAI | Any,
     tools: list[dict[str, Any]] | None = None,
     tool_choice: str = "auto",
     max_tokens: int | None = None,
@@ -33,7 +32,15 @@ def chat_completion(
         model (str): ID of the model to use. See the model endpoint compatibility table:
             https://platform.openai.com/docs/models/model-endpoint-compatibility
             for details on which models work with the Chat API.
-        client (OpenAI): An instance of the OpenAI client.
+        client (OpenAI): An instance of the OpenAI or AzureOpenAI client.
+            If anything else is provided, we assume that it follows the OpenAI spec and call it by passing kwargs directly.
+            For example you can provide something like:
+            ```
+            def custom_client(**kwargs):
+                client = openai_client()
+                completion = client.chat.completions.create(**kwargs)
+                return completion.to_dict()
+            ```
         tools (list[dict[str, Any]], optional):A list of tools the model may call.
             Use this to provide a list of functions the model may generate JSON inputs for. Defaults to None.
         tool_choice (str, optional): The tool choice to use. Can be "auto", "required", "none", or a specific function name.
@@ -88,8 +95,6 @@ def chat_completion(
     elif json_schema is not None:
         if isinstance(json_schema, dict):
             response_format = {"type": "json_schema", "json_schema": json_schema}
-        elif issubclass(json_schema, BaseModel):
-            response_format = json_schema
     else:
         response_format = {"type": "text"}
 
@@ -120,67 +125,71 @@ def chat_completion(
             kwargs["top_logprobs"] = logprobs[1]
 
     start_time = time.time()
-    response = client.chat.completions.create(**kwargs)
+    if isinstance(client, OpenAI | AzureOpenAI):
+        response = client.chat.completions.create(**kwargs)
+        response = response.to_dict()
+    else:
+        response = client(**kwargs)
     end_time = time.time()
     response_duration = end_time - start_time
 
     response_data: dict[str, Any] = {"choices": []}
-    for response_choice in response.choices:
+    for response_choice in response["choices"]:
         response_data_curr = {}
-        finish_reason = response_choice.finish_reason
+        finish_reason = response_choice["finish_reason"]
         response_data_curr["finish_reason"] = finish_reason
 
         # We first check for tool calls because even if the finish_reason is stop, the model may have called a tool
-        tool_calls = response_choice.message.tool_calls
+        tool_calls = response_choice["message"].get("tool_calls", None)
         if tool_calls:
             tool_names = []
             tool_args_list = []
             for tool_call in tool_calls:
-                tool_names.append(tool_call.function.name)
-                tool_args_list.append(json.loads(tool_call.function.arguments))
-            response_data_curr["message"] = response_choice.message.content
+                tool_names.append(tool_call["function"]["name"])
+                tool_args_list.append(json.loads(tool_call["function"]["arguments"]))
+            response_data_curr["message"] = response_choice["message"]["content"]
             response_data_curr["tool_names"] = tool_names
             response_data_curr["tool_args_list"] = tool_args_list
         elif finish_reason == "stop" or finish_reason == "length":
-            message = response_choice.message.content
+            message = response_choice["message"]["content"]
             if json_mode or json_schema is not None:
                 with contextlib.suppress(json.JSONDecodeError):
                     message = json.loads(message)
             response_data_curr["message"] = message
 
-        if response_choice.logprobs and response_choice.logprobs.content is not None:
+        if response_choice["logprobs"] and response_choice["logprobs"]["content"] is not None:
             logprobs_list: list[dict[str, Any] | list[dict[str, Any]]] = []
-            for logprob in response_choice.logprobs.content:
-                if logprob.top_logprobs:
+            for logprob in response_choice["logprobs"]["content"]:
+                if logprob["top_logprobs"]:
                     curr_logprob_infos = []
-                    for top_logprob in logprob.top_logprobs:
+                    for top_logprob in logprob["top_logprobs"]:
                         curr_logprob_infos.append(
                             {
-                                "token": top_logprob.token,
-                                "logprob": top_logprob.logprob,
-                                "bytes": top_logprob.bytes,
+                                "token": top_logprob["token"],
+                                "logprob": top_logprob["logprob"],
+                                "bytes": top_logprob["bytes"],
                             }
                         )
                     logprobs_list.append(curr_logprob_infos)
                 else:
                     logprobs_list.append(
                         {
-                            "token": logprob.token,
-                            "logprob": logprob.logprob,
-                            "bytes": logprob.bytes,
+                            "token": logprob["token"],
+                            "logprob": logprob["logprob"],
+                            "bytes": logprob["bytes"],
                         }
                     )
 
             response_data_curr["logprobs"] = logprobs_list
         response_data["choices"].append(response_data_curr)
 
-    usage = response.usage
+    usage = response["usage"]
     if usage is not None:
-        response_data["completion_tokens"] = usage.completion_tokens
-        response_data["prompt_tokens"] = usage.prompt_tokens
+        response_data["completion_tokens"] = usage["completion_tokens"]
+        response_data["prompt_tokens"] = usage["prompt_tokens"]
 
-    if seed is not None and response.system_fingerprint is not None:
-        response_data["system_fingerprint"] = response.system_fingerprint
+    if seed is not None and response["system_fingerprint"] is not None:
+        response_data["system_fingerprint"] = response["system_fingerprint"]
 
     response_data["response_duration"] = round(response_duration, 4)
 

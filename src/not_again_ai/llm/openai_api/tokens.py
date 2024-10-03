@@ -1,3 +1,6 @@
+from collections.abc import Collection, Set
+from typing import Literal
+
 import tiktoken
 
 
@@ -18,18 +21,38 @@ def load_tokenizer(model: str) -> tiktoken.Encoding:
     return encoding
 
 
-def truncate_str(text: str, max_len: int, tokenizer: tiktoken.Encoding) -> str:
+def truncate_str(
+    text: str,
+    max_len: int,
+    tokenizer: tiktoken.Encoding,
+    allowed_special: Literal["all"] | Set[str] = set(),
+    disallowed_special: Literal["all"] | Collection[str] = (),
+) -> str:
     """Truncates a string to a maximum token length.
+
+    Special tokens are artificial tokens used to unlock capabilities from a model,
+    such as fill-in-the-middle. So we want to be careful about accidentally encoding special
+    tokens, since they can be used to trick a model into doing something we don't want it to do.
+
+    Hence, by default, encode will raise an error if it encounters text that corresponds
+    to a special token. This can be controlled on a per-token level using the `allowed_special`
+    and `disallowed_special` parameters. In particular:
+    - Setting `disallowed_special` to () will prevent this function from raising errors and
+        cause all text corresponding to special tokens to be encoded as natural text.
+    - Setting `allowed_special` to "all" will cause this function to treat all text
+        corresponding to special tokens to be encoded as special tokens.
 
     Args:
         text (str): The string to truncate.
         max_len (int): The maximum number of tokens to keep.
         tokenizer (tiktoken.Encoding): A tiktoken encoding object
+        allowed_special (str | set[str]):
+        disallowed_special (str | set[str]):
 
     Returns:
         str: The truncated string.
     """
-    tokens = tokenizer.encode(text)
+    tokens = tokenizer.encode(text, allowed_special=allowed_special, disallowed_special=disallowed_special)
     if len(tokens) > max_len:
         tokens = tokens[:max_len]
         # Decode the tokens back to a string
@@ -39,26 +62,61 @@ def truncate_str(text: str, max_len: int, tokenizer: tiktoken.Encoding) -> str:
         return text
 
 
-def num_tokens_in_string(text: str, tokenizer: tiktoken.Encoding) -> int:
+def num_tokens_in_string(
+    text: str,
+    tokenizer: tiktoken.Encoding,
+    allowed_special: Literal["all"] | Set[str] = set(),
+    disallowed_special: Literal["all"] | Collection[str] = (),
+) -> int:
     """Return the number of tokens in a string.
+
+    Special tokens are artificial tokens used to unlock capabilities from a model,
+    such as fill-in-the-middle. So we want to be careful about accidentally encoding special
+    tokens, since they can be used to trick a model into doing something we don't want it to do.
+
+    Hence, by default, encode will raise an error if it encounters text that corresponds
+    to a special token. This can be controlled on a per-token level using the `allowed_special`
+    and `disallowed_special` parameters. In particular:
+    - Setting `disallowed_special` to () will prevent this function from raising errors and
+        cause all text corresponding to special tokens to be encoded as natural text.
+    - Setting `allowed_special` to "all" will cause this function to treat all text
+        corresponding to special tokens to be encoded as special tokens.
 
     Args:
         text (str): The string to count the tokens.
         tokenizer (tiktoken.Encoding): A tiktoken encoding object
+        allowed_special (str | set[str]):
+        disallowed_special (str | set[str]):
 
     Returns:
         int: The number of tokens in the string.
     """
-    return len(tokenizer.encode(text))
+    return len(tokenizer.encode(text, allowed_special=allowed_special, disallowed_special=disallowed_special))
 
 
 def num_tokens_from_messages(
-    messages: list[dict[str, str]], tokenizer: tiktoken.Encoding, model: str = "gpt-3.5-turbo-0125"
+    messages: list[dict[str, str]],
+    tokenizer: tiktoken.Encoding,
+    model: str = "gpt-3.5-turbo-0125",
+    allowed_special: Literal["all"] | Set[str] = set(),
+    disallowed_special: Literal["all"] | Collection[str] = (),
 ) -> int:
     """Return the number of tokens used by a list of messages.
     NOTE: Does not support counting tokens used by function calling or prompts with images.
     Reference: # https://github.com/openai/openai-cookbook/blob/main/examples/How_to_format_inputs_to_ChatGPT_models.ipynb
     and https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb
+
+    Special tokens are artificial tokens used to unlock capabilities from a model,
+    such as fill-in-the-middle. So we want to be careful about accidentally encoding special
+    tokens, since they can be used to trick a model into doing something we don't want it to do.
+
+    Hence, by default, encode will raise an error if it encounters text that corresponds
+    to a special token. This can be controlled on a per-token level using the `allowed_special`
+    and `disallowed_special` parameters. In particular:
+    - Setting `disallowed_special` to () will prevent this function from raising errors and
+        cause all text corresponding to special tokens to be encoded as natural text.
+    - Setting `allowed_special` to "all" will cause this function to treat all text
+        corresponding to special tokens to be encoded as special tokens.
 
     Args:
         messages (list[dict[str, str]]): A list of messages to count the tokens
@@ -66,6 +124,8 @@ def num_tokens_from_messages(
         tokenizer (tiktoken.Encoding): A tiktoken encoding object
         model (str): The model to use for tokenization. Defaults to "gpt-3.5-turbo-0125".
             See https://platform.openai.com/docs/models for a list of OpenAI models.
+        allowed_special (str | set[str]):
+        disallowed_special (str | set[str]):
 
     Returns:
         int: The number of tokens used by the messages.
@@ -111,7 +171,13 @@ See https://github.com/openai/openai-python/blob/main/chatml.md for information 
     for message in messages:
         num_tokens += tokens_per_message
         for key, value in message.items():
-            num_tokens += len(tokenizer.encode(value))
+            num_tokens += len(
+                tokenizer.encode(
+                    value,
+                    allowed_special=allowed_special,
+                    disallowed_special=disallowed_special,
+                )
+            )
             if key == "name":
                 num_tokens += tokens_per_name
     num_tokens += 3  # every reply is primed with <|start|>assistant<|message|>

@@ -1,7 +1,9 @@
 from pathlib import Path
 from typing import Any
 
-from not_again_ai.llm.openai_api.prompts import chat_prompt, encode_image
+from pydantic import BaseModel
+
+from not_again_ai.llm.openai_api.prompts import chat_prompt, encode_image, pydantic_to_json_schema
 
 image_dir = Path(__file__).parent.parent / "sample_images"
 sk_infographic = image_dir / "SKInfographic.png"
@@ -146,3 +148,43 @@ def test_vision_prompt_2() -> None:
     ]
 
     assert messages_formatted == messages_expected
+
+
+def test_pydantic_to_json_schema() -> None:
+    class Step(BaseModel):
+        explanation: str
+        output: str
+
+    class MathResponse(BaseModel):
+        steps: list[Step]
+        final_answer: str
+
+    json_schema = pydantic_to_json_schema(MathResponse, schema_name="math_response", description="A math response")
+
+    expected_schema = {
+        "$defs": {
+            "Step": {
+                "properties": {
+                    "explanation": {"title": "Explanation", "type": "string"},
+                    "output": {"title": "Output", "type": "string"},
+                },
+                "required": ["explanation", "output"],
+                "title": "Step",
+                "type": "object",
+                "additionalProperties": False,
+            }
+        },
+        "properties": {
+            "steps": {"items": {"$ref": "#/$defs/Step"}, "title": "Steps", "type": "array"},
+            "final_answer": {"title": "Final Answer", "type": "string"},
+        },
+        "required": ["steps", "final_answer"],
+        "title": "MathResponse",
+        "type": "object",
+        "additionalProperties": False,
+    }
+
+    assert json_schema["strict"] is True
+    assert json_schema["name"] == "math_response"
+    assert json_schema["description"] == "A math response"
+    assert json_schema["schema"] == expected_schema

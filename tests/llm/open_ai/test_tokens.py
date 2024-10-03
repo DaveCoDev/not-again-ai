@@ -76,3 +76,11 @@ def test_num_tokens_unknown_model() -> None:
     tokenizer = load_tokenizer("unknown-model")
     with pytest.raises(NotImplementedError):
         num_tokens_from_messages(messages, tokenizer=tokenizer, model="unknown-model")
+
+
+def test_num_tokens_allowed_special() -> None:
+    text = "<|endoftext|>"
+    tokenizer = load_tokenizer("gpt-4o")
+
+    num_tokens = num_tokens_in_string(text, tokenizer, disallowed_special=(), allowed_special=set())
+    assert num_tokens == 7
