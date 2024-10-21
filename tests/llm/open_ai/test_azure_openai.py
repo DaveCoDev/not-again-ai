@@ -2,8 +2,9 @@ from pathlib import Path
 from typing import Any
 
 from openai import AzureOpenAI
+import pytest
 
-from not_again_ai.llm.openai_api.chat_completion import chat_completion
+from not_again_ai.llm.openai_api.chat_completion import chat_completion, chat_completion_stream
 from not_again_ai.llm.openai_api.openai_client import openai_client
 from not_again_ai.llm.openai_api.prompts import encode_image
 
@@ -102,8 +103,128 @@ def test_chat_completion_misc_1() -> None:
     print(response)
 
 
+def test_chat_completion_stream_simple() -> None:
+    client = openai_client()
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Hello!"},
+    ]
+    response = chat_completion_stream(
+        messages=messages,
+        model="gpt-4o-mini-2024-07-18",
+        client=client,
+        max_tokens=3,
+        temperature=0.7,
+        seed=42,
+    )
+    for chunk in response:
+        print(chunk)
+
+
+@pytest.mark.skip("API Cost")
+def test_chat_completion_stream_multiple_functions() -> None:
+    client = openai_client()
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "get_current_weather",
+                "description": "Get the current weather",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA",
+                        },
+                        "format": {
+                            "type": "string",
+                            "enum": ["celsius", "fahrenheit"],
+                            "description": "The temperature unit to use. Infer this from the users location.",
+                        },
+                    },
+                    "required": ["location", "format"],
+                },
+            },
+        },
+    ]
+    messages = [
+        {
+            "role": "system",
+            "content": "Call the get_current_weather function once for each city that the user mentions.",
+        },
+        {
+            "role": "user",
+            "content": "What's the current weather like in Boston, MA and New York, NY today?",
+        },
+    ]
+    response = chat_completion_stream(
+        messages=messages,
+        model="gpt-4o-mini-2024-07-18",
+        client=client,
+        tools=tools,
+        max_tokens=400,
+        temperature=0,
+    )
+    for chunk in response:
+        print(chunk)
+
+
+@pytest.mark.skip("API Cost")
+def test_chat_completion_stream_message_with_tools() -> None:
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "get_current_weather",
+                "description": "Get the current weather",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA",
+                        },
+                        "format": {
+                            "type": "string",
+                            "enum": ["celsius", "fahrenheit"],
+                            "description": "The temperature unit to use. Infer this from the users location.",
+                        },
+                    },
+                    "required": ["location", "format"],
+                },
+            },
+        },
+    ]
+    messages = [
+        {
+            "role": "system",
+            "content": "First greet the user by saying 'Hello!'. Then call the get_current_weather function for each city the user mentions. Finally, say goodbye to the user.",
+        },
+        {
+            "role": "user",
+            "content": "What is the weather like in Orlando, FL?",
+        },
+    ]
+    client = openai_client()
+    response = chat_completion_stream(
+        messages=messages,
+        model="gpt-4o-2024-08-06",
+        client=client,
+        tools=tools,
+        tool_choice="auto",
+        max_tokens=500,
+        temperature=0.5,
+    )
+    for chunk in response:
+        print(chunk)
+
+
 if __name__ == "__main__":
-    test_chat_completion_misc_1()
-    test_chat_completion_vision_different_fidelity()
-    test_aoai_chat_completion()
     test_azure_openai()
+    test_aoai_chat_completion()
+    test_chat_completion_vision_different_fidelity()
+    test_chat_completion_misc_1()
+    test_chat_completion_stream_simple()
+    test_chat_completion_stream_multiple_functions()
+    test_chat_completion_stream_message_with_tools()

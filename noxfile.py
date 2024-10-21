@@ -17,7 +17,7 @@ nox.options.sessions = [
 
 @session(python=["3.11", "3.12"])
 def test(s: Session) -> None:
-    s.install(".[llm,local_llm,statistics,viz]", "pytest", "pytest-cov", "pytest-randomly")
+    s.install(".[data,llm,local_llm,statistics,viz]", "pytest", "pytest-cov", "pytest-randomly")
 
     # Skip tests in directories specified by the SKIP_TESTS_NAII environment variable.
     skip_tests = os.getenv("SKIP_TESTS_NAAI", "")
