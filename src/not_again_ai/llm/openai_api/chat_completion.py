@@ -1,3 +1,4 @@
+from collections.abc import Generator
 import contextlib
 import json
 import time
@@ -32,7 +33,7 @@ def chat_completion(
         model (str): ID of the model to use. See the model endpoint compatibility table:
             https://platform.openai.com/docs/models/model-endpoint-compatibility
             for details on which models work with the Chat API.
-        client (OpenAI): An instance of the OpenAI or AzureOpenAI client.
+        client (OpenAI | AzureOpenAI | Any): An instance of the OpenAI or AzureOpenAI client.
             If anything else is provided, we assume that it follows the OpenAI spec and call it by passing kwargs directly.
             For example you can provide something like:
             ```
@@ -198,3 +199,141 @@ def chat_completion(
         del response_data["choices"]
 
     return response_data
+
+
+def chat_completion_stream(
+    messages: list[dict[str, Any]],
+    model: str,
+    client: OpenAI | AzureOpenAI | Any,
+    tools: list[dict[str, Any]] | None = None,
+    tool_choice: str = "auto",
+    max_tokens: int | None = None,
+    temperature: float = 0.7,
+    seed: int | None = None,
+    **kwargs: Any,
+) -> Generator[dict[str, Any], None, None]:
+    """Stream a chat completion from the OpenAI API.
+
+    Args:
+        messages (list[dict[str, Any]]): The messages to send to the model.
+        model (str): The model to use for the chat completion.
+        client (OpenAI | AzureOpenAI | Any): The client to use to send the request.
+            If anything else is provided, we assume that it follows the OpenAI spec and call it by passing kwargs directly.
+            For example you can provide something like:
+            ```
+            def custom_client(**kwargs) -> Generator[dict[str, Any], None, None]:  # type: ignore
+                client = openai_client()
+                completion = client.chat.completions.create(**kwargs)
+                for chunk in completion:
+                    yield chunk.to_dict()
+            ```
+        tools (list[dict[str, Any]], optional):A list of tools the model may call.
+            Use this to provide a list of functions the model may generate JSON inputs for. Defaults to None.
+        tool_choice (str, optional): The tool choice to use. Can be "auto", "required", "none", or a specific function name.
+            Note the function name cannot be any of "auto", "required", or "none". Defaults to "auto".
+        max_tokens (int | None): The maximum number of tokens to generate.
+        temperature (float): The temperature to use for the chat completion.
+        seed (int, optional): If specified, OpenAI will make a best effort to sample deterministically,
+            such that repeated requests with the same `seed` and parameters should return the same result.
+            Does not currently return `system_fingerprint`.
+
+    Returns:
+        Generator[dict[str, Any], None, None]: A generator of chunks of the chat completion.
+        Each chunk is a dictionary with the following keys:
+            role (str): The role of the chunk. Can be "assistant", "tool", or "usage".
+            content (str): The content of the chunk.
+            tool_name (str | None): The name of the tool called by the model.
+            tool_call_id (str | None): The ID of the tool call.
+            completion_tokens (int | None): The number of tokens used by the model to generate the completion.
+            prompt_tokens (int | None): The number of tokens in the messages sent to the model.
+    """
+
+    class ChatCompletionStreamParser:
+        def __init__(self) -> None:
+            # Remembers if we are currently streaming an assistant message or tool call
+            self.last_type: str = ""
+            self.last_tool_name: str | None = None
+            self.last_tool_call_id: str | None = None
+
+        def process_chunk(self, chunk: dict[str, Any]) -> dict[str, Any] | None:
+            """Convert the current chunk into a more digestible format
+            {
+                "role": Literal["assistant", "tool", "usage"],
+                "content": str,
+                "tool_name": str | None,
+                "tool_call_id": str | None,
+                "completion_tokens": int | None,
+                "prompt_tokens": int | None,
+            }
+            """
+            processed_chunk: dict[str, Any] = {}
+            if chunk["choices"]:
+                choice = chunk["choices"][0]
+                # This checks if its just a regular message currently being streamed
+                if choice["delta"].get("role", "") and choice["delta"].get("tool_calls", None) is None:
+                    if choice["delta"]["role"] != self.last_type:
+                        self.last_type = choice["delta"]["role"]
+                        processed_chunk["role"] = self.last_type
+                        if not choice["delta"]["content"]:
+                            processed_chunk["content"] = ""
+                        else:
+                            processed_chunk["content"] = choice["delta"]["content"]
+                    else:
+                        processed_chunk["role"] = self.last_type
+                elif choice["delta"].get("tool_calls", None):
+                    # tool_calls will always be present if the model is calling a tool
+                    tool_call = choice["delta"]["tool_calls"][0]
+                    if tool_call["function"].get("name"):
+                        self.last_type = "tool"
+                        self.last_tool_name = tool_call["function"]["name"]
+                        self.last_tool_call_id = tool_call["id"]
+                    processed_chunk["role"] = "tool"
+                    processed_chunk["content"] = tool_call["function"]["arguments"]
+                    processed_chunk["tool_name"] = self.last_tool_name
+                    processed_chunk["tool_call_id"] = self.last_tool_call_id
+                elif choice["delta"].get("content", ""):
+                    # This is the case after the first regular assistant message
+                    processed_chunk["role"] = self.last_type
+                    processed_chunk["content"] = choice["delta"]["content"]
+            else:
+                if chunk.get("usage"):
+                    processed_chunk["role"] = "usage"
+                    processed_chunk["completion_tokens"] = chunk["usage"]["completion_tokens"]
+                    processed_chunk["prompt_tokens"] = chunk["usage"]["prompt_tokens"]
+                else:
+                    return None
+            return processed_chunk
+
+    kwargs.update(
+        {
+            "messages": messages,
+            "model": model,
+            "max_tokens": max_tokens,
+            "temperature": temperature,
+            "stream": True,
+            "stream_options": {"include_usage": True},
+        }
+    )
+
+    if tools is not None:
+        kwargs["tools"] = tools
+        if tool_choice not in ["none", "auto", "required"]:
+            kwargs["tool_choice"] = {"type": "function", "function": {"name": tool_choice}}
+        else:
+            kwargs["tool_choice"] = tool_choice
+
+    if seed is not None:
+        kwargs["seed"] = seed
+
+    if isinstance(client, OpenAI | AzureOpenAI):
+        response = client.chat.completions.create(**kwargs)
+    else:
+        response = client(**kwargs)
+
+    parser = ChatCompletionStreamParser()
+    for chunk in response:
+        if isinstance(client, OpenAI | AzureOpenAI):
+            chunk = chunk.to_dict()
+        processed_chunk = parser.process_chunk(chunk)
+        if processed_chunk:
+            yield processed_chunk
