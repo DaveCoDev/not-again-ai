@@ -16,12 +16,6 @@ from not_again_ai.llm.chat_completion.types import (
 )
 
 
-class InvalidOAIAPITypeError(Exception):
-    """Raised when an invalid OAIAPIType string is provided."""
-
-    pass
-
-
 def validate(request: ChatCompletionRequest) -> None:
     if request.json_mode and request.structured_outputs is not None:
         raise ValueError("json_schema and json_mode cannot be used together.")
@@ -42,6 +36,18 @@ def openai_chat_completion(
         response_format = {"type": "text"}
 
     kwargs = request.model_dump(mode="json", exclude_none=True)
+
+    # Iterate over each message and
+    for message in kwargs["messages"]:
+        role = message.get("role", None)
+        # For each ToolMessage, change the "name" field to be named "tool_call_id" instead
+        if role is not None and role == "tool":
+            message["tool_call_id"] = message.pop("name")
+
+        # For each AssistantMessage with tool calls, make the function arguments a string
+        if role is not None and role == "assistant" and message.get("tool_calls", None):
+            for tool_call in message["tool_calls"]:
+                tool_call["function"]["arguments"] = str(tool_call["function"]["arguments"])
 
     # Delete the json_mode and structured_outputs from kwargs
     kwargs.pop("json_mode", None)
@@ -152,12 +158,9 @@ def openai_chat_completion(
 
     extras["prompt_filter_results"] = response.get("prompt_filter_results", None)
 
-    if errors:
-        errors = errors.strip()
-
     return ChatCompletionResponse(
         choices=choices,
-        errors=errors,
+        errors=errors.strip(),
         extras=extras,
         completion_tokens=completion_tokens,
         prompt_tokens=prompt_tokens,
@@ -186,6 +189,12 @@ def create_client_callable(client_class: type[OpenAI | AzureOpenAI], **client_ar
         return completion.to_dict()
 
     return client_callable
+
+
+class InvalidOAIAPITypeError(Exception):
+    """Raised when an invalid OAIAPIType string is provided."""
+
+    pass
 
 
 def openai_client(
@@ -219,6 +228,7 @@ def openai_client(
             408 Request Timeout, 409 Conflict, 429 Rate Limit, and >=500 Internal errors are all retried by default.
 
     Returns:
+        Callable[..., Any]: A callable that creates a client and returns completion results
 
 
     Raises:

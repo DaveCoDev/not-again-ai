@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from typing import Any
 
+from not_again_ai.llm.chat_completion.providers.ollama_api import ollama_chat_completion
 from not_again_ai.llm.chat_completion.providers.openai_api import openai_chat_completion
 from not_again_ai.llm.chat_completion.types import ChatCompletionRequest, ChatCompletionResponse
 
@@ -25,5 +26,7 @@ def chat_completion(
     """
     if provider == "openai" or provider == "azure_openai":
         return openai_chat_completion(request, client)
+    elif provider == "ollama":
+        return ollama_chat_completion(request, client)
     else:
         raise ValueError(f"Provider {provider} not supported")

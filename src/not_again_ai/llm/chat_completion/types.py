@@ -89,8 +89,9 @@ class ChatCompletionRequest(BaseModel):
     model: str
 
     max_completion_tokens: int | None = Field(default=None)
+    context_window: int | None = Field(default=None)
     logprobs: bool | None = Field(default=None)
-    n: int = Field(default=1)
+    n: int | None = Field(default=None)
 
     tools: list[dict[str, Any]] | None = Field(default=None)
     tool_choice: str | None = Field(default=None)
@@ -108,6 +109,14 @@ class ChatCompletionRequest(BaseModel):
     stop: str | list[str] | None = Field(default=None)
 
     seed: int | None = Field(default=None)
+
+    mirostat: int | None = Field(default=None)
+    mirostat_eta: float | None = Field(default=None)
+    mirostat_tau: float | None = Field(default=None)
+    repeat_last_n: int | None = Field(default=None)
+    tfs_z: float | None = Field(default=None)
+    top_k: int | None = Field(default=None)
+    min_p: float | None = Field(default=None)
 
 
 class ChatCompletionChoice(BaseModel):
