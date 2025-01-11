@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "not-again-ai"
-version = "0.14.0"
+version = "0.15.0"
 description = "Designed to once and for all collect all the little things that come up over and over again in AI projects and put them in one place."
 authors = ["DaveCoDev <dave.co.dev@gmail.com>"]
 license = "MIT"
@@ -27,27 +27,28 @@ classifiers = [
 python = "^3.11 || ^3.12"
 
 loguru = { version = "^0.7" }
-pydantic = { version = "^2.9"}
+pydantic = { version = "^2.10"}
 
 
 # Optional dependencies are defined here, and groupings are defined below.
-azure-ai-inference = { version = "==1.0.0b5", optional = true }
+azure-ai-inference = { version = "==1.0.0b6", optional = true }
 azure-identity = { version = "^1.19", optional = true }
 jinja2 = { version = "^3.1", optional = true }
-numpy = { version = "^2.1", optional = true }
-ollama = { version = "^0.3", optional = true }
-openai = { version = "^1.52", optional = true }
+numpy = { version = "^2.2", optional = true }
+ollama = { version = "^0.4", optional = true }
+openai = { version = "^1.59", optional = true }
 pandas = { version = "^2.2", optional = true }
-pytest-playwright = { version = "^0.5", optional = true }
+playwright = { version = "^1.49", optional = true }
+pytest-playwright = { version = "^0.6", optional = true }
 python-liquid = { version = "^1.12", optional = true }
-scipy = { version = "^1.14", optional = true }
-scikit-learn = { version = "^1.5", optional = true }
+scipy = { version = "^1.15", optional = true }
+scikit-learn = { version = "^1.6", optional = true }
 seaborn = { version = "^0.13", optional = true }
 tiktoken = { version = "^0.8", optional = true }
-transformers = { version = "^4.45", optional = true }
+transformers = { version = "^4.48", optional = true }
 
 [tool.poetry.extras]
-data = ["pytest-playwright"]
+data = ["playwright", "pytest-playwright"]
 llm = ["azure-ai-inference", "azure-identity", "openai", "python-liquid", "tiktoken"]
 local_llm = ["jinja2", "ollama", "transformers"]
 statistics = ["numpy", "scikit-learn", "scipy"]

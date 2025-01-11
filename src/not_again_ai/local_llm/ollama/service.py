@@ -13,8 +13,7 @@ def list_models(client: Client) -> list[dict[str, Any]]:
 
     Returns:
         list[dict[str, Any]]: A list of dictionaries (each corresponding to an available model) with the following keys:
-            name (str): Name of the model
-            model (str): Name of the model. This should be the same as the name.
+            name_model (str): Name of the model
             modified_at (str): The date and time the model was last modified.
             size (int): The size of the model in bytes.
             size_readable (str): The size of the model in a human-readable format.
@@ -25,13 +24,11 @@ def list_models(client: Client) -> list[dict[str, Any]]:
     response_data = []
     for model_data in response:
         curr_model_data = {}
-        curr_model_data["name"] = model_data["name"]
-        curr_model_data["model"] = model_data["model"]
-        curr_model_data["modified_at"] = model_data["modified_at"]
-        curr_model_data["size"] = model_data["size"]
-        curr_model_data["size_readable"] = readable_size(model_data["size"])
-        curr_model_data["details"] = model_data["details"]
-
+        curr_model_data["name_model"] = model_data.model
+        curr_model_data["modified_at"] = model_data.modified_at
+        curr_model_data["size"] = model_data.size
+        curr_model_data["size_readable"] = readable_size(model_data.size)
+        curr_model_data["details"] = model_data.details
         response_data.append(curr_model_data)
 
     return response_data
@@ -51,7 +48,7 @@ def is_model_available(model_name: str, client: Client) -> bool:
     if ":" not in model_name:
         model_name = f"{model_name}:latest"
     models = list_models(client)
-    return any(model["name"] == model_name for model in models)
+    return any(model["name_model"] == model_name for model in models)
 
 
 def show(model_name: str, client: Client) -> dict[str, Any]:

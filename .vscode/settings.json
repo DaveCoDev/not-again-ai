@@ -17,6 +17,6 @@
     },
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
-    "python.testing.pytestArgs": [],
+    "python.testing.pytestArgs": ["-s"],
     "markdown.extension.orderedList.marker": "one",
 }
