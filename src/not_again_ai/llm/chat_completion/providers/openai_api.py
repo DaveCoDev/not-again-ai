@@ -203,7 +203,6 @@ def openai_client(
     organization: str | None = None,
     aoai_api_version: str = "2024-06-01",
     azure_endpoint: str | None = None,
-    azure_key: str | None = None,
     timeout: float | None = None,
     max_retries: int | None = None,
 ) -> Callable[..., Any]:
@@ -217,11 +216,11 @@ def openai_client(
             Defaults to 'openai'.
         api_key (str, optional): The API key to authenticate the client. If not provided,
             OpenAI automatically uses `OPENAI_API_KEY` from the environment.
+            If provided for Azure OpenAI, it will be used for authentication instead of the Azure AD token provider.
         organization (str, optional): The ID of the organization. If not provided,
             OpenAI automotically uses `OPENAI_ORG_ID` from the environment.
         aoai_api_version (str, optional): Only applicable if using Azure OpenAI https://learn.microsoft.com/azure/ai-services/openai/reference#rest-api-versioning
         azure_endpoint (str, optional): The endpoint to use for Azure OpenAI.
-        azure_key (str, optional): If provided, will be used for authentication instead of the Azure AD token provider.
         timeout (float, optional): By default requests time out after 10 minutes.
         max_retries (int, optional): Certain errors are automatically retried 2 times by default,
             with a short exponential backoff. Connection errors (for example, due to a network connectivity problem),
@@ -247,12 +246,12 @@ def openai_client(
             max_retries=max_retries,
         )
     elif api_type == "azure_openai":
-        if azure_key:
+        if api_key:
             return create_client_callable(
                 AzureOpenAI,
                 api_version=aoai_api_version,
                 azure_endpoint=azure_endpoint,
-                api_key=azure_key,
+                api_key=api_key,
                 timeout=timeout,
                 max_retries=max_retries,
             )

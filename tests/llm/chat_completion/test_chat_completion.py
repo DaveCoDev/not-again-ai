@@ -816,7 +816,7 @@ def azure_openai_client_fixture(request: pytest.FixtureRequest) -> Callable[...,
 
 
 def test_chat_completion_azure_key(azure_openai_client_fixture: Callable[..., Any]) -> None:
-    azure_openai_client_fixture = openai_client(api_type="azure_openai", azure_key=os.environ["AZURE_OPENAI_KEY"])
+    azure_openai_client_fixture = openai_client(api_type="azure_openai", api_key=os.environ["AZURE_OPENAI_KEY"])
     request = ChatCompletionRequest(
         model="gpt-4o-mini-2024-07-18",
         messages=[
