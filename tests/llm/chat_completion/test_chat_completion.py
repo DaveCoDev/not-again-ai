@@ -777,6 +777,18 @@ def test_chat_completion_vision_many_features(openai_aoai_client_fixture: Callab
     print(response.model_dump(mode="json", exclude_none=True))
 
 
+def test_chat_completion_invalid_params(openai_aoai_client_fixture: Callable[..., Any]) -> None:
+    request = ChatCompletionRequest(
+        model="gpt-4o-2024-11-20",
+        messages=[UserMessage(content="What is the capital of France?")],
+        max_completion_tokens=100,
+        context_window=1000,
+        mirostat=1,
+    )
+    response = chat_completion(request, "openai", openai_aoai_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
 # region OpenAI
 @pytest.fixture(
     params=[

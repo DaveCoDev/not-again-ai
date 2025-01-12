@@ -15,6 +15,17 @@ from not_again_ai.llm.chat_completion.types import (
     ToolCall,
 )
 
+OPENAI_PARAMETER_MAP = {
+    "context_window": None,
+    "mirostat": None,
+    "mirostat_eta": None,
+    "mirostat_tau": None,
+    "repeat_last_n": None,
+    "tfs_z": None,
+    "top_k": None,
+    "min_p": None,
+}
+
 
 def validate(request: ChatCompletionRequest) -> None:
     if request.json_mode and request.structured_outputs is not None:
@@ -36,6 +47,15 @@ def openai_chat_completion(
         response_format = {"type": "text"}
 
     kwargs = request.model_dump(mode="json", exclude_none=True)
+
+    # For each key in OPENAI_PARAMETER_MAP
+    # If it is not None, set the key in kwargs to the value of the corresponding value in OPENAI_PARAMETER_MAP
+    # If it is None, remove that key from kwargs
+    for key, value in OPENAI_PARAMETER_MAP.items():
+        if value is not None and key in kwargs:
+            kwargs[value] = kwargs.pop(key)
+        elif value is None and key in kwargs:
+            del kwargs[key]
 
     # Iterate over each message and
     for message in kwargs["messages"]:
