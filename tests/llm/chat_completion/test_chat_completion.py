@@ -852,6 +852,7 @@ def test_chat_completion_ollama(ollama_client_fixture: Callable[..., Any]) -> No
         max_completion_tokens=100,
         frequency_penalty=1.2,
         top_p=0.8,
+        context_window=1000,
     )
     response = chat_completion(request, "ollama", ollama_client_fixture)
     print(response.model_dump(mode="json", exclude_none=True))

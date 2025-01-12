@@ -20,6 +20,7 @@ from not_again_ai.llm.chat_completion.types import (
 OLLAMA_PARAMETER_MAP = {
     "frequency_penalty": "repeat_penalty",
     "max_completion_tokens": "num_predict",
+    "context_window": "num_ctx",
     "n": None,
     "tool_choice": None,
     "reasoning_effort": None,
