@@ -8,28 +8,28 @@ on:
     branches: ["main"]
 
 env:
-  POETRY_VERSION: "1.8.3"
+  POETRY_VERSION: "2.0.1"
   PYTHON_VERSION: "3.12"
 
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         python-version: ["3.11", "3.12" ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install poetry
         run: pipx install poetry==${POETRY_VERSION}
       - name: Install poetry-plugin-export
         run: pipx inject poetry poetry-plugin-export
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: poetry
       - name: Install Nox
-        run: poetry install --only nox
+        run: poetry sync --only nox
       - name: Test with Nox
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -37,7 +37,7 @@ jobs:
           SKIP_TESTS_NAAI: "tests/llm tests/data"
         run: poetry run nox -s test-${{ matrix.python-version }}
   quality:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         job:
@@ -46,27 +46,27 @@ jobs:
           - { nox-session: type_check, poetry-groups: "type_check,main,test" }
           - { nox-session: docs, poetry-groups: "docs" }
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install poetry
         run: pipx install poetry==${POETRY_VERSION}
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: poetry
       - name: Install Nox and group dependencies
-        run: poetry install --all-extras
+        run: poetry sync --all-extras
       - name: Test with Nox
         run: poetry run nox -s ${{ matrix.job.nox-session }}
   poetry-check:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install poetry
         run: pipx install poetry==${POETRY_VERSION}
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Validate Poetry Configuration
-        run: poetry check --lock
+        run: poetry check --lock --strict

@@ -4,7 +4,7 @@ from not_again_ai.base.file_system import readable_size
 
 
 @pytest.mark.parametrize(
-    "size, expected",
+    ("size", "expected"),
     [
         (0, "0.00 B"),
         (523, "523.00 B"),

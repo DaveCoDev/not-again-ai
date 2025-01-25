@@ -63,12 +63,12 @@ def test_embarrassingly_parallel_kwargs() -> None:
 
 
 def test_embarrassingly_parallel_exceptions() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="either args_list or kwargs_list must be provided"):
         embarrassingly_parallel(multby2, None, None, num_processes=multiprocessing.cpu_count())
 
-    with pytest.raises(ValueError):
-        args = ((2, 2), (3, 3), (4, 4))
-        kwargs = [{"double": True}, {"double": False}]
+    args = ((2, 2), (3, 3), (4, 4))
+    kwargs = [{"double": True}, {"double": False}]
+    with pytest.raises(ValueError, match="args_list and kwargs_list must be of the same length"):
         embarrassingly_parallel(multby2, args, kwargs, num_processes=multiprocessing.cpu_count())
 
 

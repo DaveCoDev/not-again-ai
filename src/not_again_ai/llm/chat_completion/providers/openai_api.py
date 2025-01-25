@@ -214,8 +214,6 @@ def create_client_callable(client_class: type[OpenAI | AzureOpenAI], **client_ar
 class InvalidOAIAPITypeError(Exception):
     """Raised when an invalid OAIAPIType string is provided."""
 
-    pass
-
 
 def openai_client(
     api_type: Literal["openai", "azure_openai"] = "openai",

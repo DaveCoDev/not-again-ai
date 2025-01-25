@@ -100,10 +100,8 @@ $ poetry update
 
 To install all dependencies (with all extra dependencies) into an isolated virtual environment:
 
-> Append `--sync` to uninstall dependencies that are no longer in use from the virtual environment.
-
 ```bash
-$ poetry install --all-extras
+$ poetry sync --all-extras
 ```
 
 To [activate](https://python-poetry.org/docs/basic-usage#activating-the-virtual-environment) the
@@ -159,7 +157,7 @@ Automated code quality checks are performed using
 environments and run commands based on [`noxfile.py`](./noxfile.py) for unit testing, PEP 8 style
 guide checking, type checking and documentation generation.
 
-> Note: `nox` is installed into the virtual environment automatically by the `poetry install`
+> Note: `nox` is installed into the virtual environment automatically by the `poetry sync`
 > command above. Run `poetry shell` to activate the virtual environment.
 
 To run all default sessions:
