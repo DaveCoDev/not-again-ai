@@ -1,8 +1,10 @@
-[tool.poetry]
+[project]
 name = "not-again-ai"
-version = "0.14.0"
+version = "0.15.0"
 description = "Designed to once and for all collect all the little things that come up over and over again in AI projects and put them in one place."
-authors = ["DaveCoDev <dave.co.dev@gmail.com>"]
+authors = [
+    { name = "DaveCoDev", email = "dave.co.dev@gmail.com" }
+]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/DaveCoDev/not-again-ai"
@@ -19,41 +21,49 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Typing :: Typed",
 ]
+requires-python = ">=3.11, <3.13"
+# Lets us define dependencies completely in tool.poetry.dependencies
+dynamic = [ "dependencies" ]
+dependencies = [
+    "loguru>=0.7",
+    "pydantic>=2.10"
+]
 
-[tool.poetry.dependencies]
-# Some packages, such as scipy, constrain their upper bound of Python versions they support.
-# Without also constraining the upper bound here, Poetry will not select those versions and will
-# result in an old version being resolved/locked.
-python = "^3.11 || ^3.12"
+[project.urls]
+Homepage = "https://github.com/DaveCoDev/not-again-ai"
+Documentation = "https://davecodev.github.io/not-again-ai/"
+Repository = "https://github.com/DaveCoDev/not-again-ai"
 
-loguru = { version = "^0.7" }
-pydantic = { version = "^2.9"}
+[tool.poetry]
+requires-poetry = ">=2.0.1"
 
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
 
-# Optional dependencies are defined here, and groupings are defined below.
-azure-ai-inference = { version = "==1.0.0b5", optional = true }
-azure-identity = { version = "^1.19", optional = true }
-jinja2 = { version = "^3.1", optional = true }
-numpy = { version = "^2.1", optional = true }
-ollama = { version = "^0.3", optional = true }
-openai = { version = "^1.52", optional = true }
-pandas = { version = "^2.2", optional = true }
-pytest-playwright = { version = "^0.5", optional = true }
-python-liquid = { version = "^1.12", optional = true }
-scipy = { version = "^1.14", optional = true }
-scikit-learn = { version = "^1.5", optional = true }
-seaborn = { version = "^0.13", optional = true }
-tiktoken = { version = "^0.8", optional = true }
-transformers = { version = "^4.45", optional = true }
+[project.optional-dependencies]
+data = [
+    "playwright>=1.49",
+    "pytest-playwright>=0.6"
+]
+llm = [
+    "azure-identity>=1.19",
+    "ollama>=0.4",
+    "openai>=1.60",
+    "python-liquid>=1.12",
+    "tiktoken>=0.8"
+]
+statistics = [
+    "numpy>=2.2",
+    "scikit-learn>=1.6",
+    "scipy>=1.15"
+]
+viz = [
+    "numpy>=2.2",
+    "pandas>=2.2",
+    "seaborn>=0.13"
+]
 
-[tool.poetry.extras]
-data = ["pytest-playwright"]
-llm = ["azure-ai-inference", "azure-identity", "openai", "python-liquid", "tiktoken"]
-local_llm = ["jinja2", "ollama", "transformers"]
-statistics = ["numpy", "scikit-learn", "scipy"]
-viz = ["numpy", "pandas", "seaborn"]
-
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 ipykernel = "*"
 ipywidgets = "*"
 
@@ -87,11 +97,8 @@ mkdocs-literate-nav = "*"
 [tool.poetry.group.typos.dependencies]
 typos = "*"
 
-[tool.poetry.scripts]
-not-again-ai = "not_again_ai.cli:entry_point"
-
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
@@ -117,6 +124,8 @@ select = [
     "B", # flake8-bugbear
     "C4", # flake8-comprehensions
     "ISC", # flake8-implicit-str-concat
+    "PIE", # flake8-pie
+    "PT", # flake-pytest-style
     "PTH", # flake8-use-pathlib
     "SIM", # flake8-simplify
     "TID", # flake8-tidy-imports
@@ -141,7 +150,7 @@ filterwarnings = [
     # When running tests, treat warnings as errors (e.g. -Werror).
     # See: https://docs.pytest.org/en/latest/reference/reference.html#confval-filterwarnings
     "error",
-    # Add additional warning supressions as needed here. For example, if a third-party library
+    # Add additional warning suppressions as needed here. For example, if a third-party library
     # is throwing a deprecation warning that needs to be fixed upstream:
     # "ignore::DeprecationWarning:typer",
     "ignore::pytest.PytestUnraisableExceptionWarning"

@@ -24,10 +24,8 @@ Requires: Python 3.11, or 3.12
 Install the entire package from [PyPI](https://pypi.org/project/not-again-ai/) with: 
 
 ```bash
-$ pip install not_again_ai[llm,local_llm,statistics,viz]
+$ pip install not_again_ai[data,llm,statistics,viz]
 ```
-
-Note that local LLM requires separate installations and will not work out of the box due to how hardware dependent it is. Be sure to check the [notebooks](notebooks/local_llm/) for more details.
 
 The package is split into subpackages, so you can install only the parts you need.
 
@@ -49,16 +47,7 @@ The package is split into subpackages, so you can install only the parts you nee
    1. Using AOAI requires using Entra ID authentication. See https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/managed-identity for how to set this up for your AOAI deployment.
       * Requires the correct role assigned to your user account and being signed into the Azure CLI.
    1. (Optional) Set the `AZURE_OPENAI_ENDPOINT` environment variable.
-1. Setup GitHub Models
-   1. Get a Personal Access Token from https://github.com/settings/tokens and set the `GITHUB_TOKEN` environment variable. The token does not need any permissions.
-   1. Check the [Github Marketplace](https://github.com/marketplace/models) to see which models are available.
-
-
-### Local LLM
- 1. `pip install not_again_ai[llm,local_llm]`
- 1. Some HuggingFace transformers tokenizers are gated behind access requests. If you wish to use these, you will need to request access from HuggingFace on the model card.
-    * Then set the `HF_TOKEN` environment variable to your HuggingFace API token which can be found here: https://huggingface.co/settings/tokens
- 1. If you wish to use Ollama:
+1. If you wish to use Ollama:
      1. Follow the instructions at https://github.com/ollama/ollama to install Ollama for your system. 
      1. (Optional) [Add Ollama as a startup service (recommended)](https://github.com/ollama/ollama/blob/main/docs/linux.md#adding-ollama-as-a-startup-service-recommended)
      1. (Optional) To make the Ollama service accessible on your local network from a Linux server, add the following to the `/etc/systemd/system/ollama.service` file which will make Ollama available at `http://<local_address>:11434`:
@@ -68,7 +57,6 @@ The package is split into subpackages, so you can install only the parts you nee
          Environment="OLLAMA_HOST=0.0.0.0"
          ```
      1. It is recommended to always have the latest version of Ollama. To update Ollama check the [docs](https://github.com/ollama/ollama/blob/main/docs/). The command for Linux is: `curl -fsSL https://ollama.com/install.sh | sh`
- 1. HuggingFace transformers and other requirements are hardware dependent so for providers other than Ollama, this only installs some generic dependencies. Check the [notebooks](notebooks/local_llm/) for more details on what is available and how to install it.
 
 
 ### Statistics
@@ -112,10 +100,8 @@ $ poetry update
 
 To install all dependencies (with all extra dependencies) into an isolated virtual environment:
 
-> Append `--sync` to uninstall dependencies that are no longer in use from the virtual environment.
-
 ```bash
-$ poetry install --all-extras
+$ poetry sync --all-extras
 ```
 
 To [activate](https://python-poetry.org/docs/basic-usage#activating-the-virtual-environment) the
@@ -171,7 +157,7 @@ Automated code quality checks are performed using
 environments and run commands based on [`noxfile.py`](./noxfile.py) for unit testing, PEP 8 style
 guide checking, type checking and documentation generation.
 
-> Note: `nox` is installed into the virtual environment automatically by the `poetry install`
+> Note: `nox` is installed into the virtual environment automatically by the `poetry sync`
 > command above. Run `poetry shell` to activate the virtual environment.
 
 To run all default sessions:
