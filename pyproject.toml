@@ -31,12 +31,10 @@ pydantic = { version = "^2.10"}
 
 
 # Optional dependencies are defined here, and groupings are defined below.
-azure-ai-inference = { version = "==1.0.0b6", optional = true }
 azure-identity = { version = "^1.19", optional = true }
-jinja2 = { version = "^3.1", optional = true }
 numpy = { version = "^2.2", optional = true }
 ollama = { version = "^0.4", optional = true }
-openai = { version = "^1.59", optional = true }
+openai = { version = "^1.60", optional = true }
 pandas = { version = "^2.2", optional = true }
 playwright = { version = "^1.49", optional = true }
 pytest-playwright = { version = "^0.6", optional = true }
@@ -45,12 +43,10 @@ scipy = { version = "^1.15", optional = true }
 scikit-learn = { version = "^1.6", optional = true }
 seaborn = { version = "^0.13", optional = true }
 tiktoken = { version = "^0.8", optional = true }
-transformers = { version = "^4.48", optional = true }
 
 [tool.poetry.extras]
 data = ["playwright", "pytest-playwright"]
-llm = ["azure-ai-inference", "azure-identity", "openai", "python-liquid", "tiktoken"]
-local_llm = ["jinja2", "ollama", "transformers"]
+llm = ["azure-identity", "ollama", "openai", "python-liquid", "tiktoken"]
 statistics = ["numpy", "scikit-learn", "scipy"]
 viz = ["numpy", "pandas", "seaborn"]
 

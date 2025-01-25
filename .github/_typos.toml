@@ -1,2 +1,5 @@
 [default.extend-identifiers]
 arange = "arange" # np.arange
+
+[files]
+extend-exclude = ["*.ipynb"]
