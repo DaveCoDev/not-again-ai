@@ -173,7 +173,7 @@ files = [
     {file = "certifi-2024.12.14-py3-none-any.whl", hash = "sha256:1275f7a45be9464efc1173084eaa30f866fe2e47d389406136d332ed4967ec56"},
     {file = "certifi-2024.12.14.tar.gz", hash = "sha256:b650d30f370c2b724812bee08008be0c4163b163ddaec3f2546c1caf65f191db"},
 ]
-markers = {main = "python_version == \"3.11\" and extra == \"llm\" or python_version == \"3.11\" and extra == \"data\" or python_version >= \"3.12\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"data\"", docs = "python_version == \"3.11\" or python_version >= \"3.12\""}
+markers = {main = "python_version == \"3.11\" and extra == \"data\" or python_version == \"3.11\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"data\" or python_version >= \"3.12\" and extra == \"llm\"", docs = "python_version == \"3.11\" or python_version >= \"3.12\""}
 
 [[package]]
 name = "cffi"
@@ -357,7 +357,7 @@ files = [
     {file = "charset_normalizer-3.4.1-py3-none-any.whl", hash = "sha256:d98b1668f06378c6dbefec3b92299716b931cd4e6061f3c875a71ced1780ab85"},
     {file = "charset_normalizer-3.4.1.tar.gz", hash = "sha256:44251f18cd68a75b56585dd00dae26183e102cd5e0f9f1466e6df5da2ed64ea3"},
 ]
-markers = {main = "python_version == \"3.11\" and extra == \"llm\" or python_version == \"3.11\" and extra == \"data\" or python_version >= \"3.12\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"data\"", docs = "python_version == \"3.11\" or python_version >= \"3.12\""}
+markers = {main = "python_version == \"3.11\" and extra == \"data\" or python_version == \"3.11\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"data\" or python_version >= \"3.12\" and extra == \"llm\"", docs = "python_version == \"3.11\" or python_version >= \"3.12\""}
 
 [[package]]
 name = "click"
@@ -1026,7 +1026,7 @@ files = [
     {file = "idna-3.10-py3-none-any.whl", hash = "sha256:946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"},
     {file = "idna-3.10.tar.gz", hash = "sha256:12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9"},
 ]
-markers = {main = "python_version == \"3.11\" and extra == \"llm\" or python_version == \"3.11\" and extra == \"data\" or python_version >= \"3.12\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"data\"", docs = "python_version == \"3.11\" or python_version >= \"3.12\""}
+markers = {main = "python_version == \"3.11\" and extra == \"data\" or python_version == \"3.11\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"data\" or python_version >= \"3.12\" and extra == \"llm\"", docs = "python_version == \"3.11\" or python_version >= \"3.12\""}
 
 [package.extras]
 all = ["flake8 (>=7.1.1)", "mypy (>=1.11.2)", "pytest (>=8.3.2)", "ruff (>=0.6.2)"]
@@ -2892,7 +2892,7 @@ files = [
     {file = "python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3"},
     {file = "python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"},
 ]
-markers = {main = "python_version == \"3.11\" and extra == \"viz\" or python_version == \"3.11\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"viz\" or python_version >= \"3.12\" and extra == \"llm\"", dev = "python_version == \"3.11\" or python_version >= \"3.12\"", docs = "python_version == \"3.11\" or python_version >= \"3.12\""}
+markers = {main = "python_version == \"3.11\" and extra == \"llm\" or python_version == \"3.11\" and extra == \"viz\" or python_version >= \"3.12\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"viz\"", dev = "python_version == \"3.11\" or python_version >= \"3.12\"", docs = "python_version == \"3.11\" or python_version >= \"3.12\""}
 
 [package.dependencies]
 six = ">=1.5"
@@ -3298,7 +3298,7 @@ files = [
     {file = "requests-2.32.3-py3-none-any.whl", hash = "sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6"},
     {file = "requests-2.32.3.tar.gz", hash = "sha256:55365417734eb18255590a9ff9eb97e9e1da868d4ccd6402399eaf68af20a760"},
 ]
-markers = {main = "python_version == \"3.11\" and extra == \"llm\" or python_version == \"3.11\" and extra == \"data\" or python_version >= \"3.12\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"data\"", docs = "python_version == \"3.11\" or python_version >= \"3.12\""}
+markers = {main = "python_version == \"3.11\" and extra == \"data\" or python_version == \"3.11\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"data\" or python_version >= \"3.12\" and extra == \"llm\"", docs = "python_version == \"3.11\" or python_version >= \"3.12\""}
 
 [package.dependencies]
 certifi = ">=2017.4.17"
@@ -3488,7 +3488,7 @@ files = [
     {file = "six-1.17.0-py2.py3-none-any.whl", hash = "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"},
     {file = "six-1.17.0.tar.gz", hash = "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"},
 ]
-markers = {main = "python_version == \"3.11\" and extra == \"viz\" or python_version == \"3.11\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"viz\" or python_version >= \"3.12\" and extra == \"llm\"", dev = "python_version == \"3.11\" or python_version >= \"3.12\"", docs = "python_version == \"3.11\" or python_version >= \"3.12\""}
+markers = {main = "python_version == \"3.11\" and extra == \"llm\" or python_version == \"3.11\" and extra == \"viz\" or python_version >= \"3.12\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"viz\"", dev = "python_version == \"3.11\" or python_version >= \"3.12\"", docs = "python_version == \"3.11\" or python_version >= \"3.12\""}
 
 [[package]]
 name = "sniffio"
@@ -3745,7 +3745,7 @@ files = [
     {file = "urllib3-2.3.0-py3-none-any.whl", hash = "sha256:1cee9ad369867bfdbbb48b7dd50374c0967a0bb7710050facf0dd6911440e3df"},
     {file = "urllib3-2.3.0.tar.gz", hash = "sha256:f8c5449b3cf0861679ce7e0503c7b44b5ec981bec0d1d3795a07f1ba96f0204d"},
 ]
-markers = {main = "python_version == \"3.11\" and extra == \"llm\" or python_version == \"3.11\" and extra == \"data\" or python_version >= \"3.12\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"data\"", docs = "python_version == \"3.11\" or python_version >= \"3.12\""}
+markers = {main = "python_version == \"3.11\" and extra == \"data\" or python_version == \"3.11\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"data\" or python_version >= \"3.12\" and extra == \"llm\"", docs = "python_version == \"3.11\" or python_version >= \"3.12\""}
 
 [package.extras]
 brotli = ["brotli (>=1.0.9)", "brotlicffi (>=0.8.0)"]
@@ -3870,4 +3870,4 @@ viz = ["numpy", "pandas", "seaborn"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11, <3.13"
-content-hash = "989b8c5de551c302fd074b29dba3bc3e375d9738879b51a678fb4af25a1b8642"
+content-hash = "0004a9be4eb06ab1675a061fbe5e72e2b0459621b41c37db8c76c6e61aa6e94a"

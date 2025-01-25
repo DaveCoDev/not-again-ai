@@ -24,6 +24,10 @@ classifiers = [
 requires-python = ">=3.11, <3.13"
 # Lets us define dependencies completely in tool.poetry.dependencies
 dynamic = [ "dependencies" ]
+dependencies = [
+    "loguru>=0.7",
+    "pydantic>=2.10"
+]
 
 [project.urls]
 Homepage = "https://github.com/DaveCoDev/not-again-ai"
@@ -36,29 +40,28 @@ requires-poetry = ">=2.0.1"
 [tool.poetry.requires-plugins]
 poetry-plugin-export = ">=1.8"
 
-[tool.poetry.dependencies]
-loguru = { version = "^0.7" }
-pydantic = { version = "^2.10"}
-
-# Optional dependencies are defined here, and groupings are defined below.
-azure-identity = { version = "^1.19", optional = true }
-numpy = { version = "^2.2", optional = true }
-ollama = { version = "^0.4", optional = true }
-openai = { version = "^1.60", optional = true }
-pandas = { version = "^2.2", optional = true }
-playwright = { version = "^1.49", optional = true }
-pytest-playwright = { version = "^0.6", optional = true }
-python-liquid = { version = "^1.12", optional = true }
-scipy = { version = "^1.15", optional = true }
-scikit-learn = { version = "^1.6", optional = true }
-seaborn = { version = "^0.13", optional = true }
-tiktoken = { version = "^0.8", optional = true }
-
-[tool.poetry.extras]
-data = ["playwright", "pytest-playwright"]
-llm = ["azure-identity", "ollama", "openai", "python-liquid", "tiktoken"]
-statistics = ["numpy", "scikit-learn", "scipy"]
-viz = ["numpy", "pandas", "seaborn"]
+[project.optional-dependencies]
+data = [
+    "playwright>=1.49",
+    "pytest-playwright>=0.6"
+]
+llm = [
+    "azure-identity>=1.19",
+    "ollama>=0.4",
+    "openai>=1.60",
+    "python-liquid>=1.12",
+    "tiktoken>=0.8"
+]
+statistics = [
+    "numpy>=2.2",
+    "scikit-learn>=1.6",
+    "scipy>=1.15"
+]
+viz = [
+    "numpy>=2.2",
+    "pandas>=2.2",
+    "seaborn>=0.13"
+]
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "*"
@@ -93,9 +96,6 @@ mkdocs-literate-nav = "*"
 
 [tool.poetry.group.typos.dependencies]
 typos = "*"
-
-[tool.poetry.scripts]
-not-again-ai = "not_again_ai.cli:entry_point"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
