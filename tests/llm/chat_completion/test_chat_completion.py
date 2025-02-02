@@ -22,7 +22,7 @@ from not_again_ai.llm.chat_completion.types import (
     ToolMessage,
     UserMessage,
 )
-from not_again_ai.llm.openai_api.prompts import encode_image
+from not_again_ai.llm.prompting.compile_prompt import encode_image
 
 image_dir = Path(__file__).parent.parent / "sample_images"
 cat_image = image_dir / "cat.jpg"
@@ -36,7 +36,7 @@ sk_diagram = image_dir / "SKDiagram.png"
 @pytest.fixture(
     params=[
         {},
-        {"api_type": "azure_openai", "aoai_api_version": "2024-10-01-preview"},
+        {"api_type": "azure_openai", "aoai_api_version": "2025-01-01-preview"},
     ]
 )
 def openai_aoai_client_fixture(request: pytest.FixtureRequest) -> Callable[..., Any]:

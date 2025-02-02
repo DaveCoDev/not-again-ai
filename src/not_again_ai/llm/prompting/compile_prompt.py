@@ -1,4 +1,5 @@
 import base64
+from collections.abc import Sequence
 from copy import deepcopy
 import mimetypes
 from pathlib import Path
@@ -8,10 +9,27 @@ from liquid import Template
 from openai.lib._pydantic import to_strict_json_schema
 from pydantic import BaseModel
 
-from not_again_ai.llm.chat_completion.types import MessageT, TextContent
+from not_again_ai.llm.chat_completion.types import MessageT
 
 
-def compile_messages(messages: list[MessageT], variables: dict[str, str]) -> list[MessageT]:
+def _apply_templates(value: Any, variables: dict[str, str]) -> Any:
+    """Recursively applies Liquid templating to all string fields within the given value."""
+    if isinstance(value, str):
+        return Template(value).render(**variables)
+    elif isinstance(value, list):
+        return [_apply_templates(item, variables) for item in value]
+    elif isinstance(value, dict):
+        return {key: _apply_templates(val, variables) for key, val in value.items()}
+    elif isinstance(value, BaseModel):
+        # Process each field in the BaseModel by converting it to a dict,
+        # applying templating to its values, and then re-instantiating the model.
+        processed_data = {key: _apply_templates(val, variables) for key, val in value.model_dump().items()}
+        return value.__class__(**processed_data)
+    else:
+        return value
+
+
+def compile_messages(messages: Sequence[MessageT], variables: dict[str, str]) -> Sequence[MessageT]:
     """Compiles messages using Liquid templating and the provided variables.
     Calls Template(content_part).render(**variables) on each text content part.
 
@@ -23,17 +41,26 @@ def compile_messages(messages: list[MessageT], variables: dict[str, str]) -> lis
         The same list of messages with the content parts injected with the variables.
     """
     messages_formatted = deepcopy(messages)
-    for message in messages_formatted:
-        if isinstance(message.content, str):
-            # For simple string content, apply template directly
-            message.content = Template(message.content).render(**variables)
-        elif isinstance(message.content, list):
-            # For UserMessage with content parts
-            for content_part in message.content:
-                if isinstance(content_part, TextContent):
-                    content_part.text = Template(content_part.text).render(**variables)
-                # ImageContent parts are left unchanged
+    messages_formatted = [_apply_templates(message, variables) for message in messages_formatted]
     return messages_formatted
+
+
+def compile_tools(tools: Sequence[dict[str, Any]], variables: dict[str, str]) -> Sequence[dict[str, Any]]:
+    """Compiles a list of tool argument dictionaries using Liquid templating and provided variables.
+
+    Each dictionary in the list is deep copied and processed recursively to substitute any Liquid
+    templates present in its data structure.
+
+    Args:
+        tools: A list of dictionaries representing tool arguments, where values can include Liquid templates.
+        variables: A dictionary of variables to substitute into the Liquid templates.
+
+    Returns:
+        A new list of dictionaries with the Liquid templates replaced by their corresponding variable values.
+    """
+    tools_formatted = deepcopy(tools)
+    tools_formatted = [_apply_templates(tool, variables) for tool in tools_formatted]
+    return tools_formatted
 
 
 def encode_image(image_path: Path) -> str:

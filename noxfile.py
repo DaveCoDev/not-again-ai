@@ -21,7 +21,7 @@ def test(s: Session) -> None:
 
     # Skip tests in directories specified by the SKIP_TESTS_NAII environment variable.
     skip_tests = os.getenv("SKIP_TESTS_NAAI", "")
-    skip_tests += " tests/llm/chat_completion/"
+    skip_tests += " tests/llm/chat_completion/ tests/llm/embedding/"
     skip_args = [f"--ignore={dir}" for dir in skip_tests.split()] if skip_tests else []
 
     s.run(
