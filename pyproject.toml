@@ -1,6 +1,6 @@
 [project]
 name = "not-again-ai"
-version = "0.15.0"
+version = "0.16.0"
 description = "Designed to once and for all collect all the little things that come up over and over again in AI projects and put them in one place."
 authors = [
     { name = "DaveCoDev", email = "dave.co.dev@gmail.com" }
@@ -22,8 +22,6 @@ classifiers = [
     "Typing :: Typed",
 ]
 requires-python = ">=3.11, <3.13"
-# Lets us define dependencies completely in tool.poetry.dependencies
-dynamic = [ "dependencies" ]
 dependencies = [
     "loguru>=0.7",
     "pydantic>=2.10"
@@ -43,12 +41,12 @@ poetry-plugin-export = ">=1.8"
 [project.optional-dependencies]
 data = [
     "playwright>=1.49",
-    "pytest-playwright>=0.6"
+    "pytest-playwright>=0.7"
 ]
 llm = [
     "azure-identity>=1.19",
     "ollama>=0.4",
-    "openai>=1.60",
+    "openai>=1",
     "python-liquid>=1.12",
     "tiktoken>=0.8"
 ]
