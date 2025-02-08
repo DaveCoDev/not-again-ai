@@ -52,9 +52,20 @@ class Function(BaseModel):
     arguments: dict[str, Any]
 
 
+class PartialFunction(BaseModel):
+    name: str
+    arguments: str | dict[str, Any]
+
+
 class ToolCall(BaseModel):
     id: str
     function: Function
+    type: Literal["function"] = "function"
+
+
+class PartialToolCall(BaseModel):
+    id: str | None
+    function: PartialFunction
     type: Literal["function"] = "function"
 
 
@@ -87,6 +98,7 @@ MessageT = AssistantMessage | DeveloperMessage | SystemMessage | ToolMessage | U
 class ChatCompletionRequest(BaseModel):
     messages: list[MessageT]
     model: str
+    stream: bool = Field(default=False)
 
     max_completion_tokens: int | None = Field(default=None)
     context_window: int | None = Field(default=None)
@@ -147,4 +159,36 @@ class ChatCompletionResponse(BaseModel):
 
     system_fingerprint: str | None = Field(default=None)
 
+    extras: Any | None = Field(default=None)
+
+
+class ChatCompletionDelta(BaseModel):
+    content: str
+    role: Role = Field(default=Role.ASSISTANT)
+
+    tool_calls: list[PartialToolCall] | None = Field(default=None)
+
+    refusal: str | None = Field(default=None)
+
+
+class ChatCompletionChoiceStream(BaseModel):
+    delta: ChatCompletionDelta
+    index: int
+    finish_reason: Literal["stop", "length", "tool_calls", "content_filter"] | None
+
+    logprobs: list[dict[str, Any] | list[dict[str, Any]]] | None = Field(default=None)
+
+    extras: Any | None = Field(default=None)
+
+
+class ChatCompletionChunk(BaseModel):
+    choices: list[ChatCompletionChoiceStream]
+
+    errors: str = Field(default="")
+
+    completion_tokens: int | None = Field(default=None)
+    prompt_tokens: int | None = Field(default=None)
+    response_duration: float | None = Field(default=None)
+
+    system_fingerprint: str | None = Field(default=None)
     extras: Any | None = Field(default=None)

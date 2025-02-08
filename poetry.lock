@@ -2801,6 +2801,26 @@ pluggy = ">=1.5,<2"
 dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
+name = "pytest-asyncio"
+version = "0.25.3"
+description = "Pytest support for asyncio"
+optional = false
+python-versions = ">=3.9"
+groups = ["test"]
+markers = "python_version == \"3.11\" or python_version >= \"3.12\""
+files = [
+    {file = "pytest_asyncio-0.25.3-py3-none-any.whl", hash = "sha256:9e89518e0f9bd08928f97a3482fdc4e244df17529460bc038291ccaf8f85c7c3"},
+    {file = "pytest_asyncio-0.25.3.tar.gz", hash = "sha256:fc1da2cf9f125ada7e710b4ddad05518d4cee187ae9412e9ac9271003497f07a"},
+]
+
+[package.dependencies]
+pytest = ">=8.2,<9"
+
+[package.extras]
+docs = ["sphinx (>=5.3)", "sphinx-rtd-theme (>=1)"]
+testing = ["coverage (>=6.2)", "hypothesis (>=5.7.1)"]
+
+[[package]]
 name = "pytest-base-url"
 version = "2.1.0"
 description = "pytest plugin for URL based testing"
@@ -2893,15 +2913,15 @@ six = ">=1.5"
 
 [[package]]
 name = "python-liquid"
-version = "1.12.2"
+version = "1.13.0"
 description = "A Python engine for the Liquid template language."
 optional = true
 python-versions = ">=3.7"
 groups = ["main"]
 markers = "python_version == \"3.11\" and extra == \"llm\" or python_version >= \"3.12\" and extra == \"llm\""
 files = [
-    {file = "python_liquid-1.12.2-py3-none-any.whl", hash = "sha256:4a2611ecb7d77476f2a028438cf02213873ec06b1223f661ba16eceec130e192"},
-    {file = "python_liquid-1.12.2.tar.gz", hash = "sha256:46b5deb2337c1afe91760f2da46b05f17b55482023da441a4a78d096c4271d19"},
+    {file = "python_liquid-1.13.0-py3-none-any.whl", hash = "sha256:843ed7b8af00c1480d1bf402553ed07bdddce130ebbf4b1fefc84bb2e076f5d4"},
+    {file = "python_liquid-1.13.0.tar.gz", hash = "sha256:c158fbaad6dd41c49de7cff34e3611bff7211326fb3049322d27673e1d66e166"},
 ]
 
 [package.dependencies]
@@ -3864,4 +3884,4 @@ viz = ["numpy", "pandas", "seaborn"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11, <3.13"
-content-hash = "6861b50ce845a53d9318c10e475bf09e016878df22848300b7a39e233f5a73a0"
+content-hash = "44a539d8fdd0304109197a76bb838eb143610eb0138881af60d1c3afb5e850be"
