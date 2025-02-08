@@ -1,6 +1,6 @@
 [project]
 name = "not-again-ai"
-version = "0.16.0"
+version = "0.16.1"
 description = "Designed to once and for all collect all the little things that come up over and over again in AI projects and put them in one place."
 authors = [
     { name = "DaveCoDev", email = "dave.co.dev@gmail.com" }
@@ -40,7 +40,7 @@ poetry-plugin-export = ">=1.8"
 
 [project.optional-dependencies]
 data = [
-    "playwright>=1.49",
+    "playwright>=1.50",
     "pytest-playwright>=0.7"
 ]
 llm = [

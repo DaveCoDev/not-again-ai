@@ -28,6 +28,7 @@ OLLAMA_PARAMETER_MAP = {
     "logit_bias": None,
     "top_logprobs": None,
     "presence_penalty": None,
+    "max_tokens": "num_predict",
 }
 
 
@@ -44,6 +45,10 @@ def validate(request: ChatCompletionRequest) -> None:
     if isinstance(request.stop, list):
         logger.warning("Parameter 'stop' needs to be a string and not a list. It will be ignored.")
         request.stop = None
+
+    # Raise an error if both "max_tokens" and "max_completion_tokens" are provided
+    if request.max_tokens is not None and request.max_completion_tokens is not None:
+        raise ValueError("`max_tokens` and `max_completion_tokens` cannot both be provided.")
 
 
 def ollama_chat_completion(
