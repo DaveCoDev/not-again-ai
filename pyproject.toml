@@ -1,6 +1,6 @@
 [project]
 name = "not-again-ai"
-version = "0.16.1"
+version = "0.17.0"
 description = "Designed to once and for all collect all the little things that come up over and over again in AI projects and put them in one place."
 authors = [
     { name = "DaveCoDev", email = "dave.co.dev@gmail.com" }
@@ -70,6 +70,7 @@ nox-poetry = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
+pytest-asyncio = "*"
 pytest-cov = "*"
 pytest-randomly = "*"
 
@@ -153,6 +154,7 @@ filterwarnings = [
     # "ignore::DeprecationWarning:typer",
     "ignore::pytest.PytestUnraisableExceptionWarning"
 ]
+asyncio_mode = "auto"
 
 [tool.coverage.run]
 branch = true
