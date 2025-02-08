@@ -1,7 +1,7 @@
 from collections.abc import AsyncGenerator, Callable
 from typing import Any
 
-from not_again_ai.llm.chat_completion.providers.ollama_api import ollama_chat_completion
+from not_again_ai.llm.chat_completion.providers.ollama_api import ollama_chat_completion, ollama_chat_completion_stream
 from not_again_ai.llm.chat_completion.providers.openai_api import openai_chat_completion, openai_chat_completion_stream
 from not_again_ai.llm.chat_completion.types import ChatCompletionChunk, ChatCompletionRequest, ChatCompletionResponse
 
@@ -53,6 +53,9 @@ async def chat_completion_stream(
     request.stream = True
     if provider == "openai" or provider == "azure_openai":
         async for chunk in openai_chat_completion_stream(request, client):
+            yield chunk
+    elif provider == "ollama":
+        async for chunk in ollama_chat_completion_stream(request, client):
             yield chunk
     else:
         raise ValueError(f"Provider {provider} not supported")

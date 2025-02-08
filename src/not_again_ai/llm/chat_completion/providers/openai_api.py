@@ -224,6 +224,7 @@ async def openai_chat_completion_stream(
     validate(request)
     kwargs = format_kwargs(request)
 
+    start_time = time.time()
     stream = await client(**kwargs)
 
     async for chunk in stream:
@@ -234,7 +235,7 @@ async def openai_chat_completion_stream(
             chunk = chunk.to_dict()
 
         choices: list[ChatCompletionChoiceStream] = []
-        for choice_index, choice in enumerate(chunk["choices"]):
+        for choice in chunk["choices"]:
             content = choice.get("delta", {}).get("content", "")
             if not content:
                 content = ""
@@ -251,12 +252,6 @@ async def openai_chat_completion_stream(
                     tool_name = tool_call.get("function", {}).get("name", None)
                     if not tool_name:
                         tool_name = ""
-                    # Check if the tool name is valid (one of the tool names in the request)
-                    if request.tools and tool_name not in [tool["function"]["name"] for tool in request.tools]:
-                        errors += (
-                            f"Choice {choice_index}: Tool call {tool_call} has an invalid tool name: {tool_name}\n"
-                        )
-
                     tool_args = tool_call.get("function", {}).get("arguments", "")
                     if not tool_args:
                         tool_args = ""
@@ -300,7 +295,26 @@ async def openai_chat_completion_stream(
             )
             choices.append(choice_obj)
 
-        chunk_obj = ChatCompletionChunk(choices=choices)
+        current_time = time.time()
+        response_duration = round(current_time - start_time, 4)
+
+        if "usage" in chunk and chunk["usage"] is not None:
+            completion_tokens = chunk["usage"].get("completion_tokens", None)
+            prompt_tokens = chunk["usage"].get("prompt_tokens", None)
+            system_fingerprint = chunk.get("system_fingerprint", None)
+        else:
+            completion_tokens = None
+            prompt_tokens = None
+            system_fingerprint = None
+
+        chunk_obj = ChatCompletionChunk(
+            choices=choices,
+            errors=errors.strip(),
+            completion_tokens=completion_tokens,
+            prompt_tokens=prompt_tokens,
+            response_duration=response_duration,
+            system_fingerprint=system_fingerprint,
+        )
         yield chunk_obj
 
 
@@ -331,6 +345,7 @@ def create_client_callable_stream(
 
     def client_callable(**kwargs: Any) -> Coroutine[Any, Any, Any]:
         client = client_class(**filtered_args)
+        kwargs["stream_options"] = {"include_usage": True}
         stream = client.chat.completions.create(**kwargs)
         return stream
 

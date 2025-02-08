@@ -1,4 +1,4 @@
-from collections.abc import Callable
+from collections.abc import AsyncGenerator, Callable
 import json
 import os
 import re
@@ -6,14 +6,20 @@ import time
 from typing import Any, Literal, cast
 
 from loguru import logger
-from ollama import ChatResponse, Client, ResponseError
+from ollama import AsyncClient, ChatResponse, Client, ResponseError
 
 from not_again_ai.llm.chat_completion.types import (
     AssistantMessage,
     ChatCompletionChoice,
+    ChatCompletionChoiceStream,
+    ChatCompletionChunk,
+    ChatCompletionDelta,
     ChatCompletionRequest,
     ChatCompletionResponse,
     Function,
+    PartialFunction,
+    PartialToolCall,
+    Role,
     ToolCall,
 )
 
@@ -51,14 +57,8 @@ def validate(request: ChatCompletionRequest) -> None:
         raise ValueError("`max_tokens` and `max_completion_tokens` cannot both be provided.")
 
 
-def ollama_chat_completion(
-    request: ChatCompletionRequest,
-    client: Callable[..., Any],
-) -> ChatCompletionResponse:
-    validate(request)
-
+def format_kwargs(request: ChatCompletionRequest) -> dict[str, Any]:
     kwargs = request.model_dump(mode="json", exclude_none=True)
-
     # For each key in OLLAMA_PARAMETER_MAP
     # If it is not None, set the key in kwargs to the value of the corresponding value in OLLAMA_PARAMETER_MAP
     # If it is None, remove that key from kwargs
@@ -141,6 +141,16 @@ def ollama_chat_completion(
             logger.warning("Ollama model only supports a single image per message. Using only the first images.")
         message["images"] = images
 
+    return kwargs
+
+
+def ollama_chat_completion(
+    request: ChatCompletionRequest,
+    client: Callable[..., Any],
+) -> ChatCompletionResponse:
+    validate(request)
+    kwargs = format_kwargs(request)
+
     try:
         start_time = time.time()
         response: ChatResponse = client(**kwargs)
@@ -164,7 +174,7 @@ def ollama_chat_completion(
             tool_name = tool_call.function.name
             if request.tools and tool_name not in [tool["function"]["name"] for tool in request.tools]:
                 errors += f"Tool call {tool_call} has an invalid tool name: {tool_name}\n"
-            tool_args = tool_call.function.arguments
+            tool_args = dict(tool_call.function.arguments)
             parsed_tool_calls.append(
                 ToolCall(
                     id="",
@@ -206,7 +216,65 @@ def ollama_chat_completion(
     )
 
 
-def ollama_client(host: str | None = None, timeout: float | None = None) -> Callable[..., Any]:
+async def ollama_chat_completion_stream(
+    request: ChatCompletionRequest,
+    client: Callable[..., Any],
+) -> AsyncGenerator[ChatCompletionChunk, None]:
+    validate(request)
+    kwargs = format_kwargs(request)
+
+    start_time = time.time()
+    stream = await client(**kwargs)
+
+    async for chunk in stream:
+        errors = ""
+        # Handle tool calls
+        tool_calls: list[PartialToolCall] | None = None
+        if chunk.message.tool_calls:
+            parsed_tool_calls: list[PartialToolCall] = []
+            for tool_call in chunk.message.tool_calls:
+                tool_name = tool_call.function.name
+                if request.tools and tool_name not in [tool["function"]["name"] for tool in request.tools]:
+                    errors += f"Tool call {tool_call} has an invalid tool name: {tool_name}\n"
+                tool_args = tool_call.function.arguments
+
+                parsed_tool_calls.append(
+                    PartialToolCall(
+                        id="",
+                        function=PartialFunction(
+                            name=tool_name,
+                            arguments=tool_args,
+                        ),
+                    )
+                )
+            tool_calls = parsed_tool_calls
+
+        current_time = time.time()
+        response_duration = round(current_time - start_time, 4)
+
+        delta = ChatCompletionDelta(
+            content=chunk.message.content or "",
+            role=Role.ASSISTANT,
+            tool_calls=tool_calls,
+        )
+        choice_obj = ChatCompletionChoiceStream(
+            delta=delta,
+            finish_reason=chunk.done_reason,
+            index=0,
+        )
+        chunk_obj = ChatCompletionChunk(
+            choices=[choice_obj],
+            errors=errors.strip(),
+            completion_tokens=chunk.get("eval_count", None),
+            prompt_tokens=chunk.get("prompt_eval_count", None),
+            response_duration=response_duration,
+        )
+        yield chunk_obj
+
+
+def ollama_client(
+    host: str | None = None, timeout: float | None = None, async_client: bool = False
+) -> Callable[..., Any]:
     """Create an Ollama client instance based on the specified host or will read from the OLLAMA_HOST environment variable.
 
     Args:
@@ -226,7 +294,7 @@ def ollama_client(host: str | None = None, timeout: float | None = None) -> Call
             host = "http://localhost:11434"
 
     def client_callable(**kwargs: Any) -> Any:
-        client = Client(host=host, timeout=timeout)
+        client = AsyncClient(host=host, timeout=timeout) if async_client else Client(host=host, timeout=timeout)
         return client.chat(**kwargs)
 
     return client_callable

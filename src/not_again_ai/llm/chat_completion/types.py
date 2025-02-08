@@ -54,7 +54,7 @@ class Function(BaseModel):
 
 class PartialFunction(BaseModel):
     name: str
-    arguments: str
+    arguments: str | dict[str, Any]
 
 
 class ToolCall(BaseModel):
