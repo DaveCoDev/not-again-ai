@@ -789,6 +789,16 @@ def test_chat_completion_invalid_params(openai_aoai_client_fixture: Callable[...
     print(response.model_dump(mode="json", exclude_none=True))
 
 
+def test_chat_completion_max_tokens(openai_aoai_client_fixture: Callable[..., Any]) -> None:
+    request = ChatCompletionRequest(
+        model="gpt-4o-mini-2024-07-18",
+        messages=[UserMessage(content="What is the capital of France?")],
+        max_tokens=100,
+    )
+    response = chat_completion(request, "openai", openai_aoai_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
 # region OpenAI
 @pytest.fixture(
     params=[
@@ -1055,6 +1065,16 @@ def test_chat_completion_ollama_vision_multiple_messages(ollama_client_fixture: 
         max_completion_tokens=100,
     )
 
+    response = chat_completion(request, "ollama", ollama_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_chat_completion_ollama_max_tokens(ollama_client_fixture: Callable[..., Any]) -> None:
+    request = ChatCompletionRequest(
+        model="llama3.2-vision:11b-instruct-q4_K_M",
+        messages=[UserMessage(content="What is the capital of France?")],
+        max_tokens=100,
+    )
     response = chat_completion(request, "ollama", ollama_client_fixture)
     print(response.model_dump(mode="json", exclude_none=True))
 

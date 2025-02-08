@@ -118,6 +118,11 @@ class ChatCompletionRequest(BaseModel):
     top_k: int | None = Field(default=None)
     min_p: float | None = Field(default=None)
 
+    max_tokens: int | None = Field(
+        default=None,
+        description="Sometimes `max_completion_tokens` is not correctly supported so we provide this as a fallback.",
+    )
+
 
 class ChatCompletionChoice(BaseModel):
     message: AssistantMessage

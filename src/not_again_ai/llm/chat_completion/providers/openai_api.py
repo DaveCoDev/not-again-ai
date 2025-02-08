@@ -31,6 +31,10 @@ def validate(request: ChatCompletionRequest) -> None:
     if request.json_mode and request.structured_outputs is not None:
         raise ValueError("json_schema and json_mode cannot be used together.")
 
+    # Raise an error if both "max_tokens" and "max_completion_tokens" are provided
+    if request.max_tokens is not None and request.max_completion_tokens is not None:
+        raise ValueError("`max_tokens` and `max_completion_tokens` cannot both be provided.")
+
 
 def openai_chat_completion(
     request: ChatCompletionRequest,
