@@ -1,25 +1,29 @@
 # not-again-ai
 
 [![GitHub Actions][github-actions-badge]](https://github.com/johnthagen/python-blueprint/actions)
-[![Packaged with Poetry][poetry-badge]](https://python-poetry.org/)
+[![uv][uv-badge]](https://github.com/astral-sh/uv)
 [![Nox][nox-badge]](https://github.com/wntrblm/nox)
 [![Ruff][ruff-badge]](https://github.com/astral-sh/ruff)
 [![Type checked with mypy][mypy-badge]](https://mypy-lang.org/)
 
 [github-actions-badge]: https://github.com/johnthagen/python-blueprint/workflows/python/badge.svg
-[poetry-badge]: https://img.shields.io/badge/packaging-poetry-cyan.svg
+[uv-badge]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json
 [nox-badge]: https://img.shields.io/badge/%F0%9F%A6%8A-Nox-D85E00.svg
 [black-badge]: https://img.shields.io/badge/code%20style-black-000000.svg
 [ruff-badge]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
 [mypy-badge]: https://www.mypy-lang.org/static/mypy_badge.svg
 
-**not-again-ai** is a collection of various building blocks that come up over and over again when developing AI products. The key goals of this package are to have simple, yet flexible interfaces and to minimize dependencies. It is encouraged to also **a)** use this as a template for your own Python package. **b)** instead of installing the package, copy and paste functions into your own projects. We make this easier by limiting the number of dependencies and use an MIT license.
+**not-again-ai** is a collection of various building blocks that come up over and over again when developing AI products. 
+The key goals of this package are to have simple, yet flexible interfaces and to minimize dependencies. 
+It is encouraged to also **a)** use this as a template for your own Python package. 
+**b)** instead of installing the package, copy and paste functions into your own projects. 
+We make this easier by limiting the number of dependencies and use an MIT license.
 
 **Documentation** available within individual **[notebooks](notebooks)**, docstrings within the source, or auto-generated at [DaveCoDev.github.io/not-again-ai/](https://DaveCoDev.github.io/not-again-ai/).
 
 # Installation
 
-Requires: Python 3.11, or 3.12
+Requires: Python 3.11, or 3.12 which can be installed with [uv](https://docs.astral.sh/uv/getting-started/installation/) by running the command `uv python install 3.12`
 
 Install the entire package from [PyPI](https://pypi.org/project/not-again-ai/) with: 
 
@@ -69,52 +73,35 @@ The package is split into subpackages, so you can install only the parts you nee
 
 # Development Information
 
-The following information is relevant if you would like to contribute or use this package as a template for yourself. 
+This package uses [uv](https://docs.astral.sh/uv/) to manage dependencies and
+isolated [Python virtual environments](https://docs.python.org/3/library/venv.html).
 
-This package uses [Poetry](https://python-poetry.org/) to manage dependencies and
-isolated [Python virtual environments](https://docs.python.org/3/library/venv.html). To proceed, be sure to first install [pipx](https://github.com/pypa/pipx#install-pipx)
-and then [install Poetry](https://python-poetry.org/docs/#installing-with-pipx).
+To proceed,
+[install uv globally](https://docs.astral.sh/uv/getting-started/installation/)
+onto your system.
 
-Install Poetry Plugin: Export
+To install a specific version of Python:
 
-```bash
-$ pipx inject poetry poetry-plugin-export
-```
-
-(Optional) configure Poetry to use an in-project virtual environment.
-```bash
-$ poetry config virtualenvs.in-project true
+```shell
+uv python install 3.12
 ```
 
 ## Dependencies
 
 Dependencies are defined in [`pyproject.toml`](./pyproject.toml) and specific versions are locked
-into [`poetry.lock`](./poetry.lock). This allows for exact reproducible environments across
+into [`uv.lock`](./uv.lock). This allows for exact reproducible environments across
 all machines that use the project, both during development and in production.
 
-To upgrade all dependencies to the versions defined in [`pyproject.toml`](./pyproject.toml):
+To install all dependencies into an isolated virtual environment:
 
-```bash
-$ poetry update
+```shell
+uv sync --all-extras
 ```
 
-To install all dependencies (with all extra dependencies) into an isolated virtual environment:
+To upgrade all dependencies to their latest versions:
 
-```bash
-$ poetry sync --all-extras
-```
-
-To [activate](https://python-poetry.org/docs/basic-usage#activating-the-virtual-environment) the
-virtual environment that is automatically created by Poetry:
-
-```bash
-$ poetry shell
-```
-
-To deactivate the environment:
-
-```bash
-(.venv) $ exit
+```shell
+uv lock --upgrade
 ```
 
 ## Packaging
@@ -122,48 +109,40 @@ To deactivate the environment:
 This project is designed as a Python package, meaning that it can be bundled up and redistributed
 as a single compressed file.
 
-Packaging is configured by:
-
-- [`pyproject.toml`](./pyproject.toml)
+Packaging is configured by the [`pyproject.toml`](./pyproject.toml).
 
 To package the project as both a 
 [source distribution](https://packaging.python.org/en/latest/flow/#the-source-distribution-sdist) and
 a [wheel](https://packaging.python.org/en/latest/specifications/binary-distribution-format/):
 
 ```bash
-$ poetry build
+$ uv build
 ```
 
 This will generate `dist/not-again-ai-<version>.tar.gz` and `dist/not_again_ai-<version>-py3-none-any.whl`.
 
-Read more about the [advantages of wheels](https://pythonwheels.com/) to understand why generating
-wheel distributions are important.
 
 ## Publish Distributions to PyPI
 
 Source and wheel redistributable packages can
-be [published to PyPI](https://python-poetry.org/docs/cli#publish) or installed
+be [published to PyPI](https://docs.astral.sh/uv/guides/package/) or installed
 directly from the filesystem using `pip`.
 
-```bash
-$ poetry publish
+```shell
+uv publish
 ```
 
 # Enforcing Code Quality
 
-Automated code quality checks are performed using 
-[Nox](https://nox.thea.codes/en/stable/) and
-[`nox-poetry`](https://nox-poetry.readthedocs.io/en/stable/). Nox will automatically create virtual
-environments and run commands based on [`noxfile.py`](./noxfile.py) for unit testing, PEP 8 style
-guide checking, type checking and documentation generation.
-
-> Note: `nox` is installed into the virtual environment automatically by the `poetry sync`
-> command above. Run `poetry shell` to activate the virtual environment.
+Automated code quality checks are performed using [Nox](https://nox.thea.codes/en/stable/). Nox
+will automatically create virtual environments and run commands based on
+[`noxfile.py`](./noxfile.py) for unit testing, PEP 8 style guide checking, type checking and
+documentation generation.
 
 To run all default sessions:
 
-```bash
-(.venv) $ nox
+```shell
+uv run nox
 ```
 
 ## Unit Testing
@@ -195,7 +174,7 @@ pytest and code coverage are configured in [`pyproject.toml`](./pyproject.toml).
 To run selected tests:
 
 ```bash
-(.venv) $ nox -s test -- -k "test_web"
+(.venv) $ uv run nox -s test -- -k "test_web"
 ```
 
 ## Code Style Checking
@@ -209,13 +188,13 @@ code. PEP 8 code compliance is verified using [Ruff][Ruff]. Ruff is configured i
 To lint code, run:
 
 ```bash
-(.venv) $ nox -s lint
+(.venv) $ uv run nox -s lint
 ```
 
 To automatically fix fixable lint errors, run:
 
 ```bash
-(.venv) $ nox -s lint_fix
+(.venv) $ uv run nox -s lint_fix
 ```
 
 ## Automated Code Formatting
@@ -225,13 +204,13 @@ To automatically fix fixable lint errors, run:
 To automatically format code, run:
 
 ```bash
-(.venv) $ nox -s fmt
+(.venv) $ uv run nox -s fmt
 ```
 
 To verify code has been formatted, such as in a CI job:
 
 ```bash
-(.venv) $ nox -s fmt_check
+(.venv) $ uv run nox -s fmt_check
 ```
 
 ## Type Checking
@@ -251,10 +230,8 @@ def factorial(n: int) -> int:
 mypy is configured in [`pyproject.toml`](./pyproject.toml). To type check code, run:
 
 ```bash
-(.venv) $ nox -s type_check
+(.venv) $ uv run nox -s type_check
 ```
-
-See also [awesome-python-typing](https://github.com/typeddjango/awesome-python-typing).
 
 ### Distributing Type Annotations
 
@@ -271,7 +248,7 @@ installed package to indicate that inline type annotations should be checked.
 Check for typos using [typos](https://github.com/crate-ci/typos)
 
 ```bash
-(.venv) $ nox -s typos
+(.venv) $ uv run nox -s typos
 ```
 
 ## Continuous Integration
@@ -288,81 +265,6 @@ Install the [Python extension](https://marketplace.visualstudio.com/items?itemNa
 Install the [Ruff extension](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) for VSCode.
 
 Default settings are configured in [`.vscode/settings.json`](./.vscode/settings.json) which will enable Ruff with consistent settings.
-
-# Generating Documentation
-
-## Generating a User Guide
-
-[Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) is a powerful static site
-generator that combines easy-to-write Markdown, with a number of Markdown extensions that increase
-the power of Markdown. This makes it a great fit for user guides and other technical documentation.
-
-The example MkDocs project included in this project is configured to allow the built documentation
-to be hosted at any URL or viewed offline from the file system.
-
-To build the user guide, run,
-
-```bash
-(.venv) $ nox -s docs
-```
-
-and open `docs/user_guide/site/index.html` using a web browser.
-
-To build the user guide, additionally validating external URLs, run:
-
-```bash
-(.venv) $ nox -s docs_check_urls
-```
-
-To build the user guide in a format suitable for viewing directly from the file system, run:
-
-```bash
-(.venv) $ nox -s docs_offline
-```
-
-To build and serve the user guide with automatic rebuilding as you change the contents,
-run:
-
-```bash
-(.venv) $ nox -s docs_serve
-``` 
-
-and open <http://127.0.0.1:8000> in a browser.
-
-Each time the `main` Git branch is updated, the 
-[`.github/workflows/pages.yml`](.github/workflows/pages.yml) GitHub Action will
-automatically build the user guide and publish it to [GitHub Pages](https://pages.github.com/).
-This is configured in the `docs_github_pages` Nox session.
-
-## Generating API Documentation
-
-This project uses [mkdocstrings](https://github.com/mkdocstrings/mkdocstrings) plugin for
-MkDocs, which renders
-[Google-style docstrings](https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html)
-into an MkDocs project. Google-style docstrings provide a good mix of easy-to-read docstrings in
-code as well as nicely-rendered output.
-
-```python
-"""Computes the factorial through a recursive algorithm.
-
-Args:
-    n: A positive input value.
-
-Raises:
-    InvalidFactorialError: If n is less than 0.
-
-Returns:
-    Computed factorial.
-"""
-```
-
-## Misc
-
-If you get a `Failed to create the collection: Prompt dismissed..` error when running `poetry update` on Ubuntu, try setting the following environment variable:
-
-    ```bash
-    export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
-    ```
 
 # Attributions
 [python-blueprint](https://github.com/johnthagen/python-blueprint) for the Python package skeleton.
