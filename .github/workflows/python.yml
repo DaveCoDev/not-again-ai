@@ -35,7 +35,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_ORG_ID: ${{ secrets.OPENAI_ORG_ID }}
-          SKIP_TESTS_NAAI: "tests/llm tests/data"
+          SKIP_TESTS_NAAI: "tests/llm/chat_completion tests/llm/embedding tests/data"
         run: uv run nox -s test-${{ matrix.python-version }}
   quality:
     runs-on: ubuntu-24.04

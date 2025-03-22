@@ -34,25 +34,25 @@ Repository = "https://github.com/DaveCoDev/not-again-ai"
 
 [project.optional-dependencies]
 data = [
-    "playwright>=1.50",
-    "pytest-playwright>=0.7"
+    "playwright>=1.51,<2.0",
+    "pytest-playwright>=0.7,<1.0",
 ]
 llm = [
-    "azure-identity>=1.19",
-    "ollama>=0.4",
-    "openai>=1",
-    "python-liquid>=1.12,<2.0",
-    "tiktoken>=0.8"
+    "azure-identity>=1.21,<2.0",
+    "ollama>=0.4,<1.0",
+    "openai>=1.68,<2.0",
+    "python-liquid>=2.0,<3.0",
+    "tiktoken>=0.9,<1.0"
 ]
 statistics = [
-    "numpy>=2.2",
-    "scikit-learn>=1.6",
+    "numpy>=2.2,<3.0",
+    "scikit-learn>=1.6,<2.0",
     "scipy>=1.15"
 ]
 viz = [
-    "numpy>=2.2",
-    "pandas>=2.2",
-    "seaborn>=0.13"
+    "numpy>=2.2,<3.0",
+    "pandas>=2.2,<3.0",
+    "seaborn>=0.13,<1.0",
 ]
 
 [dependency-groups]
