@@ -19,7 +19,7 @@ It is encouraged to also **a)** use this as a template for your own Python packa
 **b)** instead of installing the package, copy and paste functions into your own projects. 
 We make this easier by limiting the number of dependencies and use an MIT license.
 
-**Documentation** available within individual **[notebooks](notebooks)**, docstrings within the source, or auto-generated at [DaveCoDev.github.io/not-again-ai/](https://DaveCoDev.github.io/not-again-ai/).
+**Documentation** available within individual **[notebooks](notebooks)** or docstrings within the source code.
 
 # Installation
 
