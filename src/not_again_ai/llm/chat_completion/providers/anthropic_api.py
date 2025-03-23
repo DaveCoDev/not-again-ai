@@ -103,12 +103,12 @@ def anthropic_chat_completion(request: ChatCompletionRequest, client: Callable[.
         elif tool_choice_value in ["auto", "any"]:
             tool_choice["type"] = "auto"
             if kwargs.get("parallel_tool_calls") is not None:
-                tool_choice["disable_parallel_tool_use"] = not kwargs["parallel_tool_calls"]
+                tool_choice["disable_parallel_tool_use"] = str(not kwargs["parallel_tool_calls"])
         else:
             tool_choice["name"] = tool_choice_value
             tool_choice["type"] = "tool"
             if kwargs.get("parallel_tool_calls") is not None:
-                tool_choice["disable_parallel_tool_use"] = not kwargs["parallel_tool_calls"]
+                tool_choice["disable_parallel_tool_use"] = str(not kwargs["parallel_tool_calls"])
         kwargs["tool_choice"] = tool_choice
     kwargs.pop("parallel_tool_calls", None)
 
@@ -128,7 +128,7 @@ def anthropic_chat_completion(request: ChatCompletionRequest, client: Callable[.
                     id=block.id,
                     function=Function(
                         name=block.name,
-                        arguments=block.input,
+                        arguments=block.input,  # type: ignore
                     ),
                 )
             )
@@ -138,7 +138,7 @@ def anthropic_chat_completion(request: ChatCompletionRequest, client: Callable[.
             content=assistant_message,
             tool_calls=tool_calls,
         ),
-        finish_reason=response.stop_reason,
+        finish_reason=response.stop_reason or "stop",
     )
 
     chat_completion_response = ChatCompletionResponse(
@@ -165,7 +165,7 @@ def create_client_callable(client_class: type[Anthropic], **client_args: Any) ->
     """
     filtered_args = {k: v for k, v in client_args.items() if v is not None}
 
-    def client_callable(**kwargs: Any) -> Message:
+    def client_callable(**kwargs: Any) -> Any:
         client = client_class(**filtered_args)
         completion = client.beta.messages.create(**kwargs)
         return completion
