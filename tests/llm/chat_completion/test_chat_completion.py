@@ -6,6 +6,7 @@ from typing import Any
 import pytest
 
 from not_again_ai.llm.chat_completion import chat_completion
+from not_again_ai.llm.chat_completion.providers.anthropic_api import anthropic_client
 from not_again_ai.llm.chat_completion.providers.ollama_api import ollama_client
 from not_again_ai.llm.chat_completion.providers.openai_api import openai_client
 from not_again_ai.llm.chat_completion.types import (
@@ -855,6 +856,8 @@ def test_chat_completion_azure_key(azure_openai_client_fixture: Callable[..., An
 
 
 # region Ollama
+
+
 @pytest.fixture(
     params=[
         {},
@@ -1076,6 +1079,237 @@ def test_chat_completion_ollama_max_tokens(ollama_client_fixture: Callable[..., 
         max_tokens=100,
     )
     response = chat_completion(request, "ollama", ollama_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+# endregion
+
+
+# region Anthropic
+
+
+@pytest.fixture(
+    params=[
+        {},
+    ]
+)
+def anthropic_client_fixture(request: pytest.FixtureRequest) -> Callable[..., Any]:
+    return anthropic_client(**request.param)
+
+
+def test_anthropic_chat_completion_simple(anthropic_client_fixture: Callable[..., Any]) -> None:
+    request = ChatCompletionRequest(
+        model="claude-3-7-sonnet-20250219",
+        messages=[
+            SystemMessage(content="You are a helpful assistant."),
+            UserMessage(content="What is the capital of France?"),
+        ],
+        max_completion_tokens=200,
+    )
+    response = chat_completion(request, "anthropic", anthropic_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_anthropic_chat_completion_multiple(anthropic_client_fixture: Callable[..., Any]) -> None:
+    request = ChatCompletionRequest(
+        model="claude-3-7-sonnet-20250219",
+        messages=[
+            SystemMessage(content="You are a helpful assistant."),
+            UserMessage(content="What is the capital of France?"),
+        ],
+        max_completion_tokens=200,
+        temperature=1,
+        top_k=20,
+        top_p=0.95,
+    )
+    response = chat_completion(request, "anthropic", anthropic_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_anthropic_chat_completion_tool(anthropic_client_fixture: Callable[..., Any]) -> None:
+    stock_tool = {
+        "name": "get_stock_price",
+        "description": "Get the current stock price for a given ticker symbol.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "ticker": {"type": "string", "description": "The stock ticker symbol, e.g. AAPL for Apple Inc."}
+            },
+            "required": ["ticker"],
+        },
+    }
+
+    request = ChatCompletionRequest(
+        model="claude-3-7-sonnet-20250219",
+        messages=[
+            UserMessage(content="What's the S&P 500 at today?"),
+        ],
+        tools=[stock_tool],
+        max_tokens=300,
+    )
+    response = chat_completion(request, "anthropic", anthropic_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_anthropic_chat_completion_multiple_tools(anthropic_client_fixture: Callable[..., Any]) -> None:
+    tools = [
+        {
+            "name": "get_weather",
+            "description": "Get the current weather in a given location",
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "location": {"type": "string", "description": "The city and state, e.g. San Francisco, CA"},
+                    "unit": {
+                        "type": "string",
+                        "enum": ["celsius", "fahrenheit"],
+                        "description": "The unit of temperature, either 'celsius' or 'fahrenheit'",
+                    },
+                },
+                "required": ["location"],
+            },
+        },
+        {
+            "name": "get_time",
+            "description": "Get the current time in a given time zone",
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "timezone": {"type": "string", "description": "The IANA time zone name, e.g. America/Los_Angeles"}
+                },
+                "required": ["timezone"],
+            },
+        },
+    ]
+
+    request = ChatCompletionRequest(
+        model="claude-3-7-sonnet-20250219",
+        messages=[
+            UserMessage(content="What is the weather like right now in New York? Also what time is it there?"),
+        ],
+        tools=tools,
+        temperature=1,
+        max_tokens=400,
+    )
+    response = chat_completion(request, "anthropic", anthropic_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_anthropic_chat_completion_tool_required_name(anthropic_client_fixture: Callable[..., Any]) -> None:
+    tools = [
+        {
+            "name": "get_current_weather",
+            "description": "Get the current weather",
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city and state, e.g. San Francisco, CA",
+                    },
+                    "format": {
+                        "type": "string",
+                        "enum": ["celsius", "fahrenheit"],
+                        "description": "The temperature unit to use. Infer this from the users location.",
+                    },
+                },
+                "required": ["location", "format"],
+            },
+        }
+    ]
+    request = ChatCompletionRequest(
+        model="claude-3-7-sonnet-20250219",
+        messages=[
+            UserMessage(content="What's the current weather like in Boston, MA today?"),
+        ],
+        tools=tools,
+        tool_choice="get_current_weather",
+        max_completion_tokens=300,
+        temperature=0,
+    )
+    response = chat_completion(request, "anthropic", anthropic_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_anthropic_chat_completion_tool_required(anthropic_client_fixture: Callable[..., Any]) -> None:
+    tools = [
+        {
+            "name": "get_current_weather",
+            "description": "Get the current weather",
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city and state, e.g. San Francisco, CA",
+                    },
+                    "format": {
+                        "type": "string",
+                        "enum": ["celsius", "fahrenheit"],
+                        "description": "The temperature unit to use. Infer this from the users location.",
+                    },
+                },
+                "required": ["location", "format"],
+            },
+        }
+    ]
+    request = ChatCompletionRequest(
+        model="claude-3-7-sonnet-20250219",
+        messages=[
+            UserMessage(content="What's the current weather like in Boston, MA today?"),
+        ],
+        tools=tools,
+        tool_choice="any",
+        parallel_tool_calls=False,
+        max_completion_tokens=300,
+        temperature=0,
+    )
+    response = chat_completion(request, "anthropic", anthropic_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_anthropic_chat_completion_builtin_tool(anthropic_client_fixture: Callable[..., Any]) -> None:
+    tools = [
+        {"type": "text_editor_20250124", "name": "str_replace_editor"},
+    ]
+    request = ChatCompletionRequest(
+        model="claude-3-7-sonnet-20250219",
+        messages=[
+            UserMessage(content="There's a syntax error in my primes.py file. Can you help me fix it?"),
+        ],
+        tools=tools,
+        tool_choice="any",
+        max_completion_tokens=500,
+        temperature=0.2,
+    )
+    response = chat_completion(request, "anthropic", anthropic_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_anthropic_chat_completion_tool_message(anthropic_client_fixture: Callable[..., Any]) -> None:
+    messages: list[MessageT] = [
+        UserMessage(content="What is the weather in Boston, MA?"),
+        AssistantMessage(
+            content="",
+            tool_calls=[
+                ToolCall(
+                    id="abc123",
+                    function=Function(
+                        name="get_current_weather",
+                        arguments={"location": "Boston, MA"},
+                    ),
+                )
+            ],
+        ),
+        ToolMessage(name="abc123", content="The weather in Boston, MA is 70 degrees Fahrenheit."),
+    ]
+    request = ChatCompletionRequest(
+        model="claude-3-7-sonnet-20250219",
+        messages=messages,
+        max_completion_tokens=300,
+        temperature=0.3,
+    )
+    response = chat_completion(request, "anthropic", anthropic_client_fixture)
     print(response.model_dump(mode="json", exclude_none=True))
 
 
