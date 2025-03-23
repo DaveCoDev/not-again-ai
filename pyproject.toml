@@ -1,6 +1,6 @@
 [project]
 name = "not-again-ai"
-version = "0.17.0"
+version = "0.18.0"
 description = "Designed to once and for all collect all the little things that come up over and over again in AI projects and put them in one place."
 authors = [
     { name = "DaveCoDev", email = "dave.co.dev@gmail.com" }
@@ -21,10 +21,10 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Typing :: Typed",
 ]
-requires-python = ">=3.11, <3.13"
+requires-python = ">=3.11"
 dependencies = [
     "loguru>=0.7",
-    "pydantic>=2.10"
+    "pydantic>=2.10",
 ]
 
 [project.urls]
@@ -32,73 +32,61 @@ Homepage = "https://github.com/DaveCoDev/not-again-ai"
 Documentation = "https://davecodev.github.io/not-again-ai/"
 Repository = "https://github.com/DaveCoDev/not-again-ai"
 
-[tool.poetry]
-requires-poetry = ">=2.0.1"
-
-[tool.poetry.requires-plugins]
-poetry-plugin-export = ">=1.8"
-
 [project.optional-dependencies]
 data = [
-    "playwright>=1.50",
-    "pytest-playwright>=0.7"
+    "playwright>=1.51,<2.0",
+    "pytest-playwright>=0.7,<1.0",
 ]
 llm = [
-    "azure-identity>=1.19",
-    "ollama>=0.4",
-    "openai>=1",
-    "python-liquid>=1.12",
-    "tiktoken>=0.8"
+    "anthropic>=0.49,<1.0",
+    "azure-identity>=1.21,<2.0",
+    "ollama>=0.4,<1.0",
+    "openai>=1.68,<2.0",
+    "python-liquid>=2.0,<3.0",
+    "tiktoken>=0.9,<1.0"
 ]
 statistics = [
-    "numpy>=2.2",
-    "scikit-learn>=1.6",
+    "numpy>=2.2,<3.0",
+    "scikit-learn>=1.6,<2.0",
     "scipy>=1.15"
 ]
 viz = [
-    "numpy>=2.2",
-    "pandas>=2.2",
-    "seaborn>=0.13"
+    "numpy>=2.2,<3.0",
+    "pandas>=2.2,<3.0",
+    "seaborn>=0.13,<1.0",
 ]
 
-[tool.poetry.group.dev.dependencies]
-ipykernel = "*"
-ipywidgets = "*"
-
-[tool.poetry.group.nox.dependencies]
-nox-poetry = "*"
-
-[tool.poetry.group.test.dependencies]
-pytest = "*"
-pytest-asyncio = "*"
-pytest-cov = "*"
-pytest-randomly = "*"
-
-[tool.poetry.group.type_check.dependencies]
-mypy = "*"
-# As of mypy 0.900, mypy no longer bundles the stubs for third-party libraries that reside
-# in the typeshed project. Add these "types-" packages here if you depend on them in
-# requirements.in (e.g. types-requests).
-# See: http://mypy-lang.blogspot.com/2021/06/mypy-0900-released.html
-#      https://github.com/python/typeshed/tree/main/stubs
-
-[tool.poetry.group.lint.dependencies]
-ruff = "*"
-
-[tool.poetry.group.docs.dependencies]
-mkdocs-material = "*"
-mkdocs-htmlproofer-plugin = "*"
-mkdocstrings = { version = "*", extras = ["python"] }
-# Autodoc.
-mkdocs-gen-files = "*"
-mkdocs-literate-nav = "*"
-
-[tool.poetry.group.typos.dependencies]
-typos = "*"
+[dependency-groups]
+dev = [
+    "ipykernel",
+    "ipywidgets",
+]
+nox = [
+    "nox",
+]
+test = [
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "pytest-randomly",
+]
+type_check = [
+    "mypy",
+    # Add "types-" stub packages as needed: https://github.com/python/typeshed/tree/main/stubs
+]
+lint = [
+    "ruff",
+]
+typos = [
+    "typos",
+]
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+default-groups = "all"
 
 [tool.mypy]
 ignore_missing_imports = true
@@ -109,7 +97,7 @@ disallow_untyped_calls = false
 
 [tool.ruff]
 line-length = 120
-target-version = "py311"
+target-version = "py312"
 src = ["src", "tests"]
 
 [tool.ruff.lint]
@@ -129,7 +117,7 @@ select = [
     "SIM", # flake8-simplify
     "TID", # flake8-tidy-imports
 ]
-ignore = ["E501"]
+extend-ignore = ["E501"]
 unfixable = ["F401"]
 
 [tool.ruff.lint.isort]

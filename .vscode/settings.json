@@ -1,7 +1,5 @@
 {
-    "ruff.lint.args": [
-        "--config=./pyproject.toml"
-    ],
+    "ruff.configuration": "./pyproject.toml",
     "notebook.formatOnSave.enabled": true,
     "notebook.codeActionsOnSave": {
         "notebook.source.fixAll": "explicit",

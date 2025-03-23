@@ -138,7 +138,9 @@ class ChatCompletionRequest(BaseModel):
 
 class ChatCompletionChoice(BaseModel):
     message: AssistantMessage
-    finish_reason: Literal["stop", "length", "tool_calls", "content_filter"]
+    finish_reason: Literal[
+        "stop", "length", "tool_calls", "content_filter", "end_turn", "max_tokens", "stop_sequence", "tool_use"
+    ]
 
     json_message: dict[str, Any] | None = Field(default=None)
     logprobs: list[dict[str, Any] | list[dict[str, Any]]] | None = Field(default=None)
@@ -155,6 +157,8 @@ class ChatCompletionResponse(BaseModel):
     prompt_tokens: int
     completion_detailed_tokens: dict[str, int] | None = Field(default=None)
     prompt_detailed_tokens: dict[str, int] | None = Field(default=None)
+    cache_read_input_tokens: int | None = Field(default=None)
+    cache_creation_input_tokens: int | None = Field(default=None)
     response_duration: float
 
     system_fingerprint: str | None = Field(default=None)

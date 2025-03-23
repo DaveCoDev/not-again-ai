@@ -1,6 +1,7 @@
 from collections.abc import AsyncGenerator, Callable
 from typing import Any
 
+from not_again_ai.llm.chat_completion.providers.anthropic_api import anthropic_chat_completion
 from not_again_ai.llm.chat_completion.providers.ollama_api import ollama_chat_completion, ollama_chat_completion_stream
 from not_again_ai.llm.chat_completion.providers.openai_api import openai_chat_completion, openai_chat_completion_stream
 from not_again_ai.llm.chat_completion.types import ChatCompletionChunk, ChatCompletionRequest, ChatCompletionResponse
@@ -28,6 +29,8 @@ def chat_completion(
         return openai_chat_completion(request, client)
     elif provider == "ollama":
         return ollama_chat_completion(request, client)
+    elif provider == "anthropic":
+        return anthropic_chat_completion(request, client)
     else:
         raise ValueError(f"Provider {provider} not supported")
 
@@ -41,6 +44,7 @@ async def chat_completion_stream(
     - `openai` - OpenAI
     - `azure_openai` - Azure OpenAI
     - `ollama` - Ollama
+    - `anthropic` - Anthropic
 
     Args:
         request: Request parameter object
