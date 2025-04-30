@@ -95,7 +95,7 @@ all machines that use the project, both during development and in production.
 To install all dependencies into an isolated virtual environment:
 
 ```shell
-uv sync --all-extras
+uv sync --all-extras --all-groups
 ```
 
 To upgrade all dependencies to their latest versions:
