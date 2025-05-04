@@ -103,12 +103,12 @@ def anthropic_chat_completion(request: ChatCompletionRequest, client: Callable[.
         elif tool_choice_value in ["auto", "any"]:
             tool_choice["type"] = "auto"
             if kwargs.get("parallel_tool_calls") is not None:
-                tool_choice["disable_parallel_tool_use"] = str(not kwargs["parallel_tool_calls"])
+                tool_choice["disable_parallel_tool_use"] = not kwargs["parallel_tool_calls"]
         else:
             tool_choice["name"] = tool_choice_value
             tool_choice["type"] = "tool"
             if kwargs.get("parallel_tool_calls") is not None:
-                tool_choice["disable_parallel_tool_use"] = str(not kwargs["parallel_tool_calls"])
+                tool_choice["disable_parallel_tool_use"] = not kwargs["parallel_tool_calls"]
         kwargs["tool_choice"] = tool_choice
     kwargs.pop("parallel_tool_calls", None)
 

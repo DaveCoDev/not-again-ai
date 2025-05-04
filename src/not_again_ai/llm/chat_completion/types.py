@@ -138,10 +138,7 @@ class ChatCompletionRequest(BaseModel):
 
 class ChatCompletionChoice(BaseModel):
     message: AssistantMessage
-    finish_reason: Literal[
-        "stop", "length", "tool_calls", "content_filter", "end_turn", "max_tokens", "stop_sequence", "tool_use"
-    ]
-
+    finish_reason: str
     json_message: dict[str, Any] | None = Field(default=None)
     logprobs: list[dict[str, Any] | list[dict[str, Any]]] | None = Field(default=None)
 

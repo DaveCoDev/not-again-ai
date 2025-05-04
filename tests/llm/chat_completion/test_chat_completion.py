@@ -1527,4 +1527,87 @@ def test_gemini_chat_completion_tool_message(gemini_client_fixture: Callable[...
     print(response.model_dump(mode="json", exclude_none=True))
 
 
-# enndregion
+def test_gemini_chat_completion_vision(gemini_client_fixture: Callable[..., Any]) -> None:
+    messages: list[MessageT] = [
+        SystemMessage(content="You are a helpful assistant."),
+        UserMessage(
+            content=[
+                TextContent(text="Describe the animal in the image in one word."),
+                ImageContent(
+                    image_url=ImageUrl(url=f"data:image/jpeg;base64,{encode_image(cat_image)}", detail=ImageDetail.LOW)
+                ),
+            ]
+        ),
+    ]
+
+    request = ChatCompletionRequest(
+        messages=messages,
+        model="gemini-2.5-flash-preview-04-17",
+        max_completion_tokens=200,
+        temperature=0.5,
+    )
+
+    response = chat_completion(request, "gemini", gemini_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_gemini_chat_completion_vision_tool_call(gemini_client_fixture: Callable[..., Any]) -> None:
+    messages: list[MessageT] = [
+        SystemMessage(
+            content="""You are detecting if there is text (numbers or letters) in images. 
+If you see any text, call the ocr tool. It takes no parameters."""
+        ),
+        UserMessage(
+            content=[
+                ImageContent(
+                    image_url=ImageUrl(
+                        url=f"data:image/png;base64,{encode_image(numbers_image)}", detail=ImageDetail.LOW
+                    )
+                ),
+            ]
+        ),
+    ]
+    tools = [
+        {
+            "name": "ocr",
+            "description": "Perform Optical Character Recognition (OCR) on an image",
+            "parameters": {},
+        },
+    ]
+
+    request = ChatCompletionRequest(
+        messages=messages,
+        model="gemini-2.5-flash-preview-04-17",
+        tools=tools,
+        max_completion_tokens=200,
+    )
+
+    response = chat_completion(request, "gemini", gemini_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_gemini_chat_completion_vision_multiple_images(gemini_client_fixture: Callable[..., Any]) -> None:
+    messages: list[MessageT] = [
+        SystemMessage(content="You are a helpful assistant."),
+        UserMessage(
+            content=[
+                TextContent(text="What are the animals in the images? Reply in one word for each animal."),
+                ImageContent(
+                    image_url=ImageUrl(url=f"data:image/jpeg;base64,{encode_image(cat_image)}", detail=ImageDetail.LOW)
+                ),
+                ImageContent(
+                    image_url=ImageUrl(url=f"data:image/jpeg;base64,{encode_image(dog_image)}", detail=ImageDetail.LOW)
+                ),
+            ]
+        ),
+    ]
+    request = ChatCompletionRequest(
+        messages=messages,
+        model="gemini-2.5-flash-preview-04-17",
+        max_completion_tokens=100,
+    )
+    response = chat_completion(request, "gemini", gemini_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+# endregion

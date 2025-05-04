@@ -1,3 +1,4 @@
+import base64
 from collections.abc import Callable
 import os
 import time
@@ -5,7 +6,7 @@ from typing import Any
 
 from google import genai
 from google.genai import types
-from google.genai.types import FunctionCall, GenerateContentResponse
+from google.genai.types import FunctionCall, FunctionCallingConfigMode, GenerateContentResponse
 
 from not_again_ai.llm.chat_completion.types import (
     AssistantMessage,
@@ -13,6 +14,9 @@ from not_again_ai.llm.chat_completion.types import (
     ChatCompletionRequest,
     ChatCompletionResponse,
     Function,
+    ImageContent,
+    Role,
+    TextContent,
     ToolCall,
 )
 
@@ -40,17 +44,25 @@ GEMINI_FINISH_REASON_MAP = {
 
 
 def gemini_chat_completion(request: ChatCompletionRequest, client: Callable[..., Any]) -> ChatCompletionResponse:
-    """Gemini chat completion function."""
+    """Experimental Gemini chat completion function."""
     # Handle messages
     # Any system messages need to be removed from messages and concatenated into a single string (in order)
     system = ""
     contents = []
     for message in request.messages:
         if message.role == "system":
-            system += message.content + "\n"
+            # Handle both string content and structured content
+            if isinstance(message.content, str):
+                system += message.content + "\n"
+            else:
+                # If it's a list of content parts, extract text content
+                for part in message.content:
+                    if hasattr(part, "text"):
+                        system += part.text + "\n"
         elif message.role == "tool":
+            tool_name = message.name if message.name is not None else ""
             function_response_part = types.Part.from_function_response(
-                name=message.name,
+                name=tool_name,
                 response={"result": message.content},
             )
             contents.append(
@@ -60,27 +72,43 @@ def gemini_chat_completion(request: ChatCompletionRequest, client: Callable[...,
                 )
             )
         elif message.role == "assistant":
-            if message.content:
+            if message.content and isinstance(message.content, str):
                 contents.append(types.Content(role="model", parts=[types.Part(text=message.content)]))
             function_parts = []
-            for tool_call in message.tool_calls or []:
-                function_call_part = types.Part(
-                    function_call=FunctionCall(
-                        id=tool_call.id,
-                        name=tool_call.function.name,
-                        args=tool_call.function.arguments,
+            if isinstance(message, AssistantMessage) and message.tool_calls:
+                for tool_call in message.tool_calls:
+                    function_call_part = types.Part(
+                        function_call=FunctionCall(
+                            id=tool_call.id,
+                            name=tool_call.function.name,
+                            args=tool_call.function.arguments,
+                        )
                     )
-                )
-                function_parts.append(function_call_part)
+                    function_parts.append(function_call_part)
             if function_parts:
                 contents.append(types.Content(role="model", parts=function_parts))
         elif message.role == "user":
-            contents.append(types.Content(role="user", parts=[types.Part(text=message.content)]))
+            if isinstance(message.content, str):
+                contents.append(types.Content(role="user", parts=[types.Part(text=message.content)]))
+            elif isinstance(message.content, list):
+                parts = []
+                for part in message.content:
+                    if isinstance(part, TextContent):
+                        parts.append(types.Part(text=part.text))
+                    elif isinstance(part, ImageContent):
+                        # Extract MIME type and data from data URI
+                        uri_parts = part.image_url.url.split(",", 1)
+                        if len(uri_parts) == 2:
+                            mime_type = uri_parts[0].split(":")[1].split(";")[0]
+                            base64_data = uri_parts[1]
+                            image_data = base64.b64decode(base64_data)
+                            parts.append(types.Part.from_bytes(mime_type=mime_type, data=image_data))
+                contents.append(types.Content(role="user", parts=parts))
 
-    kwargs = {}
+    kwargs: dict[str, Any] = {}
     kwargs["contents"] = contents
     kwargs["model"] = request.model
-    config = {}
+    config: dict[str, Any] = {}
     config["system_instruction"] = system.rstrip()
     config["automatic_function_calling"] = {"disable": True}
 
@@ -88,20 +116,24 @@ def gemini_chat_completion(request: ChatCompletionRequest, client: Callable[...,
     if request.tool_choice:
         tool_choice = request.tool_choice
         if tool_choice == "auto":
-            config["tool_config"] = types.FunctionCallingConfig(mode="AUTO")
+            config["tool_config"] = types.FunctionCallingConfig(mode=FunctionCallingConfigMode.AUTO)
         elif tool_choice == "any":
-            config["tool_config"] = types.FunctionCallingConfig(mode="ANY")
+            config["tool_config"] = types.FunctionCallingConfig(mode=FunctionCallingConfigMode.ANY)
         elif tool_choice == "none":
-            config["tool_config"] = types.FunctionCallingConfig(mode="NONE")
+            config["tool_config"] = types.FunctionCallingConfig(mode=FunctionCallingConfigMode.NONE)
         elif isinstance(tool_choice, list):
-            config["tool_config"] = types.FunctionCallingConfig(mode="ANY", allowed_function_names=tool_choice)
+            config["tool_config"] = types.FunctionCallingConfig(
+                mode=FunctionCallingConfigMode.ANY, allowed_function_names=tool_choice
+            )
         elif tool_choice not in (None, "auto", "any", "none"):
-            config["tool_config"] = types.FunctionCallingConfig(mode="ANY", allowed_function_names=[tool_choice])
+            config["tool_config"] = types.FunctionCallingConfig(
+                mode=FunctionCallingConfigMode.ANY, allowed_function_names=[tool_choice]
+            )
 
     # Handle tools
     tools = []
     for tool in request.tools or []:
-        tools.append(types.Tool(function_declarations=[tool]))
+        tools.append(types.Tool(function_declarations=[tool]))  # type: ignore
     if tools:
         config["tools"] = tools
 
@@ -118,33 +150,38 @@ def gemini_chat_completion(request: ChatCompletionRequest, client: Callable[...,
     end_time = time.time()
     response_duration = round(end_time - start_time, 4)
 
-    finish_reason = response.candidates[0].finish_reason
-    finish_reason = GEMINI_FINISH_REASON_MAP.get(finish_reason, "other")
+    finish_reason = "other"
+    if response.candidates and response.candidates[0].finish_reason:
+        finish_reason_str = str(response.candidates[0].finish_reason)
+        finish_reason = GEMINI_FINISH_REASON_MAP.get(finish_reason_str, "other")
 
     tool_calls: list[ToolCall] = []
     tool_call_objs = response.function_calls
     if tool_call_objs:
-        for tool_call in tool_call_objs:
-            tool_call_id = tool_call.id
-            if not tool_call_id:
-                tool_call_id = ""
+        for tool_call_obj in tool_call_objs:
+            tool_call_id = tool_call_obj.id if tool_call_obj.id else ""
             tool_calls.append(
                 ToolCall(
                     id=tool_call_id,
                     function=Function(
-                        name=tool_call.name,
-                        arguments=tool_call.args,
+                        name=tool_call_obj.name if tool_call_obj.name is not None else "",
+                        arguments=tool_call_obj.args if tool_call_obj.args is not None else {},
                     ),
                 )
             )
 
-    assistant_message = response.candidates[0].content.parts[0].text
-    if not assistant_message:
-        assistant_message = ""
+    assistant_message = ""
+    if (
+        response.candidates
+        and response.candidates[0].content
+        and response.candidates[0].content.parts
+        and response.candidates[0].content.parts[0].text
+    ):
+        assistant_message = response.candidates[0].content.parts[0].text
 
     choice = ChatCompletionChoice(
         message=AssistantMessage(
-            role="assistant",
+            role=Role.ASSISTANT,
             content=assistant_message,
             tool_calls=tool_calls,
         ),
@@ -152,14 +189,22 @@ def gemini_chat_completion(request: ChatCompletionRequest, client: Callable[...,
     )
 
     completion_tokens = 0
-    if response.usage_metadata.thoughts_token_count:
-        completion_tokens = response.usage_metadata.thoughts_token_count
-    completion_tokens += response.usage_metadata.candidates_token_count
+    # Add null check for usage_metadata
+    if response.usage_metadata is not None:
+        if response.usage_metadata.thoughts_token_count:
+            completion_tokens = response.usage_metadata.thoughts_token_count
+        if response.usage_metadata.candidates_token_count:
+            completion_tokens += response.usage_metadata.candidates_token_count
+
+    # Set safe default for prompt_tokens
+    prompt_tokens = 0
+    if response.usage_metadata is not None and response.usage_metadata.prompt_token_count:
+        prompt_tokens = response.usage_metadata.prompt_token_count
 
     chat_completion_response = ChatCompletionResponse(
         choices=[choice],
         completion_tokens=completion_tokens,
-        prompt_tokens=response.usage_metadata.prompt_token_count,
+        prompt_tokens=prompt_tokens,
         response_duration=response_duration,
     )
     return chat_completion_response
