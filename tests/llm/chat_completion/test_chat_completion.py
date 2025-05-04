@@ -7,6 +7,7 @@ import pytest
 
 from not_again_ai.llm.chat_completion import chat_completion
 from not_again_ai.llm.chat_completion.providers.anthropic_api import anthropic_client
+from not_again_ai.llm.chat_completion.providers.gemini_api import gemini_client
 from not_again_ai.llm.chat_completion.providers.ollama_api import ollama_client
 from not_again_ai.llm.chat_completion.providers.openai_api import openai_client
 from not_again_ai.llm.chat_completion.types import (
@@ -46,7 +47,7 @@ def openai_aoai_client_fixture(request: pytest.FixtureRequest) -> Callable[..., 
 
 def test_chat_completion_simple(openai_aoai_client_fixture: Callable[..., Any]) -> None:
     request = ChatCompletionRequest(
-        model="gpt-4o-mini-2024-07-18",
+        model="gpt-4.1-mini-2025-04-14",
         messages=[
             SystemMessage(content="Hello, world!"),
             UserMessage(content="What is the capital of France?"),
@@ -59,7 +60,7 @@ def test_chat_completion_simple(openai_aoai_client_fixture: Callable[..., Any]) 
 
 def test_chat_completion_length(openai_aoai_client_fixture: Callable[..., Any]) -> None:
     request = ChatCompletionRequest(
-        model="gpt-4o-2024-11-20",
+        model="gpt-4.1-2025-04-14",
         messages=[
             SystemMessage(content="Hello, world!"),
             UserMessage(content="What is the capital of France and the capital of Germany?"),
@@ -810,16 +811,17 @@ def openai_client_fixture(request: pytest.FixtureRequest) -> Callable[..., Any]:
     return openai_client(**request.param)
 
 
-def test_chat_completion_o1_mini(openai_client_fixture: Callable[..., Any]) -> None:
+def test_chat_completion_o4_mini(openai_client_fixture: Callable[..., Any]) -> None:
     messages: list[MessageT] = [
         UserMessage(
             content="You only think for one sentence, and then write at most a one sentence response. What is the capital of France?"
         ),
     ]
     request = ChatCompletionRequest(
-        model="o1-mini-2024-09-12",
+        model="o4-mini-2025-04-16",
         messages=messages,
         max_completion_tokens=500,
+        reasoning_effort="low",
     )
     response = chat_completion(request, "openai", openai_client_fixture)
     print(response.model_dump(mode="json", exclude_none=True))
@@ -1142,7 +1144,7 @@ def test_anthropic_chat_completion_tool(anthropic_client_fixture: Callable[..., 
     request = ChatCompletionRequest(
         model="claude-3-7-sonnet-20250219",
         messages=[
-            UserMessage(content="What's the S&P 500 at today?"),
+            UserMessage(content="What's MSFT stock at today?"),
         ],
         tools=[stock_tool],
         max_tokens=300,
@@ -1310,6 +1312,302 @@ def test_anthropic_chat_completion_tool_message(anthropic_client_fixture: Callab
         temperature=0.3,
     )
     response = chat_completion(request, "anthropic", anthropic_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+# endregion
+
+
+# region Gemini
+
+
+@pytest.fixture(
+    params=[
+        {},
+    ]
+)
+def gemini_client_fixture(request: pytest.FixtureRequest) -> Callable[..., Any]:
+    return gemini_client(**request.param)
+
+
+def test_gemini_chat_completion_simple(gemini_client_fixture: Callable[..., Any]) -> None:
+    request = ChatCompletionRequest(
+        model="gemini-2.5-pro-exp-03-25",
+        messages=[
+            SystemMessage(content="You are a helpful assistant."),
+            UserMessage(content="What is the capital of France?"),
+        ],
+        max_completion_tokens=200,
+    )
+    response = chat_completion(request, "gemini", gemini_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_gemini_chat_completion_multiple(gemini_client_fixture: Callable[..., Any]) -> None:
+    request = ChatCompletionRequest(
+        model="gemini-2.5-flash-preview-04-17",
+        messages=[
+            SystemMessage(content="You are a helpful assistant."),
+            UserMessage(content="What is the capital of France?"),
+        ],
+        max_completion_tokens=200,
+        temperature=1,
+        top_k=20,
+        top_p=0.95,
+    )
+    response = chat_completion(request, "gemini", gemini_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_gemini_chat_completion_tool(gemini_client_fixture: Callable[..., Any]) -> None:
+    stock_tool = {
+        "name": "get_stock_price",
+        "description": "Get the current stock price for a given ticker symbol.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "ticker": {"type": "string", "description": "The stock ticker symbol, e.g. AAPL for Apple Inc."}
+            },
+            "required": ["ticker"],
+        },
+    }
+
+    request = ChatCompletionRequest(
+        model="gemini-2.5-flash-preview-04-17",
+        messages=[
+            UserMessage(content="What's MSFT stock at today?"),
+        ],
+        tools=[stock_tool],
+        max_tokens=300,
+    )
+    response = chat_completion(request, "gemini", gemini_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_gemini_chat_completion_multiple_tools(gemini_client_fixture: Callable[..., Any]) -> None:
+    tools = [
+        {
+            "name": "get_weather",
+            "description": "Get the current weather in a given location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {"type": "string", "description": "The city and state, e.g. San Francisco, CA"},
+                    "unit": {
+                        "type": "string",
+                        "enum": ["celsius", "fahrenheit"],
+                        "description": "The unit of temperature, either 'celsius' or 'fahrenheit'",
+                    },
+                },
+                "required": ["location"],
+            },
+        },
+        {
+            "name": "get_time",
+            "description": "Get the current time in a given time zone",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "timezone": {"type": "string", "description": "The IANA time zone name, e.g. America/Los_Angeles"}
+                },
+                "required": ["timezone"],
+            },
+        },
+    ]
+
+    request = ChatCompletionRequest(
+        model="gemini-2.5-flash-preview-04-17",
+        messages=[
+            UserMessage(content="What is the weather like right now in New York? Also what time is it there?"),
+        ],
+        tools=tools,
+        temperature=1,
+        max_tokens=400,
+    )
+    response = chat_completion(request, "gemini", gemini_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_gemini_chat_completion_tool_required_name(gemini_client_fixture: Callable[..., Any]) -> None:
+    tools = [
+        {
+            "name": "get_current_weather",
+            "description": "Get the current weather",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city and state, e.g. San Francisco, CA",
+                    },
+                    "format": {
+                        "type": "string",
+                        "enum": ["celsius", "fahrenheit"],
+                        "description": "The temperature unit to use. Infer this from the users location.",
+                    },
+                },
+                "required": ["location", "format"],
+            },
+        }
+    ]
+    request = ChatCompletionRequest(
+        model="gemini-2.5-flash-preview-04-17",
+        messages=[
+            UserMessage(content="What's the current weather like in Boston, MA today?"),
+        ],
+        tools=tools,
+        tool_choice="get_current_weather",
+        max_completion_tokens=300,
+        temperature=0,
+    )
+    response = chat_completion(request, "gemini", gemini_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_gemini_chat_completion_tool_required(gemini_client_fixture: Callable[..., Any]) -> None:
+    tools = [
+        {
+            "name": "get_current_weather",
+            "description": "Get the current weather",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city and state, e.g. San Francisco, CA",
+                    },
+                    "format": {
+                        "type": "string",
+                        "enum": ["celsius", "fahrenheit"],
+                        "description": "The temperature unit to use. Infer this from the users location.",
+                    },
+                },
+                "required": ["location", "format"],
+            },
+        }
+    ]
+    request = ChatCompletionRequest(
+        model="gemini-2.5-flash-preview-04-17",
+        messages=[
+            UserMessage(content="What's the current weather like in Boston, MA today?"),
+        ],
+        tools=tools,
+        tool_choice="any",
+        parallel_tool_calls=False,
+        max_completion_tokens=300,
+        temperature=0,
+    )
+    response = chat_completion(request, "gemini", gemini_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_gemini_chat_completion_tool_message(gemini_client_fixture: Callable[..., Any]) -> None:
+    messages: list[MessageT] = [
+        UserMessage(content="What is the weather in Boston, MA?"),
+        AssistantMessage(
+            content="",
+            tool_calls=[
+                ToolCall(
+                    id="abc123",
+                    function=Function(
+                        name="get_current_weather",
+                        arguments={"location": "Boston, MA"},
+                    ),
+                )
+            ],
+        ),
+        ToolMessage(name="abc123", content="70 F"),
+    ]
+    request = ChatCompletionRequest(
+        model="gemini-2.5-flash-preview-04-17",
+        messages=messages,
+        max_completion_tokens=300,
+        temperature=0.3,
+    )
+    response = chat_completion(request, "gemini", gemini_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_gemini_chat_completion_vision(gemini_client_fixture: Callable[..., Any]) -> None:
+    messages: list[MessageT] = [
+        SystemMessage(content="You are a helpful assistant."),
+        UserMessage(
+            content=[
+                TextContent(text="Describe the animal in the image in one word."),
+                ImageContent(
+                    image_url=ImageUrl(url=f"data:image/jpeg;base64,{encode_image(cat_image)}", detail=ImageDetail.LOW)
+                ),
+            ]
+        ),
+    ]
+
+    request = ChatCompletionRequest(
+        messages=messages,
+        model="gemini-2.5-flash-preview-04-17",
+        max_completion_tokens=200,
+        temperature=0.5,
+    )
+
+    response = chat_completion(request, "gemini", gemini_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_gemini_chat_completion_vision_tool_call(gemini_client_fixture: Callable[..., Any]) -> None:
+    messages: list[MessageT] = [
+        SystemMessage(
+            content="""You are detecting if there is text (numbers or letters) in images. 
+If you see any text, call the ocr tool. It takes no parameters."""
+        ),
+        UserMessage(
+            content=[
+                ImageContent(
+                    image_url=ImageUrl(
+                        url=f"data:image/png;base64,{encode_image(numbers_image)}", detail=ImageDetail.LOW
+                    )
+                ),
+            ]
+        ),
+    ]
+    tools = [
+        {
+            "name": "ocr",
+            "description": "Perform Optical Character Recognition (OCR) on an image",
+            "parameters": {},
+        },
+    ]
+
+    request = ChatCompletionRequest(
+        messages=messages,
+        model="gemini-2.5-flash-preview-04-17",
+        tools=tools,
+        max_completion_tokens=200,
+    )
+
+    response = chat_completion(request, "gemini", gemini_client_fixture)
+    print(response.model_dump(mode="json", exclude_none=True))
+
+
+def test_gemini_chat_completion_vision_multiple_images(gemini_client_fixture: Callable[..., Any]) -> None:
+    messages: list[MessageT] = [
+        SystemMessage(content="You are a helpful assistant."),
+        UserMessage(
+            content=[
+                TextContent(text="What are the animals in the images? Reply in one word for each animal."),
+                ImageContent(
+                    image_url=ImageUrl(url=f"data:image/jpeg;base64,{encode_image(cat_image)}", detail=ImageDetail.LOW)
+                ),
+                ImageContent(
+                    image_url=ImageUrl(url=f"data:image/jpeg;base64,{encode_image(dog_image)}", detail=ImageDetail.LOW)
+                ),
+            ]
+        ),
+    ]
+    request = ChatCompletionRequest(
+        messages=messages,
+        model="gemini-2.5-flash-preview-04-17",
+        max_completion_tokens=100,
+    )
+    response = chat_completion(request, "gemini", gemini_client_fixture)
     print(response.model_dump(mode="json", exclude_none=True))
 
 
