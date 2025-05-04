@@ -47,7 +47,7 @@ def openai_aoai_client_fixture(request: pytest.FixtureRequest) -> Callable[..., 
 
 def test_chat_completion_simple(openai_aoai_client_fixture: Callable[..., Any]) -> None:
     request = ChatCompletionRequest(
-        model="gpt-4o-mini-2024-07-18",
+        model="gpt-4.1-mini-2025-04-14",
         messages=[
             SystemMessage(content="Hello, world!"),
             UserMessage(content="What is the capital of France?"),
@@ -60,7 +60,7 @@ def test_chat_completion_simple(openai_aoai_client_fixture: Callable[..., Any]) 
 
 def test_chat_completion_length(openai_aoai_client_fixture: Callable[..., Any]) -> None:
     request = ChatCompletionRequest(
-        model="gpt-4o-2024-11-20",
+        model="gpt-4.1-2025-04-14",
         messages=[
             SystemMessage(content="Hello, world!"),
             UserMessage(content="What is the capital of France and the capital of Germany?"),
@@ -811,16 +811,17 @@ def openai_client_fixture(request: pytest.FixtureRequest) -> Callable[..., Any]:
     return openai_client(**request.param)
 
 
-def test_chat_completion_o1_mini(openai_client_fixture: Callable[..., Any]) -> None:
+def test_chat_completion_o4_mini(openai_client_fixture: Callable[..., Any]) -> None:
     messages: list[MessageT] = [
         UserMessage(
             content="You only think for one sentence, and then write at most a one sentence response. What is the capital of France?"
         ),
     ]
     request = ChatCompletionRequest(
-        model="o1-mini-2024-09-12",
+        model="o4-mini-2025-04-16",
         messages=messages,
         max_completion_tokens=500,
+        reasoning_effort="low",
     )
     response = chat_completion(request, "openai", openai_client_fixture)
     print(response.model_dump(mode="json", exclude_none=True))
