@@ -1,28 +1,20 @@
-from collections.abc import Generator
-
-from playwright.sync_api import Browser, Playwright
 import pytest
 
-from not_again_ai.data.web import create_browser, get_raw_web_content
+from not_again_ai.data.web import process_url
 
 
-@pytest.fixture
-def browser_fixture() -> Generator[tuple[Playwright, Browser], None, None]:
-    p, browser = create_browser(headless=True)
-    yield p, browser
-    browser.close()
-    p.stop()
-
-
-def test_get_raw_web_content_new_browser() -> None:
-    content = get_raw_web_content("https://playwright.dev/")
-    assert content, "Content should not be empty"
-
-
-def test_get_raw_web_content_existing_browser(browser_fixture: tuple[Playwright, Browser]) -> None:
-    _, browser = browser_fixture
-    content = get_raw_web_content(
-        "https://playwright.dev/",
-        browser=browser,
-    )
-    assert content, "Content should not be empty"
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://example.com",
+        "https://github.com/unclecode/crawl4ai",
+        "https://arxiv.org/pdf/1710.02298",
+        "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "https://www.nascar.com/news/nascar-craftsman-truck-series/",
+        "https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit?gid=0#gid=0",
+        "https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/export?format=csv&gid=0",
+    ],
+)
+async def test_process_url(url: str) -> None:
+    content = await process_url(url)
+    assert content, f"Content should not be empty for URL: {url}"

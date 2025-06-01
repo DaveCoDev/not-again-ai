@@ -39,7 +39,9 @@ The package is split into subpackages, so you can install only the parts you nee
 
 ### Data
 1. `pip install not_again_ai[data]`
-1. `playwright install` to download the browser binaries.
+1. `crawl4ai-setup` to run crawl4ai post-installation setup.
+1. Set the `BRAVE_SEARCH_API_KEY` environment variable to use the Brave Search API for web data extraction.
+   1. Get the API key from https://api-dashboard.search.brave.com/app/keys. You must have at least the Free "Data for Search" subscription.
 
 
 ### LLM
@@ -268,3 +270,5 @@ Default settings are configured in [`.vscode/settings.json`](./.vscode/settings.
 
 # Attributions
 [python-blueprint](https://github.com/johnthagen/python-blueprint) for the Python package skeleton.
+
+This project uses Crawl4AI (https://github.com/unclecode/crawl4ai) for web data extraction.

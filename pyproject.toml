@@ -1,6 +1,6 @@
 [project]
 name = "not-again-ai"
-version = "0.19.0"
+version = "0.20.0"
 description = "Designed to once and for all collect all the little things that come up over and over again in AI projects and put them in one place."
 authors = [
     { name = "DaveCoDev", email = "dave.co.dev@gmail.com" }
@@ -34,8 +34,9 @@ Repository = "https://github.com/DaveCoDev/not-again-ai"
 
 [project.optional-dependencies]
 data = [
-    "playwright>=1.51,<2.0",
-    "pytest-playwright>=0.7,<1.0",
+    "Crawl4AI>=0.6,<1.0",
+    "httpx>=0.28,<1.0",
+    "markitdown[pdf]==0.1.2"
 ]
 llm = [
     "anthropic>=0.50,<1.0",
@@ -140,7 +141,7 @@ filterwarnings = [
     "error",
     # Add additional warning suppressions as needed here. For example, if a third-party library
     # is throwing a deprecation warning that needs to be fixed upstream:
-    # "ignore::DeprecationWarning:typer",
+    "ignore::DeprecationWarning",
     "ignore::pytest.PytestUnraisableExceptionWarning"
 ]
 asyncio_mode = "auto"

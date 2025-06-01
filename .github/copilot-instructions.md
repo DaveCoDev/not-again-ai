@@ -8,3 +8,4 @@
 - Always prefer pathlib for dealing with files. Use `Path.open` instead of `open`.
 - Prefer to use pendulum instead of datetime
 - Prefer to use loguru instead of logging
+- Prefer httpx for HTTP requests instead of requests
