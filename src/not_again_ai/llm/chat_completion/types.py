@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, Generic, Literal, TypeVar
+from typing import Any, Literal, TypeVar
 
 from pydantic import BaseModel, Field
 
@@ -41,7 +41,7 @@ class ImageContent(BaseModel):
 ContentT = TypeVar("ContentT", bound=str | list[TextContent | ImageContent])
 
 
-class BaseMessage(BaseModel, Generic[ContentT]):
+class BaseMessage[ContentT](BaseModel):
     content: ContentT
     role: Role
     name: str | None = None

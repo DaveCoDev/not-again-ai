@@ -1,6 +1,6 @@
 [project]
 name = "not-again-ai"
-version = "0.20.0"
+version = "0.21.0"
 description = "Designed to once and for all collect all the little things that come up over and over again in AI projects and put them in one place."
 authors = [
     { name = "DaveCoDev", email = "dave.co.dev@gmail.com" }
@@ -39,22 +39,22 @@ data = [
     "markitdown[pdf]==0.1.2"
 ]
 llm = [
-    "anthropic>=0.50,<1.0",
-    "azure-identity>=1.21,<2.0",
-    "google-genai>1.12,<2.0",
-    "ollama>=0.4,<1.0",
-    "openai>=1.76,<2.0",
+    "anthropic>=0.55,<1.0",
+    "azure-identity>=1.23,<2.0",
+    "google-genai>1.22,<2.0",
+    "ollama>=0.5,<1.0",
+    "openai>=1.93,<2.0",
     "python-liquid>=2.0,<3.0",
     "tiktoken>=0.9,<1.0"
 ]
 statistics = [
-    "numpy>=2.2,<3.0",
-    "scikit-learn>=1.6,<2.0",
-    "scipy>=1.15"
+    "numpy>=2.3,<3.0",
+    "scikit-learn>=1.7,<2.0",
+    "scipy>=1.16"
 ]
 viz = [
-    "numpy>=2.2,<3.0",
-    "pandas>=2.2,<3.0",
+    "numpy>=2.3,<3.0",
+    "pandas>=2.3,<3.0",
     "seaborn>=0.13,<1.0",
 ]
 

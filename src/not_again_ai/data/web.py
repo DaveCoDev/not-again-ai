@@ -102,11 +102,11 @@ async def _handle_google_sheets_content(url: str) -> URLResult:
     return url_result
 
 
-async def _handle_web_content(url: str) -> URLResult:
+async def _handle_web_content(url: str, verbose: bool = False) -> URLResult:
     browser_config = BrowserConfig(
         browser_type="chromium",
         headless=True,
-        verbose=False,
+        verbose=verbose,
         user_agent_mode="random",
         java_script_enabled=True,
     )
@@ -115,6 +115,7 @@ async def _handle_web_content(url: str) -> URLResult:
         user_agent_mode="random",
         cache_mode=CacheMode.DISABLED,
         markdown_generator=DefaultMarkdownGenerator(),
+        verbose=verbose,
     )
 
     async with AsyncWebCrawler(config=browser_config) as crawler:
@@ -147,7 +148,7 @@ async def _handle_web_content(url: str) -> URLResult:
     return url_result
 
 
-async def process_url(url: str) -> URLResult:
+async def process_url(url: str, verbose: bool = False) -> URLResult:
     """
     Process a URL to extract content and convert it to Markdown and links
     """
@@ -156,5 +157,5 @@ async def process_url(url: str) -> URLResult:
     elif _detect_google_sheets(url):
         url_result = await _handle_google_sheets_content(url)
     else:
-        url_result = await _handle_web_content(url)
+        url_result = await _handle_web_content(url, verbose=verbose)
     return url_result
