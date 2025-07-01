@@ -99,7 +99,7 @@ disallow_untyped_calls = false
 
 [tool.ruff]
 line-length = 120
-target-version = "py312"
+target-version = "py311"
 src = ["src", "tests"]
 
 [tool.ruff.lint]
